@@ -11,6 +11,10 @@ export const Collections = {
 	Mfas: "_mfas",
 	Otps: "_otps",
 	Superusers: "_superusers",
+	Favorites: "favorites",
+	FoodLogs: "food_logs",
+	Foods: "foods",
+	UserStats: "user_stats",
 	Users: "users",
 } as const
 export type Collections = typeof Collections[keyof typeof Collections]
@@ -93,6 +97,66 @@ export type SuperusersRecord = {
 	verified?: boolean
 }
 
+export type FavoritesRecord = {
+	created: IsoAutoDateString
+	food?: RecordIdString
+	id: string
+	updated: IsoAutoDateString
+	user?: RecordIdString
+}
+
+export type FoodLogsRecord = {
+	calories?: number
+	carbs?: number
+	consumed_at?: IsoDateString
+	created: IsoAutoDateString
+	fats?: number
+	fiber?: number
+	food?: RecordIdString
+	id: string
+	name?: string
+	proteins?: number
+	updated: IsoAutoDateString
+	user?: RecordIdString
+}
+
+export const FoodsUnitsOptions = {
+	"grams": "grams",
+	"pieces": "pieces",
+	"slices": "slices",
+	"milliliters": "milliliters",
+	"bowls": "bowls",
+	"servings": "servings",
+} as const
+export type FoodsUnitsOptions = typeof FoodsUnitsOptions[keyof typeof FoodsUnitsOptions]
+export type FoodsRecord = {
+	calories?: number
+	carbs?: number
+	created: IsoAutoDateString
+	created_by?: RecordIdString
+	fats?: number
+	fiber?: number
+	id: string
+	name?: string
+	notes?: string
+	proteins?: number
+	quantity?: number
+	units?: FoodsUnitsOptions
+	updated: IsoAutoDateString
+}
+
+export type UserStatsRecord = {
+	created: IsoAutoDateString
+	id: string
+	target_calories?: number
+	target_carbs?: number
+	target_fats?: number
+	target_fiber?: number
+	target_proteins?: number
+	target_weight?: number
+	updated: IsoAutoDateString
+}
+
 export type UsersRecord = {
 	avatar?: FileNameString
 	created: IsoAutoDateString
@@ -112,6 +176,10 @@ export type ExternalauthsResponse<Texpand = unknown> = Required<ExternalauthsRec
 export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemFields<Texpand>
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
+export type FavoritesResponse<Texpand = unknown> = Required<FavoritesRecord> & BaseSystemFields<Texpand>
+export type FoodLogsResponse<Texpand = unknown> = Required<FoodLogsRecord> & BaseSystemFields<Texpand>
+export type FoodsResponse<Texpand = unknown> = Required<FoodsRecord> & BaseSystemFields<Texpand>
+export type UserStatsResponse<Texpand = unknown> = Required<UserStatsRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -122,6 +190,10 @@ export type CollectionRecords = {
 	_mfas: MfasRecord
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
+	favorites: FavoritesRecord
+	food_logs: FoodLogsRecord
+	foods: FoodsRecord
+	user_stats: UserStatsRecord
 	users: UsersRecord
 }
 
@@ -131,6 +203,10 @@ export type CollectionResponses = {
 	_mfas: MfasResponse
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
+	favorites: FavoritesResponse
+	food_logs: FoodLogsResponse
+	foods: FoodsResponse
+	user_stats: UserStatsResponse
 	users: UsersResponse
 }
 
