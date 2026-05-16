@@ -8,22 +8,6 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col overflow-x-hidden">
-	<!-- Navigation -->
-	<nav class="flex justify-between items-center px-6 py-8 max-w-6xl mx-auto w-full">
-		<div class="flex items-center gap-2">
-			<div class="w-8 h-8 rounded-lg bg-[var(--color-calories)] flex items-center justify-center">
-				<span class="text-[var(--color-surface)] font-black text-xl">F</span>
-			</div>
-			<span class="font-black text-xl tracking-tighter">Food Factor</span>
-		</div>
-		<a 
-			href="/dashboard" 
-			class="px-5 py-2 rounded-full bg-[var(--color-surface)] border border-[var(--border)] font-bold text-sm hover:scale-105 transition-transform"
-		>
-			Open App
-		</a>
-	</nav>
-
 	<!-- Hero Section -->
 	<main class="flex-grow flex flex-col items-center justify-center px-6 py-20 text-center max-w-4xl mx-auto">
 		<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-calories)]/10 text-[var(--color-calories)] text-xs font-bold uppercase tracking-widest mb-8">
