@@ -8,37 +8,50 @@
 </script>
 
 <nav class="flex justify-between items-center px-6 py-6 max-w-6xl mx-auto w-full">
-	<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity group">
-		<div class="w-8 h-8 rounded-lg bg-calories flex items-center justify-center group-hover:scale-110 transition-transform">
-			<span class="text-surface font-black text-xl">F</span>
-		</div>
-		<span class="font-black text-xl tracking-tighter">Food Factor</span>
-	</a>
+	{#if auth.isValid}
+		<a href="/dashboard" class="flex items-center gap-2 hover:opacity-80 transition-opacity group">
+			<div class="w-8 h-8 rounded-lg bg-calories flex items-center justify-center group-hover:scale-110 transition-transform">
+				<span class="text-surface font-black text-xl">F</span>
+			</div>
+			<span class="font-black text-xl tracking-tighter">Food Factor</span>
+		</a>
+	{:else}
+		<a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity group">
+			<div class="w-8 h-8 rounded-lg bg-calories flex items-center justify-center group-hover:scale-110 transition-transform">
+				<span class="text-surface font-black text-xl">F</span>
+			</div>
+			<span class="font-black text-xl tracking-tighter">Food Factor</span>
+		</a>
+	{/if}
 
 	<div class="flex items-center gap-2 sm:gap-6">
 		{#if auth.isValid}
 			<a
-				href="/dashboard"
-				class="font-bold text-sm transition-colors {isActive('/dashboard') ? 'text-calories' : 'hover:text-calories'}"
+				href="/log"
+				class="font-bold text-sm transition-colors hover:text-calories"
+				class:text-calories={isActive('/log')}
 			>
-				Dashboard
+				Log Fuel
 			</a>
 			<a
 				href="/add"
-				class="font-bold text-sm transition-colors {isActive('/add') ? 'text-calories' : 'hover:text-calories'}"
+				class="font-bold text-sm transition-colors hover:text-calories"
+				class:text-calories={isActive('/add')}
 			>
 				Add Food
 			</a>
 			<a
 				href="/profile"
-				class="font-bold text-sm transition-colors {isActive('/profile') ? 'text-calories' : 'hover:text-calories'}"
+				class="font-bold text-sm transition-colors hover:text-calories"
+				class:text-calories={isActive('/profile')}
 			>
 				Profile
 			</a>
 		{:else}
 			<a
 				href="/login"
-				class="font-bold text-sm transition-colors {isActive('/login') ? 'text-calories' : 'hover:text-calories'}"
+				class="font-bold text-sm transition-colors hover:text-calories"
+				class:text-calories={isActive('/login')}
 			>
 				Log in
 			</a>
