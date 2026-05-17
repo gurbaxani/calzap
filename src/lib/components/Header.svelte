@@ -24,6 +24,12 @@
 				Dashboard
 			</a>
 			<a
+				href="/add"
+				class="font-bold text-sm transition-colors {isActive('/add') ? 'text-calories' : 'hover:text-calories'}"
+			>
+				Add Food
+			</a>
+			<a
 				href="/profile"
 				class="font-bold text-sm transition-colors {isActive('/profile') ? 'text-calories' : 'hover:text-calories'}"
 			>
