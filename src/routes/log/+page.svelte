@@ -403,7 +403,7 @@
 	<meta name="description" content="Log your meals quickly by choosing from your catalog or keying in custom macronutrients." />
 </svelte:head>
 
-<main class="max-w-4xl mx-auto px-4 py-8 sm:px-6 flex flex-col gap-8 animate-in fade-in duration-300">
+<main class="max-w-md mx-auto px-6 py-8 flex flex-col gap-8 animate-in fade-in duration-300">
 	<!-- Navigation Header -->
 	<header class="flex items-center justify-between border-b border-(--border) pb-6">
 		<div class="flex items-center gap-4">
@@ -411,16 +411,16 @@
 				type="button"
 				id="btn-back-dashboard"
 				onclick={() => goto('/dashboard')}
-				class="flex h-10 w-10 items-center justify-center rounded-full bg-(--surface) text-(--fg) border border-(--border) hover:bg-(--border) transition-colors active:scale-95"
+				class="flex h-10 w-10 items-center justify-center rounded-full bg-(--surface) text-(--fg) border border-(--border) hover:bg-(--border) transition-colors active:scale-95 cursor-pointer"
 				aria-label="Back to dashboard"
 			>
-				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
 				</svg>
 			</button>
 			<div>
-				<h1 class="text-3xl font-black tracking-tight">Log Fuel</h1>
-				<p class="text-sm text-zinc-500 dark:text-zinc-400">Track macro intake in seconds</p>
+				<h1 class="text-2xl font-black tracking-tight">Log Fuel</h1>
+				<p class="text-xs text-zinc-500 dark:text-zinc-400">Track macro intake in seconds</p>
 			</div>
 		</div>
 
@@ -428,9 +428,9 @@
 		<a
 			href="/add"
 			id="link-create-food"
-			class="px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-sm transition-all text-center"
+			class="px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-xs uppercase tracking-wider transition-all text-center"
 		>
-			+ Define New Food
+			Define Food
 		</a>
 	</header>
 
@@ -447,460 +447,417 @@
 		</div>
 	{/if}
 
-	<!-- Main Core Content split in 2 columns -->
-	<div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+	<!-- Logging Interface Stack -->
+	<div class="flex flex-col gap-6">
 		
-		<!-- Left: Logging Interface (3 cols) -->
-		<div class="lg:col-span-3 flex flex-col gap-6">
-			
-			<!-- Mode Switcher -->
-			<div class="flex rounded-2xl bg-(--surface) p-1.5 border border-(--border)">
-				<button
-					type="button"
-					id="tab-search-mode"
-					onclick={() => { mode = 'search'; error = ''; successMsg = ''; }}
-					class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all text-center"
-					class:bg-zinc-900={mode === 'search'}
-					class:text-white={mode === 'search'}
-					class:dark:bg-zinc-100={mode === 'search'}
-					class:dark:text-zinc-950={mode === 'search'}
-				>
-					Search My Foods
-				</button>
-				<button
-					type="button"
-					id="tab-custom-mode"
-					onclick={() => { mode = 'custom'; error = ''; successMsg = ''; }}
-					class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all text-center"
-					class:bg-zinc-900={mode === 'custom'}
-					class:text-white={mode === 'custom'}
-					class:dark:bg-zinc-100={mode === 'custom'}
-					class:dark:text-zinc-950={mode === 'custom'}
-				>
-					Quick Add Macros
-				</button>
-			</div>
+		<!-- Mode Switcher Pill Container -->
+		<div class="flex rounded-2xl bg-(--surface) p-1 border border-(--border)">
+			<button
+				type="button"
+				id="tab-search-mode"
+				onclick={() => { mode = 'search'; error = ''; successMsg = ''; }}
+				class="flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all text-center cursor-pointer"
+				class:active-mode={mode === 'search'}
+			>
+				Catalog Search
+			</button>
+			<button
+				type="button"
+				id="tab-custom-mode"
+				onclick={() => { mode = 'custom'; error = ''; successMsg = ''; }}
+				class="flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all text-center cursor-pointer"
+				class:active-mode={mode === 'custom'}
+			>
+				Quick Add
+			</button>
+		</div>
 
-			<!-- SEARCH & LOG VIEW -->
-			{#if mode === 'search'}
-				<div class="flex flex-col gap-5 animate-in fade-in duration-200">
-					<!-- Search Input -->
-					<div class="relative">
-						<input
-							type="search"
-							id="search-foods-input"
-							bind:value={searchQuery}
-							oninput={handleSearchInput}
-							placeholder="Search your defined foods..."
-							class="w-full rounded-2xl bg-(--surface) border border-(--border) px-5 py-4 pl-12 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all placeholder:text-zinc-400"
-						/>
-						<div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-						</div>
-					</div>
-
-					<!-- Selection Details Box (if item selected) -->
-					{#if selectedFood}
-						<div id="selection-details-card" class="rounded-3xl bg-(--surface) border border-(--border) p-6 flex flex-col gap-6 shadow-xl shadow-black/5 relative overflow-hidden">
-							<button
-								type="button"
-								id="btn-close-selection"
-								onclick={() => { selectedFood = null; }}
-								class="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 hover:opacity-85 text-zinc-500"
-								aria-label="Cancel selection"
-							>
-								✕
-							</button>
-
-							<div>
-								<span class="text-xs font-black uppercase tracking-widest text-calories mb-1 block">Active Selection</span>
-								<h2 class="text-2xl font-black tracking-tight">{selectedFood.name}</h2>
-								<p class="text-sm text-zinc-500">
-									Reference: {selectedFood.quantity} {selectedFood.units} 
-									({selectedFood.calories} kcal)
-								</p>
-							</div>
-
-							<!-- Quantity Adjuster -->
-							<div class="flex flex-col gap-2 bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-2xl border border-(--border)">
-								<label for="input-consumed-qty" class="text-xs font-black uppercase tracking-wider text-zinc-500">Quantity Consumed</label>
-								<div class="flex items-center gap-3">
-									<input
-										type="number"
-										id="input-consumed-qty"
-										bind:value={consumedQty}
-										min="0.1"
-										step="any"
-										class="flex-1 bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums"
-									/>
-									<span class="text-xl font-bold text-zinc-400 uppercase">{selectedFood.units}</span>
-								</div>
-							</div>
-
-							<!-- Adjusted Macros Display -->
-							<div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-								<div class="rounded-2xl border border-(--border) p-3 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-900/30">
-									<span class="text-[10px] font-black uppercase tracking-wider text-zinc-400 mb-1">Calories</span>
-									<span class="text-xl font-black tabular-nums" style="color: var(--color-calories)">{adjCalories}</span>
-									<span class="text-[10px] font-bold text-zinc-400">kcal</span>
-								</div>
-								<div class="rounded-2xl border border-(--border) p-3 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-900/30">
-									<span class="text-[10px] font-black uppercase tracking-wider text-rose-500 dark:text-rose-400 mb-1">Protein</span>
-									<span class="text-xl font-black tabular-nums text-rose-600 dark:text-rose-400">{adjProtein}</span>
-									<span class="text-[10px] font-bold text-zinc-400">g</span>
-								</div>
-								<div class="rounded-2xl border border-(--border) p-3 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-900/30">
-									<span class="text-[10px] font-black uppercase tracking-wider text-amber-500 dark:text-amber-400 mb-1">Carbs</span>
-									<span class="text-xl font-black tabular-nums text-amber-600 dark:text-amber-400">{adjCarbs}</span>
-									<span class="text-[10px] font-bold text-zinc-400">g</span>
-								</div>
-								<div class="rounded-2xl border border-(--border) p-3 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-900/30">
-									<span class="text-[10px] font-black uppercase tracking-wider text-blue-500 dark:text-blue-400 mb-1">Fats</span>
-									<span class="text-xl font-black tabular-nums text-blue-600 dark:text-blue-400">{adjFats}</span>
-									<span class="text-[10px] font-bold text-zinc-400">g</span>
-								</div>
-								<div class="rounded-2xl border border-(--border) p-3 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-900/30 col-span-2 sm:col-span-1">
-									<span class="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 mb-1">Fiber</span>
-									<span class="text-xl font-black tabular-nums text-emerald-600 dark:text-emerald-400">{adjFiber}</span>
-									<span class="text-[10px] font-bold text-zinc-400">g</span>
-								</div>
-							</div>
-
-							<!-- Action button -->
-							<button
-								type="button"
-								id="btn-confirm-log"
-								onclick={logSelectedFood}
-								disabled={isLogging || consumedQty <= 0}
-								class="w-full py-4 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-bold text-lg hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-							>
-								{#if isLogging}
-									<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded-full block"></span>
-									<span>Logging Intake...</span>
-								{:else}
-									<span>Log {consumedQty} {selectedFood.units} of {selectedFood.name}</span>
-								{/if}
-							</button>
-						</div>
-					{/if}
-
-					<!-- Search Results List -->
-					<div class="flex flex-col gap-3">
-						<h3 class="text-xs font-black uppercase tracking-wider text-zinc-400">Your Catalog</h3>
-						
-						{#if isSearching}
-							<div class="py-12 text-center text-zinc-500">
-								<span class="animate-spin h-6 w-6 border-2 border-zinc-500 border-t-transparent rounded-full inline-block mb-2"></span>
-								<p class="font-bold text-sm">Searching Catalog...</p>
-							</div>
-						{:else}
-							{#if foodsList.length === 0}
-								<div class="rounded-3xl border-2 border-dashed border-(--border) p-12 text-center flex flex-col items-center gap-4">
-									<p class="text-zinc-500 font-bold text-lg">No custom foods found</p>
-									<p class="text-zinc-400 text-sm max-w-xs">Define custom food items with exact macronutrient counts first to easily log them.</p>
-									<a
-										href="/add"
-										class="px-6 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 text-sm font-bold transition-all"
-									>
-										Define a Food
-									</a>
-								</div>
-							{:else}
-								<div class="grid gap-3 max-h-[400px] overflow-y-auto pr-1">
-									{#each foodsList as item (item.id)}
-										<div class="flex items-stretch gap-2 group w-full">
-											<button
-												type="button"
-												id="food-item-{item.id}"
-												onclick={() => selectFoodItem(item)}
-												class="flex-1 text-left p-4 rounded-2xl bg-(--surface) border border-(--border) hover:border-zinc-400 dark:hover:border-zinc-600 transition-all flex items-center justify-between gap-4 active:scale-[0.99]"
-											>
-												<div>
-													<h4 class="font-bold text-lg tracking-tight">{item.name}</h4>
-													<p class="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
-														{item.quantity} {item.units} • <span class="tabular-nums">{item.calories} kcal</span>
-													</p>
-												</div>
-												<div class="flex items-center gap-2 text-zinc-400">
-													<span class="text-xs font-bold bg-zinc-50 dark:bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-(--border)">Select</span>
-												</div>
-											</button>
-											
-											<!-- Delete Defined Food Button -->
-											<button
-												type="button"
-												id="delete-food-{item.id}"
-												onclick={() => deleteDefinedFood(item.id)}
-												class="px-4 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 dark:text-red-400 dark:border-red-900/30 flex items-center justify-center transition-all active:scale-95"
-												title="Delete food definition"
-											>
-												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-											</button>
-										</div>
-									{/each}
-								</div>
-							{/if}
-						{/if}
+		<!-- SEARCH & LOG VIEW -->
+		{#if mode === 'search'}
+			<div class="flex flex-col gap-5 animate-in fade-in duration-200">
+				<!-- Search Input -->
+				<div class="relative">
+					<input
+						type="search"
+						id="search-foods-input"
+						bind:value={searchQuery}
+						oninput={handleSearchInput}
+						placeholder="Search foods..."
+						class="w-full rounded-2xl bg-(--surface) border border-(--border) px-5 py-4 pl-12 font-bold text-base focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-all placeholder:text-zinc-400"
+					/>
+					<div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
+						</svg>
 					</div>
 				</div>
-			{/if}
 
-			<!-- QUICK ADD VIEW -->
-			{#if mode === 'custom'}
-				<form onsubmit={logCustomMeal} class="flex flex-col gap-5 animate-in fade-in duration-200">
-					<div class="rounded-3xl bg-(--surface) border border-(--border) p-6 flex flex-col gap-6 shadow-xl shadow-black/5">
-						
-						<!-- Name -->
-						<div class="flex flex-col gap-2">
-							<label for="input-custom-name" class="text-xs font-black uppercase tracking-wider text-zinc-500">Meal Name</label>
-							<input
-								type="text"
-								id="input-custom-name"
-								bind:value={customName}
-								required
-								placeholder="e.g. Scrambled Eggs & Bread"
-								class="w-full rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-(--border) px-4 py-3 font-semibold focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all"
-							/>
-						</div>
-
-						<!-- Calories and Macros Inputs Grid -->
-						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-							
-							<!-- Calories -->
-							<div class="flex flex-col gap-2 rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/30 p-4 border border-(--border) focus-within:ring-2 focus-within:ring-zinc-900 transition-all">
-								<label for="input-custom-calories" class="text-xs font-black uppercase tracking-wider text-zinc-500">Total Calories (kcal)</label>
-								<input
-									type="number"
-									id="input-custom-calories"
-									bind:value={customCalories}
-									min="0"
-									placeholder="0"
-									class="bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums text-calories"
-								/>
-							</div>
-
-							<!-- Protein -->
-							<div class="flex flex-col gap-2 rounded-2xl bg-rose-50/30 dark:bg-rose-950/10 p-4 border border-rose-100 dark:border-rose-950 focus-within:ring-2 focus-within:ring-rose-400 transition-all">
-								<label for="input-custom-protein" class="text-xs font-black uppercase tracking-wider text-rose-500">Protein (grams)</label>
-								<input
-									type="number"
-									id="input-custom-protein"
-									bind:value={customProtein}
-									min="0"
-									step="0.1"
-									placeholder="0.0"
-									class="bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums text-rose-600 dark:text-rose-400"
-								/>
-							</div>
-
-							<!-- Carbs -->
-							<div class="flex flex-col gap-2 rounded-2xl bg-amber-50/30 dark:bg-amber-950/10 p-4 border border-amber-100 dark:border-amber-950 focus-within:ring-2 focus-within:ring-amber-400 transition-all">
-								<label for="input-custom-carbs" class="text-xs font-black uppercase tracking-wider text-amber-500">Carbs (grams)</label>
-								<input
-									type="number"
-									id="input-custom-carbs"
-									bind:value={customCarbs}
-									min="0"
-									step="0.1"
-									placeholder="0.0"
-									class="bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums text-amber-600 dark:text-amber-400"
-								/>
-							</div>
-
-							<!-- Fats -->
-							<div class="flex flex-col gap-2 rounded-2xl bg-blue-50/30 dark:bg-blue-950/10 p-4 border border-blue-100 dark:border-blue-950 focus-within:ring-2 focus-within:ring-blue-400 transition-all">
-								<label for="input-custom-fats" class="text-xs font-black uppercase tracking-wider text-blue-500">Fats (grams)</label>
-								<input
-									type="number"
-									id="input-custom-fats"
-									bind:value={customFats}
-									min="0"
-									step="0.1"
-									placeholder="0.0"
-									class="bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums text-blue-600 dark:text-blue-400"
-								/>
-							</div>
-
-							<!-- Fiber -->
-							<div class="flex flex-col gap-2 rounded-2xl bg-emerald-50/30 dark:bg-emerald-950/10 p-4 border border-emerald-100 dark:border-emerald-950 col-span-1 sm:col-span-2 focus-within:ring-2 focus-within:ring-emerald-400 transition-all">
-								<label for="input-custom-fiber" class="text-xs font-black uppercase tracking-wider text-emerald-500">Fiber (grams)</label>
-								<input
-									type="number"
-									id="input-custom-fiber"
-									bind:value={customFiber}
-									min="0"
-									step="0.1"
-									placeholder="0.0"
-									class="bg-transparent text-3xl font-black tracking-tight focus:outline-none tabular-nums text-emerald-600 dark:text-emerald-400"
-								/>
-							</div>
-						</div>
-
+				<!-- Selection Details Box (if item selected) -->
+				{#if selectedFood}
+					<div id="selection-details-card" class="rounded-3xl bg-(--surface) border border-(--border) p-6 flex flex-col gap-6 shadow-xl shadow-black/5 relative overflow-hidden">
 						<button
-							type="submit"
-							id="btn-submit-custom-meal"
-							disabled={isLogging || !customName.trim()}
-							class="w-full py-4 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-bold text-lg hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+							type="button"
+							id="btn-close-selection"
+							onclick={() => { selectedFood = null; }}
+							class="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 hover:opacity-85 text-zinc-500 cursor-pointer"
+							aria-label="Cancel selection"
+						>
+							✕
+						</button>
+
+						<div>
+							<span class="text-[9px] font-black uppercase tracking-widest text-calories mb-1 block">Active Selection</span>
+							<h2 class="text-xl font-black tracking-tight leading-tight">{selectedFood.name}</h2>
+							<p class="text-xs text-zinc-400 mt-0.5">
+								Reference: {selectedFood.quantity} {selectedFood.units} 
+								({selectedFood.calories} kcal)
+							</p>
+						</div>
+
+						<!-- Quantity Adjuster -->
+						<div class="flex flex-col gap-2 bg-zinc-50 dark:bg-zinc-950 p-4 rounded-2xl border border-(--border)">
+							<label for="input-consumed-qty" class="text-[9px] font-black uppercase tracking-wider text-zinc-400">Quantity Consumed</label>
+							<div class="flex items-baseline gap-2">
+								<input
+									type="number"
+									id="input-consumed-qty"
+									bind:value={consumedQty}
+									min="0.1"
+									step="any"
+									class="w-full bg-transparent text-3xl font-black tracking-tight focus:outline-hidden tabular-nums"
+								/>
+								<span class="text-lg font-black text-zinc-400 uppercase tracking-wide">{selectedFood.units}</span>
+							</div>
+						</div>
+
+						<!-- Adjusted Macros Display -->
+						<div class="grid grid-cols-4 gap-2">
+							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
+								<span class="text-[9px] font-black uppercase tracking-wider text-zinc-400 mb-0.5">Calories</span>
+								<span class="text-sm font-black tabular-nums style-color-calories">{adjCalories}</span>
+								<span class="text-[8px] font-bold text-zinc-400">kcal</span>
+							</div>
+							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
+								<span class="text-[9px] font-black uppercase tracking-wider text-rose-500 dark:text-rose-400 mb-0.5">Protein</span>
+								<span class="text-sm font-black tabular-nums text-rose-600 dark:text-rose-400">{adjProtein}g</span>
+							</div>
+							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
+								<span class="text-[9px] font-black uppercase tracking-wider text-amber-500 dark:text-amber-400 mb-0.5">Carbs</span>
+								<span class="text-sm font-black tabular-nums text-amber-600 dark:text-amber-400">{adjCarbs}g</span>
+							</div>
+							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
+								<span class="text-[9px] font-black uppercase tracking-wider text-blue-500 dark:text-blue-400 mb-0.5">Fats</span>
+								<span class="text-sm font-black tabular-nums text-blue-600 dark:text-blue-400">{adjFats}g</span>
+							</div>
+						</div>
+
+						<!-- Action button -->
+						<button
+							type="button"
+							id="btn-confirm-log"
+							onclick={logSelectedFood}
+							disabled={isLogging || consumedQty <= 0}
+							class="w-full py-4 rounded-2xl bg-(--fg) text-(--bg) font-bold text-base hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
 						>
 							{#if isLogging}
 								<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded-full block"></span>
-								<span>Logging Custom Meal...</span>
+								<span>Logging...</span>
 							{:else}
-								<span>Log Custom Meal</span>
+								<span>Confirm Log</span>
 							{/if}
 						</button>
 					</div>
-				</form>
-			{/if}
-		</div>
-
-		<!-- Right: Today's Summary & Log History (2 cols) -->
-		<div class="lg:col-span-2 flex flex-col gap-6">
-			
-			<!-- Today's Totals Summary Widget -->
-			<div class="rounded-3xl bg-(--surface) border border-(--border) p-6 shadow-xl shadow-black/5 flex flex-col gap-5">
-				<div>
-					<h3 class="text-xs font-black uppercase tracking-widest text-zinc-400">Aggregated Fuel Today</h3>
-					<div class="flex items-baseline gap-1.5 mt-1">
-						<span class="text-4xl font-black tracking-tight tabular-nums style-color-calories">
-							{todayTotals.calories}
-						</span>
-						<span class="text-xs font-bold text-zinc-400">/ {dailyTargets.calories} kcal</span>
-					</div>
-				</div>
-
-				<!-- Macro Mini Progress Indicators -->
-				<div class="flex flex-col gap-4.5">
-					<!-- Protein -->
-					<div class="flex flex-col gap-1.5">
-						<div class="flex justify-between text-xs font-bold">
-							<span class="text-rose-500">Protein</span>
-							<span class="tabular-nums text-zinc-500">{todayTotals.protein}g / {dailyTargets.protein}g</span>
-						</div>
-						<div class="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-							<div 
-								class="h-full rounded-full transition-all duration-500" 
-								style="background-color: var(--color-protein); width: {Math.min(100, (todayTotals.protein / dailyTargets.protein) * 100)}%"
-							></div>
-						</div>
-					</div>
-
-					<!-- Carbs -->
-					<div class="flex flex-col gap-1.5">
-						<div class="flex justify-between text-xs font-bold">
-							<span class="text-amber-500">Carbs</span>
-							<span class="tabular-nums text-zinc-500">{todayTotals.carbs}g / {dailyTargets.carbs}g</span>
-						</div>
-						<div class="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-							<div 
-								class="h-full rounded-full transition-all duration-500" 
-								style="background-color: var(--color-carbs); width: {Math.min(100, (todayTotals.carbs / dailyTargets.carbs) * 100)}%"
-							></div>
-						</div>
-					</div>
-
-					<!-- Fats -->
-					<div class="flex flex-col gap-1.5">
-						<div class="flex justify-between text-xs font-bold">
-							<span class="text-blue-500">Fats</span>
-							<span class="tabular-nums text-zinc-500">{todayTotals.fats}g / {dailyTargets.fats}g</span>
-						</div>
-						<div class="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-							<div 
-								class="h-full rounded-full transition-all duration-500" 
-								style="background-color: var(--color-fats); width: {Math.min(100, (todayTotals.fats / dailyTargets.fats) * 100)}%"
-							></div>
-						</div>
-					</div>
-
-					<!-- Fiber -->
-					<div class="flex flex-col gap-1.5">
-						<div class="flex justify-between text-xs font-bold">
-							<span class="text-emerald-500">Fiber</span>
-							<span class="tabular-nums text-zinc-500">{todayTotals.fiber}g / {dailyTargets.fiber}g</span>
-						</div>
-						<div class="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-							<div 
-								class="h-full rounded-full transition-all duration-500" 
-								style="background-color: var(--color-fiber); width: {Math.min(100, (todayTotals.fiber / dailyTargets.fiber) * 100)}%"
-							></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Today's Log entries -->
-			<div class="flex flex-col gap-3">
-				<h3 class="text-xs font-black uppercase tracking-wider text-zinc-400">Logged Today ({logsToday.length})</h3>
-
-				{#if logsToday.length === 0}
-					<div class="rounded-3xl border-2 border-dashed border-(--border) p-8 text-center text-zinc-400">
-						<p class="font-bold text-sm">No food logged today yet</p>
-						<p class="text-xs text-zinc-500 mt-1">Select a food from catalog or quick add above.</p>
-					</div>
-				{:else}
-					<div class="grid gap-3 max-h-[420px] overflow-y-auto pr-1">
-						{#each logsToday as entry (entry.id)}
-							<div
-								id="log-entry-{entry.id}"
-								class="p-4 rounded-2xl bg-(--surface) border border-(--border) flex flex-col gap-2 relative group"
-							>
-								<!-- Log Entry Header -->
-								<div class="flex items-start justify-between gap-4">
-									<div>
-										<h4 class="font-bold text-base tracking-tight leading-tight">{entry.name}</h4>
-										<p class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">
-											{#if entry.consumed_at}
-												{new Date(entry.consumed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-											{/if}
-										</p>
-									</div>
-									<div class="flex items-center gap-1.5">
-										<!-- Log Again button -->
-										<button
-											type="button"
-											onclick={() => repeatLog(entry)}
-											class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
-											title="Log this again"
-										>
-											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-										</button>
-										<!-- Delete button -->
-										<button
-											type="button"
-											onclick={() => deleteLog(entry.id)}
-											class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-											title="Delete log"
-										>
-											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-										</button>
-									</div>
-								</div>
-
-								<!-- Log Entry Macros Summary -->
-								<div class="flex items-center gap-4 text-xs font-bold text-zinc-500 pt-1.5 border-t border-zinc-100 dark:border-zinc-900">
-									<span class="tabular-nums style-color-calories">{entry.calories} kcal</span>
-									<span>•</span>
-									<span class="text-rose-500 tabular-nums">{entry.proteins}g P</span>
-									<span>•</span>
-									<span class="text-amber-500 tabular-nums">{entry.carbs}g C</span>
-									<span>•</span>
-									<span class="text-blue-500 tabular-nums">{entry.fats}g F</span>
-								</div>
-							</div>
-						{/each}
-					</div>
 				{/if}
+
+				<!-- Search Results List -->
+				<div class="flex flex-col gap-3">
+					<h3 class="text-[9px] font-black uppercase tracking-wider text-zinc-400">Catalog Food Items</h3>
+					
+					{#if isSearching}
+						<div class="py-12 text-center text-zinc-500">
+							<span class="animate-spin h-6 w-6 border-2 border-zinc-500 border-t-transparent rounded-full inline-block mb-2"></span>
+							<p class="font-bold text-sm">Searching Catalog...</p>
+						</div>
+					{:else}
+						{#if foodsList.length === 0}
+							<div class="rounded-3xl border-2 border-dashed border-(--border) p-12 text-center flex flex-col items-center gap-4">
+								<p class="text-zinc-500 font-bold text-base">No catalog foods found</p>
+								<p class="text-zinc-400 text-xs max-w-xs">Define custom food items with exact macronutrient counts first to easily log them.</p>
+								<a
+									href="/add"
+									class="px-6 py-2.5 rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 text-xs font-bold uppercase tracking-wider transition-all"
+								>
+									Define a Food
+								</a>
+							</div>
+						{:else}
+							<div class="grid gap-3 max-h-[350px] overflow-y-auto pr-1">
+								{#each foodsList as item (item.id)}
+									<div class="flex items-stretch gap-2 group w-full">
+										<button
+											type="button"
+											id="food-item-{item.id}"
+											onclick={() => selectFoodItem(item)}
+											class="flex-1 text-left p-4 rounded-2xl bg-(--surface) border border-(--border) hover:border-zinc-400 dark:hover:border-zinc-600 transition-all flex items-center justify-between gap-4 active:scale-[0.99] cursor-pointer"
+										>
+											<div>
+												<h4 class="font-bold text-base tracking-tight">{item.name}</h4>
+												<p class="text-[10px] text-zinc-400 uppercase tracking-wider font-bold mt-0.5">
+													{item.quantity} {item.units} • <span class="tabular-nums style-color-calories">{item.calories} kcal</span>
+												</p>
+											</div>
+											<span class="text-[10px] font-black uppercase tracking-wider bg-zinc-50 dark:bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-(--border)">Select</span>
+										</button>
+										
+										<!-- Delete Defined Food Button -->
+										<button
+											type="button"
+											id="delete-food-{item.id}"
+											onclick={() => deleteDefinedFood(item.id)}
+											class="px-4 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 dark:text-red-400 dark:border-red-900/30 flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+											title="Delete food definition"
+										>
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
+												<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 6.14m-1.66-6.14-.34 6.14M12 18.75m-9-13.5h18M5.25 5.25l.844 14.166a2.25 2.25 0 0 0 2.247 2.114h6.318a2.25 2.25 0 0 0 2.247-2.114L18.75 5.25M9 5.25V4.5a3.75 3.75 0 1 1 7.5 0v.75m-8.25 0h9" />
+											</svg>
+										</button>
+									</div>
+								{/each}
+							</div>
+						{/if}
+					{/if}
+				</div>
 			</div>
+		{/if}
 
-		</div>
+		<!-- QUICK ADD VIEW -->
+		{#if mode === 'custom'}
+			<form onsubmit={logCustomMeal} class="flex flex-col gap-5 animate-in fade-in duration-200">
+				<div class="rounded-3xl bg-(--surface) border border-(--border) p-6 flex flex-col gap-6 shadow-xl shadow-black/5">
+					
+					<!-- Name -->
+					<div class="flex flex-col gap-1.5">
+						<label for="input-custom-name" class="text-[9px] font-black uppercase tracking-wider text-zinc-500">Meal Name</label>
+						<input
+							type="text"
+							id="input-custom-name"
+							bind:value={customName}
+							required
+							placeholder="e.g. Eggs and toast"
+							class="w-full rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-(--border) px-4 py-3 font-semibold text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
+						/>
+					</div>
 
+					<!-- Calories and Macros Inputs Grid -->
+					<div class="grid grid-cols-2 gap-4">
+						
+						<!-- Calories -->
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/30 p-4 border border-(--border)">
+							<label for="input-custom-calories" class="text-[9px] font-black uppercase tracking-wider text-zinc-400">Calories (kcal)</label>
+							<input
+								type="number"
+								id="input-custom-calories"
+								bind:value={customCalories}
+								min="0"
+								placeholder="0"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums style-color-calories"
+							/>
+						</div>
+
+						<!-- Protein -->
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-rose-50/30 dark:bg-rose-950/10 p-4 border border-rose-100 dark:border-rose-950">
+							<label for="input-custom-protein" class="text-[9px] font-black uppercase tracking-wider text-rose-500">Protein (g)</label>
+							<input
+								type="number"
+								id="input-custom-protein"
+								bind:value={customProtein}
+								min="0"
+								step="0.1"
+								placeholder="0.0"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-rose-600 dark:text-rose-400"
+							/>
+						</div>
+
+						<!-- Carbs -->
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-amber-50/30 dark:bg-amber-950/10 p-4 border border-amber-100 dark:border-amber-950">
+							<label for="input-custom-carbs" class="text-[9px] font-black uppercase tracking-wider text-amber-500">Carbs (g)</label>
+							<input
+								type="number"
+								id="input-custom-carbs"
+								bind:value={customCarbs}
+								min="0"
+								step="0.1"
+								placeholder="0.0"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-amber-600 dark:text-amber-400"
+							/>
+						</div>
+
+						<!-- Fats -->
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-blue-50/30 dark:bg-blue-950/10 p-4 border border-blue-100 dark:border-blue-950">
+							<label for="input-custom-fats" class="text-[9px] font-black uppercase tracking-wider text-blue-500">Fats (g)</label>
+							<input
+								type="number"
+								id="input-custom-fats"
+								bind:value={customFats}
+								min="0"
+								step="0.1"
+								placeholder="0.0"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-blue-600 dark:text-blue-400"
+							/>
+						</div>
+					</div>
+
+					<button
+						type="submit"
+						id="btn-submit-custom-meal"
+						disabled={isLogging || !customName.trim()}
+						class="w-full py-4 rounded-2xl bg-(--fg) text-(--bg) font-bold text-base hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+					>
+						{#if isLogging}
+							<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded-full block"></span>
+							<span>Logging...</span>
+						{:else}
+							<span>Confirm Log</span>
+						{/if}
+					</button>
+				</div>
+			</form>
+		{/if}
 	</div>
 
+	<!-- Today's Totals Summary Widget -->
+	<section class="rounded-3xl bg-(--surface) border border-(--border) p-6 shadow-xl shadow-black/5 flex flex-col gap-5">
+		<div>
+			<h3 class="text-[9px] font-black uppercase tracking-widest text-zinc-400">Total Fuel Logged Today</h3>
+			<div class="flex items-baseline gap-1.5 mt-1">
+				<span class="text-4xl font-black tracking-tight tabular-nums style-color-calories">
+					{todayTotals.calories}
+				</span>
+				<span class="text-xs font-bold text-zinc-400">/ {dailyTargets.calories} kcal</span>
+			</div>
+		</div>
+
+		<!-- Macro Progress Bars -->
+		<div class="flex flex-col gap-4">
+			<!-- Protein -->
+			<div class="flex flex-col gap-1.5">
+				<div class="flex justify-between text-xs font-bold">
+					<span class="text-rose-500">Protein</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.protein}g / {dailyTargets.protein}g</span>
+				</div>
+				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
+					<div 
+						class="h-full rounded-full transition-all duration-500" 
+						style="background-color: var(--color-protein); width: {Math.min(100, (todayTotals.protein / dailyTargets.protein) * 100)}%"
+					></div>
+				</div>
+			</div>
+
+			<!-- Carbs -->
+			<div class="flex flex-col gap-1.5">
+				<div class="flex justify-between text-xs font-bold">
+					<span class="text-amber-500">Carbs</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.carbs}g / {dailyTargets.carbs}g</span>
+				</div>
+				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
+					<div 
+						class="h-full rounded-full transition-all duration-500" 
+						style="background-color: var(--color-carbs); width: {Math.min(100, (todayTotals.carbs / dailyTargets.carbs) * 100)}%"
+					></div>
+				</div>
+			</div>
+
+			<!-- Fats -->
+			<div class="flex flex-col gap-1.5">
+				<div class="flex justify-between text-xs font-bold">
+					<span class="text-blue-500">Fats</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.fats}g / {dailyTargets.fats}g</span>
+				</div>
+				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
+					<div 
+						class="h-full rounded-full transition-all duration-500" 
+						style="background-color: var(--color-fats); width: {Math.min(100, (todayTotals.fats / dailyTargets.fats) * 100)}%"
+					></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Today's Log entries -->
+	<section class="flex flex-col gap-4">
+		<h3 class="text-[9px] font-black uppercase tracking-wider text-zinc-400">Logged Today ({logsToday.length})</h3>
+
+		{#if logsToday.length === 0}
+			<div class="rounded-3xl border-2 border-dashed border-(--border) p-8 text-center text-zinc-400 dark:text-zinc-600 bg-zinc-50/50 dark:bg-zinc-950/20">
+				<p class="font-bold text-sm">No food logged today yet</p>
+				<p class="text-xs text-zinc-500 mt-1">Select a food from catalog or quick add above.</p>
+			</div>
+		{:else}
+			<div class="grid gap-3 max-h-[400px] overflow-y-auto pr-1">
+				{#each logsToday as entry (entry.id)}
+					<div
+						id="log-entry-{entry.id}"
+						class="p-4 rounded-2xl bg-(--surface) border border-(--border) flex flex-col gap-2 relative group hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+					>
+						<!-- Log Entry Header -->
+						<div class="flex items-start justify-between gap-4">
+							<div>
+								<h4 class="font-bold text-base tracking-tight leading-tight">{entry.name}</h4>
+								<p class="text-[9px] text-zinc-400 uppercase tracking-wider font-bold mt-0.5">
+									{#if entry.consumed_at}
+										{new Date(entry.consumed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+									{/if}
+								</p>
+							</div>
+							<div class="flex items-center gap-1.5">
+								<!-- Log Again button -->
+								<button
+									type="button"
+									onclick={() => repeatLog(entry)}
+									class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+									title="Log this again"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+									</svg>
+								</button>
+								<!-- Delete button -->
+								<button
+									type="button"
+									onclick={() => deleteLog(entry.id)}
+									class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
+									title="Delete log"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
+										<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 6.14m-1.66-6.14-.34 6.14M12 18.75m-9-13.5h18M5.25 5.25l.844 14.166a2.25 2.25 0 0 0 2.247 2.114h6.318a2.25 2.25 0 0 0 2.247-2.114L18.75 5.25M9 5.25V4.5a3.75 3.75 0 1 1 7.5 0v.75m-8.25 0h9" />
+									</svg>
+								</button>
+							</div>
+						</div>
+
+						<!-- Log Entry Macros Summary -->
+						<div class="flex items-center gap-3 text-xs font-bold text-zinc-500 pt-1.5 border-t border-zinc-100 dark:border-zinc-900">
+							<span class="tabular-nums style-color-calories">{entry.calories} kcal</span>
+							<span>•</span>
+							<span class="text-rose-500 tabular-nums">{entry.proteins}g P</span>
+							<span>•</span>
+							<span class="text-amber-500 tabular-nums">{entry.carbs}g C</span>
+							<span>•</span>
+							<span class="text-blue-500 tabular-nums">{entry.fats}g F</span>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
+	</section>
 </main>
 
 <style>
 	.style-color-calories {
 		color: var(--color-calories);
+	}
+	.active-mode {
+		background-color: var(--color-fg);
+		color: var(--color-bg);
 	}
 </style>
