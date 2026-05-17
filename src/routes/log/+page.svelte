@@ -357,6 +357,35 @@
 		}
 	}
 
+	// Delete defined food from catalog
+	async function deleteDefinedFood(id: string) {
+		if (!confirm('Are you sure you want to delete this food definition? This will not affect your past log history.')) {
+			return;
+		}
+		error = '';
+		successMsg = '';
+		try {
+			const record = await pb.collection('foods').getOne(id);
+			if (record.created_by !== auth.user?.id) {
+				error = 'Unauthorized operation';
+				return;
+			}
+			await pb.collection('foods').delete(id);
+			successMsg = 'Food definition deleted.';
+			
+			if (selectedFood?.id === id) {
+				selectedFood = null;
+			}
+			await fetchFoods();
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				error = err.message;
+			} else {
+				error = 'Failed to delete food definition';
+			}
+		}
+	}
+
 	// Initialize
 	onMount(() => {
 		if (!auth.isValid) {
@@ -579,23 +608,35 @@
 							{:else}
 								<div class="grid gap-3 max-h-[400px] overflow-y-auto pr-1">
 									{#each foodsList as item (item.id)}
-										<button
-											type="button"
-											id="food-item-{item.id}"
-											onclick={() => selectFoodItem(item)}
-											class="w-full text-left p-4 rounded-2xl bg-(--surface) border border-(--border) hover:border-zinc-400 dark:hover:border-zinc-600 transition-all flex items-center justify-between gap-4 active:scale-[0.99]"
-										>
-											<div>
-												<h4 class="font-bold text-lg tracking-tight">{item.name}</h4>
-												<p class="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
-													{item.quantity} {item.units} • <span class="tabular-nums">{item.calories} kcal</span>
-												</p>
-											</div>
-											<div class="flex items-center gap-2 text-zinc-400">
-												<span class="text-xs font-bold bg-zinc-50 dark:bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-(--border)">Select</span>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-											</div>
-										</button>
+										<div class="flex items-stretch gap-2 group w-full">
+											<button
+												type="button"
+												id="food-item-{item.id}"
+												onclick={() => selectFoodItem(item)}
+												class="flex-1 text-left p-4 rounded-2xl bg-(--surface) border border-(--border) hover:border-zinc-400 dark:hover:border-zinc-600 transition-all flex items-center justify-between gap-4 active:scale-[0.99]"
+											>
+												<div>
+													<h4 class="font-bold text-lg tracking-tight">{item.name}</h4>
+													<p class="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+														{item.quantity} {item.units} • <span class="tabular-nums">{item.calories} kcal</span>
+													</p>
+												</div>
+												<div class="flex items-center gap-2 text-zinc-400">
+													<span class="text-xs font-bold bg-zinc-50 dark:bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-(--border)">Select</span>
+												</div>
+											</button>
+											
+											<!-- Delete Defined Food Button -->
+											<button
+												type="button"
+												id="delete-food-{item.id}"
+												onclick={() => deleteDefinedFood(item.id)}
+												class="px-4 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 dark:text-red-400 dark:border-red-900/30 flex items-center justify-center transition-all active:scale-95"
+												title="Delete food definition"
+											>
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+											</button>
+										</div>
 									{/each}
 								</div>
 							{/if}
