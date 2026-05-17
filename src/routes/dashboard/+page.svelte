@@ -4,7 +4,8 @@
 	import { pb } from '$lib/pb';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import type { FoodLogsResponse } from '../../pocketbase-types';
+	import { slide } from 'svelte/transition';
+	import type { FoodLogsResponse } from '../../../pocketbase-types';
 
 	let dailyTargets = $state({
 		calories: 2500,
@@ -14,7 +15,29 @@
 		fiber: 35
 	});
 
+	let selectedDate = $state(new Date());
 	let logsToday = $state<FoodLogsResponse[]>([]);
+	let recentFoods = $state<{
+		name: string;
+		calories: number;
+		proteins: number;
+		carbs: number;
+		fats: number;
+		fiber: number;
+	}[]>([]);
+
+	let showConsumedCal = $state(false);
+	let showQuickAdd = $state(false);
+	let isSaving = $state(false);
+
+	let quickLog = $state({
+		name: '',
+		calories: undefined as number | undefined,
+		protein: undefined as number | undefined,
+		carbs: undefined as number | undefined,
+		fats: undefined as number | undefined,
+		fiber: undefined as number | undefined
+	});
 
 	// Derive today's macro intake totals dynamically from database logs
 	const consumed = $derived.by(() => {
@@ -68,16 +91,20 @@
 		}
 	}
 
-	// Fetch logs created today (secured to current user)
-	async function fetchLogsToday() {
+	// Fetch logs created on the selected date (secured to current user)
+	async function fetchLogsForDate(date: Date) {
 		if (auth.user?.id) {
 			try {
-				const startOfDay = new Date();
+				const startOfDay = new Date(date);
 				startOfDay.setHours(0, 0, 0, 0);
 				
-				const filterStr = pb.filter('user = {:userId} && consumed_at >= {:startOfDay}', {
+				const endOfDay = new Date(date);
+				endOfDay.setHours(23, 59, 59, 999);
+				
+				const filterStr = pb.filter('user = {:userId} && consumed_at >= {:startOfDay} && consumed_at <= {:endOfDay}', {
 					userId: auth.user.id,
-					startOfDay: startOfDay.toISOString()
+					startOfDay: startOfDay.toISOString(),
+					endOfDay: endOfDay.toISOString()
 				});
 				
 				const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 100, {
@@ -86,7 +113,37 @@
 				});
 				logsToday = result.items;
 			} catch (err: unknown) {
-				console.error('Error fetching today\'s logs:', err);
+				console.error('Error fetching logs:', err);
+			}
+		}
+	}
+
+	async function fetchRecentFoods() {
+		if (auth.user?.id) {
+			try {
+				const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 30, {
+					filter: pb.filter('user = {:userId}', { userId: auth.user.id }),
+					sort: '-consumed_at'
+				});
+				
+				// Group and get unique foods by name
+				const uniqueMap = new Map<string, typeof recentFoods[number]>();
+				for (const item of result.items) {
+					if (item.name && !uniqueMap.has(item.name)) {
+						uniqueMap.set(item.name, {
+							name: item.name,
+							calories: item.calories ?? 0,
+							proteins: item.proteins ?? 0,
+							carbs: item.carbs ?? 0,
+							fats: item.fats ?? 0,
+							fiber: item.fiber ?? 0
+						});
+					}
+					if (uniqueMap.size >= 5) break;
+				}
+				recentFoods = Array.from(uniqueMap.values());
+			} catch (err: unknown) {
+				console.error('Error fetching recent foods:', err);
 			}
 		}
 	}
@@ -102,9 +159,91 @@
 				return;
 			}
 			await pb.collection('food_logs').delete(id);
-			await fetchLogsToday();
+			await fetchLogsForDate(selectedDate);
+			await fetchRecentFoods();
 		} catch (err: unknown) {
 			console.error('Failed to delete log entry:', err);
+		}
+	}
+
+	function changeDate(days: number) {
+		const newDate = new Date(selectedDate);
+		newDate.setDate(newDate.getDate() + days);
+		selectedDate = newDate;
+		fetchLogsForDate(selectedDate);
+	}
+
+	function formatSelectedDate(date: Date): string {
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		
+		const yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		yesterday.setHours(0, 0, 0, 0);
+		
+		const d = new Date(date);
+		d.setHours(0, 0, 0, 0);
+		
+		if (d.getTime() === today.getTime()) {
+			return 'Today';
+		} else if (d.getTime() === yesterday.getTime()) {
+			return 'Yesterday';
+		} else {
+			return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+		}
+	}
+
+	async function saveQuickLog() {
+		if (!auth.user?.id) return;
+		isSaving = true;
+		try {
+			await pb.collection('food_logs').create({
+				user: auth.user.id,
+				name: quickLog.name || 'Quick Log',
+				calories: Number(quickLog.calories ?? 0),
+				proteins: Number(quickLog.protein ?? 0),
+				carbs: Number(quickLog.carbs ?? 0),
+				fats: Number(quickLog.fats ?? 0),
+				fiber: Number(quickLog.fiber ?? 0),
+				consumed_at: new Date().toISOString()
+			});
+			// Reset inputs
+			quickLog = {
+				name: '',
+				calories: undefined,
+				protein: undefined,
+				carbs: undefined,
+				fats: undefined,
+				fiber: undefined
+			};
+			showQuickAdd = false;
+			await fetchLogsForDate(selectedDate);
+			await fetchRecentFoods();
+		} catch (err: unknown) {
+			console.error('Failed to create quick log:', err);
+		} finally {
+			isSaving = false;
+		}
+	}
+
+	async function logRecentFood(food: typeof recentFoods[number]) {
+		if (!auth.user?.id) return;
+		try {
+			await pb.collection('food_logs').create({
+				user: auth.user.id,
+				name: food.name,
+				calories: food.calories,
+				proteins: food.proteins,
+				carbs: food.carbs,
+				fats: food.fats,
+				fiber: food.fiber,
+				consumed_at: new Date().toISOString()
+			});
+			// Always reset selection to today when adding a new meal
+			selectedDate = new Date();
+			await fetchLogsForDate(selectedDate);
+		} catch (err: unknown) {
+			console.error('Failed to log recent food:', err);
 		}
 	}
 
@@ -113,7 +252,8 @@
 			goto('/login');
 		} else {
 			fetchTargets();
-			fetchLogsToday();
+			fetchLogsForDate(selectedDate);
+			fetchRecentFoods();
 		}
 	});
 </script>
@@ -122,20 +262,77 @@
 	<title>Dashboard | Food Factor</title>
 </svelte:head>
 
-<main class="max-w-md mx-auto px-6 py-12 flex flex-col gap-12 animate-in fade-in duration-300">
-	<!-- Header / Summary -->
-	<header class="flex flex-col gap-1">
-		<h1 class="text-sm font-bold tracking-widest uppercase text-muted">Daily Summary</h1>
-		<div class="flex items-baseline gap-2">
-			<span class="text-6xl font-black tracking-tighter tabular-nums" style="color: var(--color-calories)">
-				{remainingCalories}
+<main class="max-w-md mx-auto px-6 py-8 flex flex-col gap-8 animate-in fade-in duration-300">
+	<!-- Date Switcher Segmented Control -->
+	<header class="flex flex-col gap-6">
+		<div class="flex items-center justify-between bg-(--surface) border border-(--border) rounded-2xl p-1.5 shadow-sm">
+			<button 
+				type="button" 
+				onclick={() => changeDate(-1)} 
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
+				aria-label="Previous day"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+			</button>
+			
+			<span class="font-extrabold text-sm tracking-wider uppercase text-muted">
+				{formatSelectedDate(selectedDate)}
 			</span>
-			<span class="text-xl font-bold text-muted">kcal left</span>
+			
+			<button 
+				type="button" 
+				onclick={() => changeDate(1)} 
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
+				aria-label="Next day"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+			</button>
+		</div>
+
+		<!-- Calorie Intake Dashboard -->
+		<div class="flex flex-col gap-1.5">
+			<button 
+				type="button" 
+				onclick={() => { showConsumedCal = !showConsumedCal; }} 
+				class="group flex flex-col items-start bg-transparent border-0 p-0 text-left cursor-pointer focus:outline-hidden"
+			>
+				<div class="flex items-baseline gap-2 group-hover:opacity-90 transition-opacity">
+					{#if showConsumedCal}
+						<span class="text-6xl font-black tracking-tighter tabular-nums" style="color: var(--color-calories)">
+							{consumed.calories}
+						</span>
+						<span class="text-lg font-bold text-muted">/ {dailyTargets.calories} kcal</span>
+					{:else}
+						{#if remainingCalories >= 0}
+							<span class="text-6xl font-black tracking-tighter tabular-nums" style="color: var(--color-calories)">
+								{remainingCalories}
+							</span>
+							<span class="text-lg font-bold text-muted">kcal left</span>
+						{:else}
+							<span class="text-6xl font-black tracking-tighter tabular-nums text-rose-500">
+								{Math.abs(remainingCalories)}
+							</span>
+							<span class="text-lg font-bold text-rose-500">kcal over</span>
+						{/if}
+					{/if}
+				</div>
+				<span class="text-[10px] font-black text-muted/60 uppercase tracking-widest mt-1">
+					{#if showConsumedCal}
+						Showing Total Consumed • Tap to view left
+					{:else}
+						{#if remainingCalories >= 0}
+							Showing Remaining • Tap to view consumed
+						{:else}
+							Exceeded Daily Target • Tap to view consumed
+						{/if}
+					{/if}
+				</span>
+			</button>
 		</div>
 	</header>
 
-	<!-- Macros Grid -->
-	<section class="grid gap-8">
+	<!-- Macros Grid (2x2) -->
+	<section class="grid grid-cols-2 gap-4">
 		<MacroBar 
 			label="Protein" 
 			value={consumed.protein} 
@@ -167,47 +364,156 @@
 	</section>
 
 	<!-- Actions -->
-	<section class="flex flex-col gap-4 mt-4">
+	<section class="flex flex-col gap-4 mt-2">
 		<button 
 			type="button"
 			onclick={() => goto('/log')}
 			class="w-full py-4 rounded-2xl bg-(--fg) text-(--bg) font-bold text-lg shadow-xl shadow-black/10 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
 			Log Meal
 		</button>
 		
 		<div class="grid grid-cols-2 gap-4">
 			<button 
 				type="button"
-				onclick={() => goto('/log')}
-				class="py-3 rounded-xl bg-(--surface) border border-(--border) font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
+				onclick={() => { showQuickAdd = !showQuickAdd; }}
+				class="py-3.5 rounded-2xl bg-(--surface) border border-(--border) font-bold text-sm active:scale-[0.98] transition-transform cursor-pointer"
 			>
-				Quick Add
+				{#if showQuickAdd}
+					Cancel Quick Add
+				{:else}
+					Quick Add
+				{/if}
 			</button>
 			<button 
 				type="button"
 				onclick={() => goto('/log')}
-				class="py-3 rounded-xl bg-(--surface) border border-(--border) font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
+				class="py-3.5 rounded-2xl bg-(--surface) border border-(--border) font-bold text-sm active:scale-[0.98] transition-transform cursor-pointer"
 			>
 				Scanner
 			</button>
 		</div>
+
+		<!-- Quick Add Slide Panel -->
+		{#if showQuickAdd}
+			<div 
+				transition:slide={{ duration: 300 }}
+				class="p-5 rounded-2xl bg-(--surface) border border-(--border) flex flex-col gap-4 shadow-xl"
+			>
+				<h3 class="font-extrabold text-sm uppercase tracking-wider text-muted">Quick Log Fuel</h3>
+				
+				<div class="flex flex-col gap-3">
+					<div class="flex flex-col gap-1">
+						<label for="quick-name" class="text-[10px] font-bold uppercase tracking-wider text-muted/80">Meal Name</label>
+						<input 
+							type="text" 
+							id="quick-name" 
+							placeholder="e.g. Protein shake" 
+							bind:value={quickLog.name}
+							class="w-full px-4 py-2.5 rounded-xl bg-(--surface) border border-(--border) font-medium text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
+						/>
+					</div>
+
+					<div class="grid grid-cols-2 gap-3">
+						<div class="flex flex-col gap-1">
+							<label for="quick-cal" class="text-[10px] font-bold uppercase tracking-wider text-muted/80">Calories (kcal)</label>
+							<input 
+								type="number" 
+								id="quick-cal" 
+								placeholder="0" 
+								bind:value={quickLog.calories}
+								class="w-full px-4 py-2.5 rounded-xl bg-(--surface) border border-(--border) font-bold text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors tabular-nums"
+							/>
+						</div>
+
+						<div class="flex flex-col gap-1">
+							<label for="quick-prot" class="text-[10px] font-bold uppercase tracking-wider text-muted/80">Protein (g)</label>
+							<input 
+								type="number" 
+								id="quick-prot" 
+								placeholder="0" 
+								bind:value={quickLog.protein}
+								class="w-full px-4 py-2.5 rounded-xl bg-(--surface) border border-(--border) font-bold text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors tabular-nums"
+							/>
+						</div>
+
+						<div class="flex flex-col gap-1">
+							<label for="quick-carb" class="text-[10px] font-bold uppercase tracking-wider text-muted/80">Carbs (g)</label>
+							<input 
+								type="number" 
+								id="quick-carb" 
+								placeholder="0" 
+								bind:value={quickLog.carbs}
+								class="w-full px-4 py-2.5 rounded-xl bg-(--surface) border border-(--border) font-bold text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors tabular-nums"
+							/>
+						</div>
+
+						<div class="flex flex-col gap-1">
+							<label for="quick-fat" class="text-[10px] font-bold uppercase tracking-wider text-muted/80">Fats (g)</label>
+							<input 
+								type="number" 
+								id="quick-fat" 
+								placeholder="0" 
+								bind:value={quickLog.fats}
+								class="w-full px-4 py-2.5 rounded-xl bg-(--surface) border border-(--border) font-bold text-sm focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors tabular-nums"
+							/>
+						</div>
+					</div>
+
+					<button 
+						type="button"
+						onclick={saveQuickLog}
+						disabled={isSaving}
+						class="w-full mt-2 py-3 rounded-xl bg-(--fg) text-(--bg) font-bold text-sm hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-all cursor-pointer flex items-center justify-center gap-2"
+					>
+						{#if isSaving}
+							Saving...
+						{:else}
+							Confirm Log
+						{/if}
+					</button>
+				</div>
+			</div>
+		{/if}
 	</section>
+
+	<!-- Quick Templates Section (Recent Foods) -->
+	{#if recentFoods.length > 0}
+		<section class="flex flex-col gap-3">
+			<h2 class="text-[10px] font-black uppercase tracking-wider text-muted">Quick Templates (Tap to Log)</h2>
+			<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-none mask-fade">
+				{#each recentFoods as food (food.name)}
+					<button
+						type="button"
+						onclick={() => logRecentFood(food)}
+						class="flex-shrink-0 px-4 py-3 rounded-2xl bg-(--surface) border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 transition-all text-left flex flex-col gap-1 cursor-pointer max-w-[150px]"
+					>
+						<span class="font-bold text-xs truncate w-full">{food.name}</span>
+						<div class="flex items-center gap-1.5 text-[9px] font-black text-muted uppercase">
+							<span class="style-color-calories">{food.calories} kcal</span>
+							<span>•</span>
+							<span class="text-rose-500">{Math.round(food.proteins)}g P</span>
+						</div>
+					</button>
+				{/each}
+			</div>
+		</section>
+	{/if}
 
 	<!-- Logged Today Section -->
 	<section class="flex flex-col gap-4 mt-2 animate-in fade-in duration-300">
 		<div class="flex items-center justify-between">
-			<h2 class="text-xs font-black uppercase tracking-wider text-muted">Tracked Today ({logsToday.length})</h2>
+			<h2 class="text-[10px] font-black uppercase tracking-wider text-muted">Tracked for this Date ({logsToday.length})</h2>
 			{#if logsToday.length > 0}
-				<span class="text-xs font-bold style-color-calories">{consumed.calories} kcal consumed</span>
+				<span class="text-xs font-black style-color-calories uppercase tracking-tight">{consumed.calories} kcal consumed</span>
 			{/if}
 		</div>
 
 		{#if logsToday.length === 0}
-			<div class="rounded-3xl border-2 border-dashed border-(--border) p-8 text-center text-zinc-400 dark:text-zinc-600">
-				<p class="font-bold text-sm">No food tracked today yet</p>
-				<p class="text-xs text-zinc-500 mt-1">Tap Log Meal above to start tracking!</p>
+			<div class="rounded-3xl border-2 border-dashed border-(--border) p-8 text-center text-zinc-400 dark:text-zinc-600 bg-(--surface)/40">
+				<p class="font-bold text-sm">No food tracked for this date</p>
+				<p class="text-xs text-zinc-500 mt-1">Tap Log Meal or Quick Add to start tracking!</p>
 			</div>
 		{:else}
 			<div class="flex flex-col gap-3">
@@ -229,11 +535,11 @@
 							<button
 								type="button"
 								onclick={() => deleteLog(entry.id)}
-								class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
+								class="h-8 w-8 flex items-center justify-center rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
 								title="Delete log"
 								aria-label="Delete log entry"
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
 							</button>
 						</div>
 
@@ -264,5 +570,9 @@
 	}
 	.style-color-calories {
 		color: var(--color-calories);
+	}
+	.mask-fade {
+		mask-image: linear-gradient(to right, black 85%, transparent 100%);
+		-webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
 	}
 </style>

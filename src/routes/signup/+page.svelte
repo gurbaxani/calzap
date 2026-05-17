@@ -26,7 +26,7 @@
 		error = null;
 
 		try {
-			const data: Create<'users'> = {
+			const data: Omit<Create<'users'>, 'tokenKey'> = {
 				email,
 				password,
 				passwordConfirm,
