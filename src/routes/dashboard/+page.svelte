@@ -68,7 +68,7 @@
 	async function fetchTargets() {
 		if (auth.user?.id) {
 			try {
-				const record = await pb.collection('user_stats').getOne(auth.user.id);
+				const record = await pb.collection('user_stats').getOne(auth.user.id, { requestKey: null });
 				
 				if (record.target_calories !== undefined && record.target_calories !== null) {
 					dailyTargets.calories = record.target_calories;
@@ -103,13 +103,14 @@
 				
 				const filterStr = pb.filter('user = {:userId} && consumed_at >= {:startOfDay} && consumed_at <= {:endOfDay}', {
 					userId: auth.user.id,
-					startOfDay: startOfDay.toISOString(),
-					endOfDay: endOfDay.toISOString()
+					startOfDay: startOfDay,
+					endOfDay: endOfDay
 				});
 				
 				const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 100, {
 					filter: filterStr,
-					sort: '-consumed_at'
+					sort: '-consumed_at',
+					requestKey: null
 				});
 				logsToday = result.items;
 			} catch (err: unknown) {
@@ -123,7 +124,8 @@
 			try {
 				const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 30, {
 					filter: pb.filter('user = {:userId}', { userId: auth.user.id }),
-					sort: '-consumed_at'
+					sort: '-consumed_at',
+					requestKey: null
 				});
 				
 				// Group and get unique foods by name
@@ -153,7 +155,7 @@
 			return;
 		}
 		try {
-			const record = await pb.collection('food_logs').getOne(id);
+			const record = await pb.collection('food_logs').getOne(id, { requestKey: null });
 			if (record.user !== auth.user?.id) {
 				console.error('Unauthorized operation');
 				return;
@@ -205,7 +207,7 @@
 				carbs: Number(quickLog.carbs ?? 0),
 				fats: Number(quickLog.fats ?? 0),
 				fiber: Number(quickLog.fiber ?? 0),
-				consumed_at: new Date().toISOString()
+				consumed_at: new Date()
 			});
 			// Reset inputs
 			quickLog = {
@@ -237,7 +239,7 @@
 				carbs: food.carbs,
 				fats: food.fats,
 				fiber: food.fiber,
-				consumed_at: new Date().toISOString()
+				consumed_at: new Date()
 			});
 			// Always reset selection to today when adding a new meal
 			selectedDate = new Date();

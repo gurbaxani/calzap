@@ -139,7 +139,8 @@
 			}
 			const result = await pb.collection('foods').getList<FoodsResponse>(1, 30, {
 				filter: filterStr,
-				sort: '-created'
+				sort: '-created',
+				requestKey: null
 			});
 			foodsList = result.items;
 		} catch (err: unknown) {
@@ -153,7 +154,7 @@
 	async function fetchTargets() {
 		if (auth.user?.id) {
 			try {
-				const record = await pb.collection('user_stats').getOne(auth.user.id);
+				const record = await pb.collection('user_stats').getOne(auth.user.id, { requestKey: null });
 				if (record.target_calories !== undefined && record.target_calories !== null) {
 					dailyTargets.calories = record.target_calories;
 				}
@@ -186,12 +187,13 @@
 			
 			const filterStr = pb.filter('user = {:userId} && consumed_at >= {:startOfDay}', {
 				userId: auth.user.id,
-				startOfDay: startOfDay.toISOString()
+				startOfDay: startOfDay
 			});
 			
 			const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 50, {
 				filter: filterStr,
-				sort: '-consumed_at'
+				sort: '-consumed_at',
+				requestKey: null
 			});
 			
 			logsToday = result.items;
@@ -240,7 +242,7 @@
 				carbs: adjCarbs,
 				fats: adjFats,
 				fiber: adjFiber,
-				consumed_at: new Date().toISOString()
+				consumed_at: new Date()
 			});
 			
 			successMsg = `Successfully logged ${selectedFood.name}!`;
@@ -281,7 +283,7 @@
 				carbs: customCarbs ?? 0,
 				fats: customFats ?? 0,
 				fiber: customFiber ?? 0,
-				consumed_at: new Date().toISOString()
+				consumed_at: new Date()
 			});
 			
 			successMsg = `Logged custom meal: ${customName}`;
@@ -309,7 +311,7 @@
 		error = '';
 		successMsg = '';
 		try {
-			const record = await pb.collection('food_logs').getOne(id);
+			const record = await pb.collection('food_logs').getOne(id, { requestKey: null });
 			if (record.user !== auth.user?.id) {
 				error = 'Unauthorized operation';
 				return;
@@ -344,7 +346,7 @@
 				carbs: log.carbs,
 				fats: log.fats,
 				fiber: log.fiber,
-				consumed_at: new Date().toISOString()
+				consumed_at: new Date()
 			});
 			successMsg = `Logged "${log.name}" again!`;
 			await fetchLogsToday();
@@ -365,7 +367,7 @@
 		error = '';
 		successMsg = '';
 		try {
-			const record = await pb.collection('foods').getOne(id);
+			const record = await pb.collection('foods').getOne(id, { requestKey: null });
 			if (record.created_by !== auth.user?.id) {
 				error = 'Unauthorized operation';
 				return;
