@@ -17,6 +17,27 @@
 	let saveError = $state('');
 	let exists = $state(false);
 
+	// AI API Key states (Google AI Studio)
+	let apiKey = $state('');
+	let showKey = $state(false);
+	let isKeySaved = $state(false);
+	let keySaveSuccess = $state(false);
+	let keyDeleteSuccess = $state(false);
+
+	let inputType = $derived.by(() => {
+		if (showKey) {
+			return 'text';
+		}
+		return 'password';
+	});
+
+	let keyButtonClasses = $derived.by(() => {
+		if (keySaveSuccess) {
+			return 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/10';
+		}
+		return 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/10 dark:bg-purple-700 dark:hover:bg-purple-600';
+	});
+
 	// High-Utility Derived Macro & Weight Metrics (Zero Side-Effects)
 	let macroCalories = $derived(proteins * 4 + carbs * 4 + fats * 9);
 	let calorieDifference = $derived(calories - macroCalories);
@@ -144,8 +165,42 @@
 		}
 	}
 
+	function handleSaveKey(e: Event) {
+		e.preventDefault();
+		if (!apiKey.trim()) {
+			localStorage.removeItem('google_ai_studio_api_key');
+			isKeySaved = false;
+			keySaveSuccess = false;
+			return;
+		}
+		localStorage.setItem('google_ai_studio_api_key', apiKey.trim());
+		isKeySaved = true;
+		keySaveSuccess = true;
+		keyDeleteSuccess = false;
+		setTimeout(() => {
+			keySaveSuccess = false;
+		}, 3000);
+	}
+
+	function handleDeleteKey() {
+		localStorage.removeItem('google_ai_studio_api_key');
+		apiKey = '';
+		isKeySaved = false;
+		keyDeleteSuccess = true;
+		keySaveSuccess = false;
+		setTimeout(() => {
+			keyDeleteSuccess = false;
+		}, 3000);
+	}
+
 	onMount(() => {
 		fetchGoals();
+		
+		const savedKey = localStorage.getItem('google_ai_studio_api_key');
+		if (savedKey) {
+			apiKey = savedKey;
+			isKeySaved = true;
+		}
 	});
 </script>
 
@@ -219,6 +274,102 @@
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
 							Sign Out Session
 						</a>
+					</div>
+				</div>
+
+				<!-- AI Settings Card -->
+				<div class="p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-sm relative overflow-hidden group">
+					<!-- Decorative purple circle (AI color themed) -->
+					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-[var(--color-fiber)]/5 group-hover:scale-110 transition-transform duration-500"></div>
+					
+					<div class="relative">
+						<div class="flex items-center gap-3 mb-4">
+							<div class="w-10 h-10 rounded-xl bg-[var(--color-fiber)]/10 text-[var(--color-fiber)] flex items-center justify-center font-black">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+							</div>
+							<div>
+								<h2 class="text-xl font-bold tracking-tight">AI Settings</h2>
+								<p class="text-xs text-muted font-semibold">Google AI Studio Configuration</p>
+							</div>
+						</div>
+
+						<p class="text-xs text-muted mb-5 leading-relaxed">
+							Configure your Google AI Studio API key to enable intelligent meal estimation and personalized nutrition advice. Your key is stored strictly on your local browser.
+						</p>
+
+						<form onsubmit={handleSaveKey} class="space-y-4">
+							<div class="space-y-2">
+								<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-[var(--color-fiber)] block">
+									AI Studio API Key
+								</label>
+								<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-[var(--border)] focus-within:ring-2 focus-within:ring-[var(--color-fiber)] transition-all">
+									<input
+										id="ai_api_key"
+										type={inputType}
+										bind:value={apiKey}
+										placeholder="AIzaSy..."
+										class="w-full bg-transparent px-4 py-3 text-sm font-medium focus:outline-none pr-12 text-zinc-900 dark:text-zinc-50"
+									/>
+									<button
+										type="button"
+										onclick={() => showKey = !showKey}
+										class="absolute right-3 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1"
+										aria-label="Toggle password visibility"
+									>
+										{#if showKey}
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+										{:else}
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+										{/if}
+									</button>
+								</div>
+							</div>
+
+							<div class="flex flex-col gap-2">
+								<button
+									type="submit"
+									class="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all text-sm active:scale-[0.98] {keyButtonClasses}"
+								>
+									{#if keySaveSuccess}
+										<svg class="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+										<span>Key Saved!</span>
+									{:else}
+										{#if isKeySaved}
+											<span>Update API Key</span>
+										{:else}
+											<span>Save API Key</span>
+										{/if}
+									{/if}
+								</button>
+
+								{#if isKeySaved}
+									<button
+										type="button"
+										onclick={handleDeleteKey}
+										class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-rose-500/20 text-rose-500 font-bold hover:bg-rose-500/5 transition-all text-sm active:scale-[0.98]"
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+										<span>Delete Saved Key</span>
+									</button>
+								{/if}
+							</div>
+
+							{#if keyDeleteSuccess}
+								<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">API Key deleted from local storage</p>
+							{/if}
+
+							<div class="pt-3 border-t border-[var(--border)] text-center">
+								<a
+									href="https://aistudio.google.com/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-fiber)] hover:underline"
+								>
+									Get a free API Key from Google AI Studio
+									<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+								</a>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
