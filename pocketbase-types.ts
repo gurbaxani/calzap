@@ -147,6 +147,7 @@ export type FoodsRecord = {
 
 export type UserStatsRecord = {
 	created: IsoAutoDateString
+	current_weight?: number
 	id: string
 	target_calories?: number
 	target_carbs?: number

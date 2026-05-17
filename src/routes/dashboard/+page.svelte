@@ -1,7 +1,9 @@
 <script lang="ts">
 	import MacroBar from '$lib/components/MacroBar.svelte';
+	import { auth } from '$lib/user.svelte';
+	import { pb } from '$lib/pb';
+	import { onMount } from 'svelte';
 
-	// Mock state for demonstration
 	let dailyTargets = $state({
 		calories: 2500,
 		protein: 180,
@@ -19,6 +21,38 @@
 	});
 
 	let remainingCalories = $derived(dailyTargets.calories - consumed.calories);
+
+	async function fetchTargets() {
+		if (auth.user) {
+			if (auth.user.id) {
+				try {
+					const record = await pb.collection('user_stats').getOne(auth.user.id);
+					
+					if (record.target_calories !== undefined && record.target_calories !== null) {
+						dailyTargets.calories = record.target_calories;
+					}
+					if (record.target_proteins !== undefined && record.target_proteins !== null) {
+						dailyTargets.protein = record.target_proteins;
+					}
+					if (record.target_carbs !== undefined && record.target_carbs !== null) {
+						dailyTargets.carbs = record.target_carbs;
+					}
+					if (record.target_fats !== undefined && record.target_fats !== null) {
+						dailyTargets.fats = record.target_fats;
+					}
+					if (record.target_fiber !== undefined && record.target_fiber !== null) {
+						dailyTargets.fiber = record.target_fiber;
+					}
+				} catch (err: any) {
+					// Fallback to defaults if stats do not exist yet
+				}
+			}
+		}
+	}
+
+	onMount(() => {
+		fetchTargets();
+	});
 </script>
 
 <svelte:head>
