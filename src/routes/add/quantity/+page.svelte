@@ -25,6 +25,7 @@
 		<button 
 			type="button" 
 			onclick={() => goto('/add')}
+			aria-label="Go back to name entry"
 			class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 		>
 			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +44,6 @@
 					bind:value={foodDraft.quantity}
 					min="0"
 					step="0.1"
-					autofocus
 					class="w-full rounded-2xl bg-zinc-100/80 px-4 py-4 text-2xl font-bold text-zinc-900 focus:bg-zinc-200 focus:outline-none dark:bg-zinc-800/50 dark:text-zinc-50 dark:focus:bg-zinc-800 transition-colors"
 				/>
 			</div>
@@ -68,6 +68,18 @@
 				</div>
 			</div>
 		</fieldset>
+
+		<!-- Ingredients input field -->
+		<div class="flex flex-col gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+			<label for="notes" class="text-xs font-bold uppercase tracking-wider text-zinc-500">Special Ingredients (Optional)</label>
+			<input
+				type="text"
+				id="notes"
+				bind:value={foodDraft.notes}
+				placeholder="1 tbsp sprouted moong, pnch of moringa powder, mint chutney sweetened with stevia"
+				class="w-full rounded-2xl bg-zinc-100/80 px-4 py-4 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 focus:bg-zinc-200 focus:outline-none dark:bg-zinc-800/50 dark:text-zinc-50 dark:focus:bg-zinc-800 dark:placeholder:text-zinc-600 transition-colors"
+			/>
+		</div>
 
 		<div class="pt-4">
 			<button

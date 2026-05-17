@@ -5,8 +5,66 @@
 	import { foodDraft, resetFoodDraft } from '$lib/foodDraft.svelte';
 
 	let loading = $state(false);
+	let estimating = $state(false);
 	let error = $state('');
 	let success = $state(false);
+
+	async function estimateMacros() {
+		const apiKey = localStorage.getItem('google_ai_studio_api_key');
+		if (!apiKey) {
+			error = 'Google AI Studio API key not found. Please add it in your profile settings.';
+			return;
+		}
+
+		estimating = true;
+		error = '';
+
+		const prompt = `Estimate the macronutrients for the following food item. Respond with a JSON object exactly like this: {"calories": 100, "proteins": 10, "carbs": 20, "fats": 5, "fiber": 2}. Use numbers. Return ONLY valid JSON without Markdown blocks.
+Food Name: ${foodDraft.name}
+Quantity: ${foodDraft.quantity} ${foodDraft.units}
+Special ingredients/notes: ${foodDraft.notes || 'None'}`;
+
+		try {
+			const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					contents: [{
+						parts: [{ text: prompt }]
+					}],
+					generationConfig: {
+						temperature: 0.1,
+						responseMimeType: "application/json"
+					}
+				})
+			});
+
+			if (!response.ok) {
+				const errData = await response.json();
+				throw new Error(errData.error?.message || 'Failed to fetch estimation from Gemini');
+			}
+
+			const data = await response.json();
+			const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+			if (!textResponse) {
+				throw new Error('Invalid response from Gemini');
+			}
+
+			const result = JSON.parse(textResponse);
+
+			if (result.calories !== undefined) foodDraft.calories = Number(result.calories);
+			if (result.proteins !== undefined) foodDraft.proteins = Number(result.proteins);
+			if (result.carbs !== undefined) foodDraft.carbs = Number(result.carbs);
+			if (result.fats !== undefined) foodDraft.fats = Number(result.fats);
+			if (result.fiber !== undefined) foodDraft.fiber = Number(result.fiber);
+		} catch (err: any) {
+			error = 'Estimation failed: ' + err.message;
+		} finally {
+			estimating = false;
+		}
+	}
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -30,6 +88,7 @@
 				fiber: foodDraft.fiber,
 				quantity: foodDraft.quantity,
 				units: foodDraft.units,
+				notes: foodDraft.notes,
 				created_by: auth.user.id
 			});
 			success = true;
@@ -86,6 +145,7 @@
 			<button 
 				type="button" 
 				onclick={() => goto('/add/quantity')}
+				aria-label="Go back to quantity selection"
 				class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 			>
 				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,6 +153,26 @@
 				</svg>
 			</button>
 		</header>
+
+		<div class="mb-2 animate-in fade-in slide-in-from-right-4 duration-300">
+			<button
+				type="button"
+				onclick={estimateMacros}
+				disabled={estimating || loading}
+				class="group flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-fiber)]/10 px-4 py-4 text-sm font-bold text-[var(--color-fiber)] transition-all hover:bg-[var(--color-fiber)]/20 focus:outline-none focus:ring-4 focus:ring-[var(--color-fiber)]/20 active:scale-[0.98] border border-[var(--color-fiber)]/20 disabled:cursor-not-allowed disabled:opacity-50"
+			>
+				{#if estimating}
+					<svg class="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+					</svg>
+					<span>Estimating with AI...</span>
+				{:else}
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+					<span>Estimate Macros with AI</span>
+				{/if}
+			</button>
+		</div>
 
 		<form onsubmit={handleSubmit} class="flex flex-col gap-6">
 			<fieldset class="flex flex-col gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
@@ -107,7 +187,6 @@
 							min="0"
 							step="1"
 							placeholder="0"
-							autofocus
 							class="w-32 text-right bg-transparent text-4xl font-black tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
 						/>
 					</div>
@@ -173,7 +252,7 @@
 			<div class="pt-4">
 				<button
 					type="submit"
-					disabled={loading}
+					disabled={loading || estimating}
 					class="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-4 text-lg font-bold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-50/20 active:scale-[0.98]"
 				>
 					{#if loading}

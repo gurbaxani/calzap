@@ -9,6 +9,7 @@ export const foodDraft = $state({
 	carbs: undefined as number | undefined,
 	fats: undefined as number | undefined,
 	fiber: undefined as number | undefined,
+	notes: '',
 });
 
 export function resetFoodDraft() {
@@ -20,4 +21,5 @@ export function resetFoodDraft() {
 	foodDraft.carbs = undefined;
 	foodDraft.fats = undefined;
 	foodDraft.fiber = undefined;
+	foodDraft.notes = '';
 }

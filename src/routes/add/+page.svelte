@@ -31,8 +31,7 @@
 					id="name"
 					bind:value={foodDraft.name}
 					required
-					autofocus
-					placeholder="e.g. Boiled Rice"
+					placeholder="e.g. Pani Puri"
 					class="w-full border-b-2 border-zinc-200 bg-transparent py-3 text-3xl font-bold tracking-tight text-zinc-900 placeholder:text-zinc-300 focus:border-zinc-900 focus:outline-none dark:border-zinc-800 dark:text-zinc-50 dark:placeholder:text-zinc-700 dark:focus:border-zinc-50 transition-colors"
 				/>
 			</div>
