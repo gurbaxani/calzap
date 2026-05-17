@@ -80,7 +80,7 @@
 					startOfDay: startOfDay.toISOString()
 				});
 				
-				const result = await pb.collection('food_logs').getList(1, 100, {
+				const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 100, {
 					filter: filterStr,
 					sort: '-consumed_at'
 				});
@@ -154,7 +154,7 @@
 		<button 
 			type="button"
 			onclick={() => goto('/log')}
-			class="w-full py-4 rounded-2xl bg-[var(--fg)] text-[var(--bg)] font-bold text-lg shadow-xl shadow-black/10 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+			class="w-full py-4 rounded-2xl bg-(--fg) text-(--bg) font-bold text-lg shadow-xl shadow-black/10 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
 			Log Meal
@@ -164,14 +164,14 @@
 			<button 
 				type="button"
 				onclick={() => goto('/log')}
-				class="py-3 rounded-xl bg-[var(--surface)] border border-[var(--border)] font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
+				class="py-3 rounded-xl bg-(--surface) border border-(--border) font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
 			>
 				Quick Add
 			</button>
 			<button 
 				type="button"
 				onclick={() => goto('/log')}
-				class="py-3 rounded-xl bg-[var(--surface)] border border-[var(--border)] font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
+				class="py-3 rounded-xl bg-(--surface) border border-(--border) font-semibold text-sm active:scale-[0.98] transition-transform cursor-pointer"
 			>
 				Scanner
 			</button>
