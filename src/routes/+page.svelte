@@ -277,11 +277,15 @@
 						</button>
 					</div>
 
-					<!-- Calorie Ring Widget -->
-					<div
-						class="flex flex-col items-center gap-1 text-center mb-6"
+					<!-- Calorie Intake Card Mockup -->
+					<div 
+						class="p-5 rounded-3xl border transition-all duration-300 relative overflow-hidden mb-6 w-full text-center"
+						style="background-color: oklch(from var(--color-calories) l c h / 0.04); border-color: oklch(from var(--color-calories) l c h / 0.15);"
 					>
-						<div class="flex items-baseline justify-center gap-2">
+						<!-- Accent glow inside card -->
+						<div class="absolute -right-10 -top-10 w-24 h-24 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] blur-2xl pointer-events-none"></div>
+
+						<div class="flex items-baseline justify-center gap-2 relative z-10">
 							<span
 								class="text-5xl font-black tracking-tighter tabular-nums transition-all text-calories"
 							>
@@ -292,10 +296,9 @@
 							>
 						</div>
 						<div
-							class="text-[9px] font-bold text-muted/60 uppercase tracking-widest"
+							class="text-[9px] font-bold text-muted/60 uppercase tracking-widest relative z-10 mt-1"
 						>
-							Daily Budget: 2500 kcal • Consumed: {demoTotals.calories}
-							kcal
+							Budget: 2500 kcal • Consumed: {demoTotals.calories} kcal
 						</div>
 					</div>
 
@@ -303,7 +306,8 @@
 					<div class="grid grid-cols-2 gap-3.5 mb-7">
 						<!-- Protein Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h/0.03)] border border-[oklch(from_var(--color-protein)_l_c_h/0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl border flex flex-col gap-1.5 transition-all duration-300 hover:scale-[1.01]"
+							style="background-color: oklch(from var(--color-protein) l c h / 0.04); border-color: oklch(from var(--color-protein) l c h / 0.15);"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
@@ -316,7 +320,8 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-protein)_l_c_h/0.08)] overflow-hidden"
+								class="h-1.5 w-full rounded-full overflow-hidden"
+								style="background-color: oklch(from var(--color-protein) l c h / 0.1);"
 							>
 								<div
 									class="h-full bg-protein rounded-full transition-all duration-500 ease-out-quart"
@@ -330,7 +335,8 @@
 
 						<!-- Carbs Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-carbs)_l_c_h/0.03)] border border-[oklch(from_var(--color-carbs)_l_c_h/0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl border flex flex-col gap-1.5 transition-all duration-300 hover:scale-[1.01]"
+							style="background-color: oklch(from var(--color-carbs) l c h / 0.04); border-color: oklch(from var(--color-carbs) l c h / 0.15);"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
@@ -343,7 +349,8 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-carbs)_l_c_h/0.08)] overflow-hidden"
+								class="h-1.5 w-full rounded-full overflow-hidden"
+								style="background-color: oklch(from var(--color-carbs) l c h / 0.1);"
 							>
 								<div
 									class="h-full bg-carbs rounded-full transition-all duration-500 ease-out-quart"
@@ -357,7 +364,8 @@
 
 						<!-- Fats Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fats)_l_c_h/0.03)] border border-[oklch(from_var(--color-fats)_l_c_h/0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl border flex flex-col gap-1.5 transition-all duration-300 hover:scale-[1.01]"
+							style="background-color: oklch(from var(--color-fats) l c h / 0.04); border-color: oklch(from var(--color-fats) l c h / 0.15);"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
@@ -370,7 +378,8 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fats)_l_c_h/0.08)] overflow-hidden"
+								class="h-1.5 w-full rounded-full overflow-hidden"
+								style="background-color: oklch(from var(--color-fats) l c h / 0.1);"
 							>
 								<div
 									class="h-full bg-fats rounded-full transition-all duration-500 ease-out-quart"
@@ -384,7 +393,8 @@
 
 						<!-- Fiber Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h/0.03)] border border-[oklch(from_var(--color-fiber)_l_c_h/0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl border flex flex-col gap-1.5 transition-all duration-300 hover:scale-[1.01]"
+							style="background-color: oklch(from var(--color-fiber) l c h / 0.04); border-color: oklch(from var(--color-fiber) l c h / 0.15);"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
@@ -397,7 +407,8 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fiber)_l_c_h/0.08)] overflow-hidden"
+								class="h-1.5 w-full rounded-full overflow-hidden"
+								style="background-color: oklch(from var(--color-fiber) l c h / 0.1);"
 							>
 								<div
 									class="h-full bg-fiber rounded-full transition-all duration-500 ease-out-quart"
@@ -422,7 +433,8 @@
 								type="button"
 								id="demo-add-whey"
 								onclick={() => addDemoFood(presetWhey)}
-								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border transition-all active:scale-[0.98] group flex justify-between items-center cursor-pointer"
+								style="background-color: oklch(from var(--color-calories) l c h / 0.025); border-color: oklch(from var(--color-calories) l c h / 0.12);"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
@@ -442,15 +454,15 @@
 								type="button"
 								id="demo-add-oats"
 								onclick={() => addDemoFood(presetOats)}
-								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border transition-all active:scale-[0.98] group flex justify-between items-center cursor-pointer"
+								style="background-color: oklch(from var(--color-calories) l c h / 0.025); border-color: oklch(from var(--color-calories) l c h / 0.12);"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
 										>Large Bowl of Oats</span
 									>
 									<span class="text-[9px] text-muted mt-0.5"
-										>380 kcal • 13g P • 66g C • 7g F • 10g
-										Fib</span
+										>380 kcal • 13g P • 66g C • 7g F • 10g Fib</span
 									>
 								</div>
 								<span
@@ -463,7 +475,8 @@
 								type="button"
 								id="demo-add-almonds"
 								onclick={() => addDemoFood(presetAlmonds)}
-								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border transition-all active:scale-[0.98] group flex justify-between items-center cursor-pointer"
+								style="background-color: oklch(from var(--color-calories) l c h / 0.025); border-color: oklch(from var(--color-calories) l c h / 0.12);"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
@@ -493,14 +506,15 @@
 							</h5>
 							{#each demoLogs as log (log.id)}
 								<div
-									class="flex justify-between items-center text-xs py-1 border-b border-zinc-100 dark:border-zinc-900"
+									class="flex justify-between items-center text-xs py-2 px-3 rounded-lg border transition-all duration-300"
+									style="background-color: oklch(from var(--color-calories) l c h / 0.025); border-color: oklch(from var(--color-calories) l c h / 0.1);"
 								>
 									<span
 										class="font-bold truncate max-w-[160px]"
 										>{log.name}</span
 									>
 									<span
-										class="text-muted text-[10px] tabular-nums font-bold"
+										class="text-calories text-[10px] tabular-nums font-black"
 										>+{log.calories} kcal</span
 									>
 								</div>
@@ -586,9 +600,10 @@
 
 			<!-- Dynamic Asymmetric Benefits Flow (No side stripes, no cards in cards, premium layout) -->
 			<div class="grid md:grid-cols-3 gap-8 md:gap-10">
-				<!-- Benefit 1 -->
+				<!-- Benefit 1 (Protein) -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-sm"
+					style="background-color: oklch(from var(--color-protein) l c h / 0.035); border-color: oklch(from var(--color-protein) l c h / 0.15);"
 				>
 					<div
 						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h/0.08)] flex items-center justify-center text-protein"
@@ -599,7 +614,7 @@
 						>
 					</div>
 					<div class="flex flex-col gap-2">
-						<h3 class="text-xl font-bold tracking-tight">
+						<h3 class="text-xl font-bold tracking-tight" style="color: var(--color-protein);">
 							Get your numbers in one glance
 						</h3>
 						<p
@@ -610,9 +625,10 @@
 					</div>
 				</div>
 
-				<!-- Benefit 2 -->
+				<!-- Benefit 2 (Calories) -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-sm"
+					style="background-color: oklch(from var(--color-calories) l c h / 0.035); border-color: oklch(from var(--color-calories) l c h / 0.15);"
 				>
 					<div
 						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] flex items-center justify-center text-calories"
@@ -624,7 +640,7 @@
 						>
 					</div>
 					<div class="flex flex-col gap-2">
-						<h3 class="text-xl font-bold tracking-tight">
+						<h3 class="text-xl font-bold tracking-tight" style="color: var(--color-calories);">
 							Log in two taps. Literally.
 						</h3>
 						<p
@@ -635,9 +651,10 @@
 					</div>
 				</div>
 
-				<!-- Benefit 3 -->
+				<!-- Benefit 3 (Fiber) -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-sm"
+					style="background-color: oklch(from var(--color-fiber) l c h / 0.035); border-color: oklch(from var(--color-fiber) l c h / 0.15);"
 				>
 					<div
 						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h/0.08)] flex items-center justify-center text-fiber"
@@ -648,7 +665,7 @@
 						>
 					</div>
 					<div class="flex flex-col gap-2">
-						<h3 class="text-xl font-bold tracking-tight">
+						<h3 class="text-xl font-bold tracking-tight" style="color: var(--color-fiber);">
 							Add custom foods instantly
 						</h3>
 						<p
@@ -933,7 +950,8 @@
 				</div>
 
 				<div
-					class="flex flex-col items-start gap-1 p-5 rounded-2xl border border-(--border) bg-(--surface) shadow-lg shadow-black/5 min-w-[160px] self-stretch justify-center text-center sm:text-left"
+					class="flex flex-col items-start gap-1 p-5 rounded-2xl border shadow-lg shadow-black/5 min-w-[160px] self-stretch justify-center text-center sm:text-left transition-all duration-300"
+					style="background-color: oklch(from var(--color-calories) l c h / 0.035); border-color: oklch(from var(--color-calories) l c h / 0.15);"
 				>
 					<div
 						class="text-[9px] font-black uppercase tracking-wider text-muted mb-1 w-full text-center sm:text-left"

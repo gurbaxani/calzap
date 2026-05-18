@@ -93,24 +93,34 @@
 </svelte:head>
 
 <main
-	class="max-w-md mx-auto px-6 py-8 flex flex-col gap-8 animate-in fade-in duration-300"
+	class="max-w-md mx-auto px-6 py-8 flex flex-col gap-8 animate-in fade-in duration-300 relative overflow-hidden"
 >
+	<!-- Ambient Background Glows -->
+	<div
+		class="absolute top-[-10%] left-[-10%] w-[60%] h-[40%] rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.05)] blur-[120px] pointer-events-none z-0"
+	></div>
+	<div
+		class="absolute bottom-[20%] right-[-10%] w-[70%] h-[50%] rounded-full bg-[oklch(from_var(--color-protein)_l_c_h/0.03)] blur-[160px] pointer-events-none z-0"
+	></div>
+
 	<!-- Date Switcher Segmented Control -->
-	<header class="flex flex-col gap-6">
+	<header class="flex flex-col gap-6 relative z-10">
 		<div
-			class="flex items-center justify-between bg-(--surface) border border-(--border) rounded-2xl p-1.5 shadow-sm"
+			class="flex items-center justify-between border rounded-2xl p-1.5 shadow-sm transition-all duration-300"
+			style="background-color: oklch(from var(--color-calories) l c h / 0.02); border-color: oklch(from var(--color-calories) l c h / 0.1);"
 		>
 			<button
 				type="button"
 				onclick={() => changeDate(-1)}
-				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors cursor-pointer"
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] transition-colors cursor-pointer text-muted hover:text-(--fg)"
 				aria-label="Previous day"
 			>
 				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_left</span>
 			</button>
 
 			<span
-				class="font-extrabold text-sm tracking-wider uppercase text-muted"
+				class="font-extrabold text-sm tracking-wider uppercase"
+				style="color: var(--color-calories);"
 			>
 				{formatSelectedDate(selectedDate)}
 			</span>
@@ -118,21 +128,27 @@
 			<button
 				type="button"
 				onclick={() => changeDate(1)}
-				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors cursor-pointer"
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] transition-colors cursor-pointer text-muted hover:text-(--fg)"
 				aria-label="Next day"
 			>
 				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_right</span>
 			</button>
 		</div>
 
-		<!-- Calorie Intake Dashboard -->
-		<div class="flex flex-col gap-1.5">
+		<!-- Calorie Intake Dashboard Card -->
+		<div 
+			class="p-6 rounded-3xl border transition-all duration-300 relative overflow-hidden"
+			style="background-color: oklch(from var(--color-calories) l c h / 0.04); border-color: oklch(from var(--color-calories) l c h / 0.15);"
+		>
+			<!-- Accent glow inside card -->
+			<div class="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] blur-3xl pointer-events-none"></div>
+
 			<button
 				type="button"
 				onclick={() => {
 					showConsumedCal = !showConsumedCal;
 				}}
-				class="group flex flex-col items-start bg-transparent border-0 p-0 text-left cursor-pointer focus:outline-hidden"
+				class="group flex flex-col items-start bg-transparent border-0 p-0 text-left cursor-pointer focus:outline-hidden w-full relative z-10"
 			>
 				<div
 					class="flex items-baseline gap-2 group-hover:opacity-90 transition-opacity"
@@ -184,7 +200,7 @@
 	</header>
 
 	<!-- Macros Grid (2x2) -->
-	<section class="grid grid-cols-2 gap-4">
+	<section class="grid grid-cols-2 gap-4 relative z-10">
 		<MacroBar
 			label="Protein"
 			value={consumed.protein}
@@ -216,7 +232,7 @@
 	</section>
 
 	<!-- Logged Today Section -->
-	<section class="flex flex-col gap-4 mt-2 animate-in fade-in duration-300">
+	<section class="flex flex-col gap-4 mt-2 animate-in fade-in duration-300 relative z-10">
 		<div class="flex items-center justify-between">
 			<h2
 				class="text-[10px] font-black uppercase tracking-wider text-muted"
@@ -233,11 +249,12 @@
 
 		{#if logsToday.length === 0}
 			<div
-				class="rounded-3xl border-2 border-dashed border-(--border) p-8 text-center text-zinc-400 dark:text-zinc-600 bg-(--surface)/40"
+				class="rounded-3xl border-2 border-dashed p-8 text-center transition-colors duration-300"
+				style="background-color: oklch(from var(--color-calories) l c h / 0.015); border-color: oklch(from var(--color-calories) l c h / 0.12);"
 			>
-				<p class="font-bold text-sm">No food tracked for this date</p>
-				<p class="text-xs text-zinc-500 mt-1">
-					Tap the <span class="font-black">+</span> icon to start tracking!
+				<p class="font-bold text-sm text-muted">No food tracked for this date</p>
+				<p class="text-xs text-muted/80 mt-1">
+					Tap the <span class="font-black text-calories">+</span> icon to start tracking!
 				</p>
 			</div>
 		{:else}
@@ -245,7 +262,8 @@
 				{#each logsToday as entry (entry.id)}
 					<div
 						id="dashboard-log-{entry.id}"
-						class="p-4 rounded-2xl bg-(--surface) border border-(--border) flex flex-col gap-2 relative group hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+						class="p-4 rounded-2xl flex flex-col gap-2 relative group transition-all duration-300 border hover:scale-[1.01]"
+						style="background-color: oklch(from var(--color-calories) l c h / 0.025); border-color: oklch(from var(--color-calories) l c h / 0.12);"
 					>
 						<div class="flex items-start justify-between gap-4">
 							<div class="flex flex-col">
