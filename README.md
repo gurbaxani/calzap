@@ -38,9 +38,10 @@ Calzap employs a modern typography and color pipeline optimized for raw readabil
 
 ### 5. Client-Side AI Assistance (Gemini Integration)
 Calzap features integrated AI-assisted macronutrient estimation:
-* Leverages the Google AI Studio / **Gemini API** (`gemini-3.1-flash-lite:generateContent`).
-* To preserve user privacy, the API key is provided by the client and stored strictly in their local IndexedDB database. 
-* Queries are sent securely via client-side `fetch` directly to Google's API, and responses are requested as structured JSON schema (`responseMimeType: "application/json"`), bypassing server intermediaries entirely.
+* Leverages the Google AI Studio / **Gemini API** (`gemini-3-flash:generateContent`).
+* **Execution Model**: While the actual model inference runs remotely on Google's cloud servers (fully powered by the user's custom Google AI Studio key), the integration is orchestrated directly from the user's browser client.
+* **Completely Optional**: The AI estimation feature is entirely optional. Users do not need a Google AI Studio API key to use Calzap; they can manually enter all food names, quantities, and exact macronutrient counts at any time.
+* **Absolute Privacy Guarantee**: If the AI estimation feature is not enabled (i.e., no API key is provided), **absolutely no information is transmitted anywhere**. The entire application operates in 100% local-offline mode, with all data calculations and storage self-contained purely on the user's physical device. If a key is added, only the raw meal description is queried securely to Google's endpoints directly from the browser, bypassing any application backends or telemetry trackers.
 
 ---
 
@@ -176,7 +177,7 @@ Food Name: ${foodDraft.name}
 Quantity: ${foodDraft.quantity} ${foodDraft.units}
 Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 
-const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -280,4 +281,4 @@ The resulting optimized static build is exported directly to the `./build` folde
 
 Calzap is open-source software, licensed under the **AGPL-3.0-or-later** license. 
 
-It is provided "as is" without warranty. Because all data calculations, persistence, and AI features run purely on the user's client hardware, Calzap is fully GDPR/CCPA compliant by default. No data processing agreements or remote server disclosures are required.
+It is provided "as is" without warranty. Because all core dietary calculations, history tracking, and database persistence run purely on the user's local hardware (with the optional AI estimation features queried directly from the browser to Google's AI Studio API via the user's own key), Calzap ensures complete user data ownership. No centralized application servers, tracking scripts, or third-party advertising cookie trackers are involved.
