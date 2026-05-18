@@ -18,6 +18,11 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem; /* Elegant padding offset for sticky header */
+  }
+
   :root {
     color-scheme: light dark;
     --bg: var(--color-background);

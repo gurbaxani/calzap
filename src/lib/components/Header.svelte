@@ -57,7 +57,7 @@
 
 					<!-- Dropdown Submenu Container -->
 					<div
-						class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-2xl bg-(--surface)/95 border border-(--border) p-2 shadow-2xl backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50 flex flex-col gap-1"
+						class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-2xl bg-(--surface)/95 border border-(--border) p-2 shadow-2xl backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50 flex flex-col gap-1 before:absolute before:content-[''] before:-top-3 before:h-3 before:left-0 before:right-0"
 					>
 						<a
 							href="/#problem-solution-section"
