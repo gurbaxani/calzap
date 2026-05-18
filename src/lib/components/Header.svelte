@@ -115,7 +115,7 @@
 <!-- Floating Mobile Dock Nav Bar -->
 {#if currentPath !== "/"}
 	<nav
-		class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-[320px] z-50 bg-(--surface)/90 backdrop-blur-md border border-(--border) rounded-3xl p-2 shadow-2xl flex items-center justify-between dock-nav"
+		class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-[360px] z-50 bg-(--surface)/90 backdrop-blur-md border border-(--border) rounded-3xl p-2 shadow-2xl flex items-center justify-between dock-nav"
 	>
 		<!-- Dashboard Tab -->
 		<a
@@ -142,6 +142,20 @@
 			>
 			<span class="text-[9px] font-black uppercase tracking-wider"
 				>Foods</span
+			>
+		</a>
+
+		<!-- Progress Tab -->
+		<a
+			href="/progress"
+			class="flex flex-col items-center justify-center gap-1 w-[72px] py-2 rounded-2xl transition-all navigation-tab"
+			class:active={isActive("/progress")}
+		>
+			<span class="material-symbols-outlined text-[20px] leading-none"
+				>trending_up</span
+			>
+			<span class="text-[9px] font-black uppercase tracking-wider"
+				>Progress</span
 			>
 		</a>
 
