@@ -37,7 +37,7 @@
 		};
 	});
 
-	const demoRemaining = $derived(2500 - demoTotals.calories);
+	const demoRemaining = $derived(2000 - demoTotals.calories);
 
 	function addDemoFood(food: Omit<DemoFood, "id">) {
 		idCounter = idCounter + 1;
@@ -298,7 +298,7 @@
 						<div
 							class="text-[9px] font-bold text-muted/60 uppercase tracking-widest relative z-10 mt-1"
 						>
-							Budget: 2500 kcal • Consumed: {demoTotals.calories} kcal
+							Budget: 2000 kcal • Consumed: {demoTotals.calories} kcal
 						</div>
 					</div>
 
