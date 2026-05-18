@@ -164,8 +164,8 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 			<fieldset class="flex flex-col gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
 				<div class="grid grid-cols-2 gap-3">
 					<!-- Calories -->
-					<div class="col-span-2 flex items-center justify-between gap-4 rounded-xl bg-zinc-100/80 p-5 ring-1 ring-inset ring-zinc-200/50 dark:bg-zinc-800/50 dark:ring-zinc-700/50 focus-within:bg-zinc-200 focus-within:ring-2 focus-within:ring-zinc-900 dark:focus-within:bg-zinc-800 dark:focus-within:ring-zinc-50 transition-all">
-						<label for="calories" class="text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">Total Calories</label>
+					<div class="col-span-2 flex items-center justify-between gap-4 rounded-xl bg-calories/5 p-5 border border-calories/15 dark:border-calories/25 focus-within:bg-calories/10 focus-within:ring-2 focus-within:ring-calories transition-all">
+						<label for="calories" class="text-sm font-bold uppercase tracking-wider text-calories">Total Calories</label>
 						<input
 							type="number"
 							id="calories"
@@ -173,13 +173,13 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 							min="0"
 							step="1"
 							placeholder="0"
-							class="w-32 text-right bg-transparent text-4xl font-black tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
+							class="w-32 text-right bg-transparent text-4xl font-black tracking-tighter text-calories placeholder:text-calories/30 focus:outline-none focus:placeholder:text-calories/10"
 						/>
 					</div>
 
 					<!-- Protein -->
-					<div class="flex flex-col gap-1 rounded-xl bg-rose-50/50 p-4 ring-1 ring-inset ring-rose-100 dark:bg-rose-950/20 dark:ring-rose-900/30 focus-within:bg-rose-50 focus-within:ring-2 focus-within:ring-rose-500 dark:focus-within:bg-rose-900/20 dark:focus-within:ring-rose-400 transition-all">
-						<label for="proteins" class="text-[10px] font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Protein (g)</label>
+					<div class="flex flex-col gap-1 rounded-xl bg-protein/5 p-4 border border-protein/15 dark:border-protein/25 focus-within:bg-protein/10 focus-within:ring-2 focus-within:ring-protein transition-all">
+						<label for="proteins" class="text-[10px] font-bold uppercase tracking-wider text-protein">Protein (g)</label>
 						<input
 							type="number"
 							id="proteins"
@@ -187,13 +187,13 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 							min="0"
 							step="0.1"
 							placeholder="0"
-							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
+							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-protein placeholder:text-protein/30 focus:outline-none"
 						/>
 					</div>
 
 					<!-- Carbs -->
-					<div class="flex flex-col gap-1 rounded-xl bg-amber-50/50 p-4 ring-1 ring-inset ring-amber-100 dark:bg-amber-950/20 dark:ring-amber-900/30 focus-within:bg-amber-50 focus-within:ring-2 focus-within:ring-amber-500 dark:focus-within:bg-amber-900/20 dark:focus-within:ring-amber-400 transition-all">
-						<label for="carbs" class="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Carbs (g)</label>
+					<div class="flex flex-col gap-1 rounded-xl bg-carbs/5 p-4 border border-carbs/15 dark:border-carbs/25 focus-within:bg-carbs/10 focus-within:ring-2 focus-within:ring-carbs transition-all">
+						<label for="carbs" class="text-[10px] font-bold uppercase tracking-wider text-carbs">Carbs (g)</label>
 						<input
 							type="number"
 							id="carbs"
@@ -201,13 +201,13 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 							min="0"
 							step="0.1"
 							placeholder="0"
-							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
+							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-carbs placeholder:text-carbs/30 focus:outline-none"
 						/>
 					</div>
 
 					<!-- Fats -->
-					<div class="flex flex-col gap-1 rounded-xl bg-blue-50/50 p-4 ring-1 ring-inset ring-blue-100 dark:bg-blue-950/20 dark:ring-blue-900/30 focus-within:bg-blue-50 focus-within:ring-2 focus-within:ring-blue-500 dark:focus-within:bg-blue-900/20 dark:focus-within:ring-blue-400 transition-all">
-						<label for="fats" class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Fats (g)</label>
+					<div class="flex flex-col gap-1 rounded-xl bg-fats/5 p-4 border border-fats/15 dark:border-fats/25 focus-within:bg-fats/10 focus-within:ring-2 focus-within:ring-fats transition-all">
+						<label for="fats" class="text-[10px] font-bold uppercase tracking-wider text-fats">Fats (g)</label>
 						<input
 							type="number"
 							id="fats"
@@ -215,13 +215,13 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 							min="0"
 							step="0.1"
 							placeholder="0"
-							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
+							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-fats placeholder:text-fats/30 focus:outline-none"
 						/>
 					</div>
 
 					<!-- Fiber -->
-					<div class="flex flex-col gap-1 rounded-xl bg-emerald-50/50 p-4 ring-1 ring-inset ring-emerald-100 dark:bg-emerald-950/20 dark:ring-emerald-900/30 focus-within:bg-emerald-50 focus-within:ring-2 focus-within:ring-emerald-500 dark:focus-within:bg-emerald-900/20 dark:focus-within:ring-emerald-400 transition-all">
-						<label for="fiber" class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Fiber (g)</label>
+					<div class="flex flex-col gap-1 rounded-xl bg-fiber/5 p-4 border border-fiber/15 dark:border-fiber/25 focus-within:bg-fiber/10 focus-within:ring-2 focus-within:ring-fiber transition-all">
+						<label for="fiber" class="text-[10px] font-bold uppercase tracking-wider text-fiber">Fiber (g)</label>
 						<input
 							type="number"
 							id="fiber"
@@ -229,7 +229,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 							min="0"
 							step="0.1"
 							placeholder="0"
-							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-zinc-900 placeholder:text-zinc-300 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-700"
+							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-fiber placeholder:text-fiber/30 focus:outline-none"
 						/>
 					</div>
 				</div>

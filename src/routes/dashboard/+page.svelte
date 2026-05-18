@@ -225,7 +225,7 @@
 			</h2>
 			{#if logsToday.length > 0}
 				<span
-					class="text-xs font-black style-color-calories uppercase tracking-tight"
+					class="text-xs font-black text-calories uppercase tracking-tight"
 					>{consumed.calories} kcal consumed</span
 				>
 			{/if}
@@ -283,24 +283,24 @@
 						<div
 							class="flex items-center gap-3 text-xs font-bold text-zinc-500 pt-1.5 border-t border-zinc-100 dark:border-zinc-900"
 						>
-							<span class="tabular-nums style-color-calories"
+							<span class="tabular-nums text-calories"
 								>{entry.calories} kcal</span
 							>
 							<span>•</span>
-							<span class="text-rose-500 tabular-nums"
+							<span class="text-protein tabular-nums"
 								>{entry.proteins}g P</span
 							>
 							<span>•</span>
-							<span class="text-amber-500 tabular-nums"
+							<span class="text-carbs tabular-nums"
 								>{entry.carbs}g C</span
 							>
 							<span>•</span>
-							<span class="text-blue-500 tabular-nums"
+							<span class="text-fats tabular-nums"
 								>{entry.fats}g F</span
 							>
 							{#if entry.fiber !== undefined && entry.fiber > 0}
 								<span>•</span>
-								<span class="text-emerald-500 tabular-nums"
+								<span class="text-fiber tabular-nums"
 									>{entry.fiber}g Fib</span
 								>
 							{/if}
@@ -315,16 +315,5 @@
 <style>
 	.text-muted {
 		color: var(--color-text-muted);
-	}
-	.style-color-calories {
-		color: var(--color-calories);
-	}
-	.mask-fade {
-		mask-image: linear-gradient(to right, black 85%, transparent 100%);
-		-webkit-mask-image: linear-gradient(
-			to right,
-			black 85%,
-			transparent 100%
-		);
 	}
 </style>

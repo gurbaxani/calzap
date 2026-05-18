@@ -8,11 +8,11 @@
   --color-border: oklch(0.92 0.01 240);
 
   /* Macro Colors */
-  --color-calories: oklch(0.6 0.18 250); /* Precise Blue */
-  --color-protein: oklch(0.65 0.2 30);   /* Strong Coral/Orange */
-  --color-carbs: oklch(0.75 0.15 85);    /* Energy Gold */
-  --color-fats: oklch(0.7 0.12 160);     /* Healthy Teal/Green */
-  --color-fiber: oklch(0.6 0.15 310);    /* Soft Purple/Grape */
+  --color-calories: oklch(0.62 0.18 250); /* Precise Sapphire Blue */
+  --color-protein: oklch(0.65 0.20 35);   /* Vibrant Energy Orange */
+  --color-carbs: oklch(0.65 0.17 145);    /* Crisp Vitality Green */
+  --color-fats: oklch(0.78 0.16 85);      /* Rich Golden Yellow */
+  --color-fiber: oklch(0.62 0.16 310);    /* Soft Grape Purple */
 
   --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
@@ -24,6 +24,13 @@
     --fg: var(--color-text);
     --surface: var(--color-surface);
     --border: var(--color-border);
+
+    /* Global Macro Variables */
+    --calories: var(--color-calories);
+    --protein: var(--color-protein);
+    --carbs: var(--color-carbs);
+    --fats: var(--color-fats);
+    --fiber: var(--color-fiber);
   }
 
   @media (prefers-color-scheme: dark) {

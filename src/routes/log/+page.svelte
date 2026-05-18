@@ -360,23 +360,27 @@
 						</div>
 
 						<!-- Adjusted Macros Display -->
-						<div class="grid grid-cols-4 gap-2">
+						<div class="grid grid-cols-5 gap-1.5">
 							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
-								<span class="text-[9px] font-black uppercase tracking-wider text-zinc-400 mb-0.5">Calories</span>
-								<span class="text-sm font-black tabular-nums style-color-calories">{adjCalories}</span>
+								<span class="text-[9px] font-black uppercase tracking-wider text-calories mb-0.5">Calories</span>
+								<span class="text-sm font-black tabular-nums text-calories">{adjCalories}</span>
 								<span class="text-[8px] font-bold text-zinc-400">kcal</span>
 							</div>
 							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
-								<span class="text-[9px] font-black uppercase tracking-wider text-rose-500 dark:text-rose-400 mb-0.5">Protein</span>
-								<span class="text-sm font-black tabular-nums text-rose-600 dark:text-rose-400">{adjProtein}g</span>
+								<span class="text-[9px] font-black uppercase tracking-wider text-protein mb-0.5">Protein</span>
+								<span class="text-sm font-black tabular-nums text-protein">{adjProtein}g</span>
 							</div>
 							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
-								<span class="text-[9px] font-black uppercase tracking-wider text-amber-500 dark:text-amber-400 mb-0.5">Carbs</span>
-								<span class="text-sm font-black tabular-nums text-amber-600 dark:text-amber-400">{adjCarbs}g</span>
+								<span class="text-[9px] font-black uppercase tracking-wider text-carbs mb-0.5">Carbs</span>
+								<span class="text-sm font-black tabular-nums text-carbs">{adjCarbs}g</span>
 							</div>
 							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
-								<span class="text-[9px] font-black uppercase tracking-wider text-blue-500 dark:text-blue-400 mb-0.5">Fats</span>
-								<span class="text-sm font-black tabular-nums text-blue-600 dark:text-blue-400">{adjFats}g</span>
+								<span class="text-[9px] font-black uppercase tracking-wider text-fats mb-0.5">Fats</span>
+								<span class="text-sm font-black tabular-nums text-fats">{adjFats}g</span>
+							</div>
+							<div class="rounded-xl border border-(--border) p-2 text-center flex flex-col bg-zinc-50/50 dark:bg-zinc-950/30">
+								<span class="text-[9px] font-black uppercase tracking-wider text-fiber mb-0.5">Fiber</span>
+								<span class="text-sm font-black tabular-nums text-fiber">{adjFiber}g</span>
 							</div>
 						</div>
 
@@ -432,7 +436,7 @@
 											<div>
 												<h4 class="font-bold text-base tracking-tight">{item.name}</h4>
 												<p class="text-[10px] text-zinc-400 uppercase tracking-wider font-bold mt-0.5">
-													{item.quantity} {item.units} • <span class="tabular-nums style-color-calories">{item.calories} kcal</span>
+													{item.quantity} {item.units} • <span class="tabular-nums text-calories">{item.calories} kcal</span>
 												</p>
 											</div>
 											<span class="text-[10px] font-black uppercase tracking-wider bg-zinc-50 dark:bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-(--border)">Select</span>
@@ -479,21 +483,21 @@
 					<div class="grid grid-cols-2 gap-4">
 						
 						<!-- Calories -->
-						<div class="flex flex-col gap-1.5 rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/30 p-4 border border-(--border)">
-							<label for="input-custom-calories" class="text-[9px] font-black uppercase tracking-wider text-zinc-400">Calories (kcal)</label>
+						<div class="col-span-2 flex flex-col gap-1.5 rounded-2xl bg-calories/5 dark:bg-calories/5 p-4 border border-calories/15 dark:border-calories/25 focus-within:ring-2 focus-within:ring-calories transition-all">
+							<label for="input-custom-calories" class="text-[9px] font-black uppercase tracking-wider text-calories">Calories (kcal)</label>
 							<input
 								type="number"
 								id="input-custom-calories"
 								bind:value={customCalories}
 								min="0"
 								placeholder="0"
-								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums style-color-calories"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-calories"
 							/>
 						</div>
 
 						<!-- Protein -->
-						<div class="flex flex-col gap-1.5 rounded-2xl bg-rose-50/30 dark:bg-rose-950/10 p-4 border border-rose-100 dark:border-rose-950">
-							<label for="input-custom-protein" class="text-[9px] font-black uppercase tracking-wider text-rose-500">Protein (g)</label>
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-protein/5 dark:bg-protein/5 p-4 border border-protein/15 dark:border-protein/25 focus-within:ring-2 focus-within:ring-protein transition-all">
+							<label for="input-custom-protein" class="text-[9px] font-black uppercase tracking-wider text-protein">Protein (g)</label>
 							<input
 								type="number"
 								id="input-custom-protein"
@@ -501,13 +505,13 @@
 								min="0"
 								step="0.1"
 								placeholder="0.0"
-								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-rose-600 dark:text-rose-400"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-protein"
 							/>
 						</div>
 
 						<!-- Carbs -->
-						<div class="flex flex-col gap-1.5 rounded-2xl bg-amber-50/30 dark:bg-amber-950/10 p-4 border border-amber-100 dark:border-amber-950">
-							<label for="input-custom-carbs" class="text-[9px] font-black uppercase tracking-wider text-amber-500">Carbs (g)</label>
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-carbs/5 dark:bg-carbs/5 p-4 border border-carbs/15 dark:border-carbs/25 focus-within:ring-2 focus-within:ring-carbs transition-all">
+							<label for="input-custom-carbs" class="text-[9px] font-black uppercase tracking-wider text-carbs">Carbs (g)</label>
 							<input
 								type="number"
 								id="input-custom-carbs"
@@ -515,13 +519,13 @@
 								min="0"
 								step="0.1"
 								placeholder="0.0"
-								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-amber-600 dark:text-amber-400"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-carbs"
 							/>
 						</div>
 
 						<!-- Fats -->
-						<div class="flex flex-col gap-1.5 rounded-2xl bg-blue-50/30 dark:bg-blue-950/10 p-4 border border-blue-100 dark:border-blue-950">
-							<label for="input-custom-fats" class="text-[9px] font-black uppercase tracking-wider text-blue-500">Fats (g)</label>
+						<div class="flex flex-col gap-1.5 rounded-2xl bg-fats/5 dark:bg-fats/5 p-4 border border-fats/15 dark:border-fats/25 focus-within:ring-2 focus-within:ring-fats transition-all">
+							<label for="input-custom-fats" class="text-[9px] font-black uppercase tracking-wider text-fats">Fats (g)</label>
 							<input
 								type="number"
 								id="input-custom-fats"
@@ -529,7 +533,21 @@
 								min="0"
 								step="0.1"
 								placeholder="0.0"
-								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-blue-600 dark:text-blue-400"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-fats"
+							/>
+						</div>
+
+						<!-- Fiber -->
+						<div class="col-span-2 flex flex-col gap-1.5 rounded-2xl bg-fiber/5 dark:bg-fiber/5 p-4 border border-fiber/15 dark:border-fiber/25 focus-within:ring-2 focus-within:ring-fiber transition-all">
+							<label for="input-custom-fiber" class="text-[9px] font-black uppercase tracking-wider text-fiber">Fiber (g)</label>
+							<input
+								type="number"
+								id="input-custom-fiber"
+								bind:value={customFiber}
+								min="0"
+								step="0.1"
+								placeholder="0.0"
+								class="bg-transparent text-2xl font-black tracking-tight focus:outline-hidden tabular-nums text-fiber"
 							/>
 						</div>
 					</div>
@@ -557,7 +575,7 @@
 		<div>
 			<h3 class="text-[9px] font-black uppercase tracking-widest text-zinc-400">Total Macros Logged Today</h3>
 			<div class="flex items-baseline gap-1.5 mt-1">
-				<span class="text-4xl font-black tracking-tight tabular-nums style-color-calories">
+				<span class="text-4xl font-black tracking-tight tabular-nums text-calories">
 					{todayTotals.calories}
 				</span>
 				<span class="text-xs font-bold text-zinc-400">/ {dailyTargets.target_calories} kcal</span>
@@ -569,7 +587,7 @@
 			<!-- Protein -->
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
-					<span class="text-rose-500">Protein</span>
+					<span class="text-protein">Protein</span>
 					<span class="tabular-nums text-zinc-400">{todayTotals.protein}g / {dailyTargets.target_proteins}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
@@ -583,7 +601,7 @@
 			<!-- Carbs -->
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
-					<span class="text-amber-500">Carbs</span>
+					<span class="text-carbs">Carbs</span>
 					<span class="tabular-nums text-zinc-400">{todayTotals.carbs}g / {dailyTargets.target_carbs}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
@@ -597,13 +615,27 @@
 			<!-- Fats -->
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
-					<span class="text-blue-500">Fats</span>
+					<span class="text-fats">Fats</span>
 					<span class="tabular-nums text-zinc-400">{todayTotals.fats}g / {dailyTargets.target_fats}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
 					<div 
 						class="h-full rounded-full transition-all duration-500" 
 						style="background-color: var(--color-fats); width: {Math.min(100, (todayTotals.fats / dailyTargets.target_fats) * 100)}%"
+					></div>
+				</div>
+			</div>
+
+			<!-- Fiber -->
+			<div class="flex flex-col gap-1.5">
+				<div class="flex justify-between text-xs font-bold">
+					<span class="text-fiber">Fiber</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.fiber}g / {dailyTargets.target_fiber}g</span>
+				</div>
+				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
+					<div 
+						class="h-full rounded-full transition-all duration-500" 
+						style="background-color: var(--color-fiber); width: {Math.min(100, (todayTotals.fiber / dailyTargets.target_fiber) * 100)}%"
 					></div>
 				</div>
 			</div>
@@ -660,13 +692,17 @@
 
 						<!-- Log Entry Macros Summary -->
 						<div class="flex items-center gap-3 text-xs font-bold text-zinc-500 pt-1.5 border-t border-zinc-100 dark:border-zinc-900">
-							<span class="tabular-nums style-color-calories">{entry.calories} kcal</span>
+							<span class="tabular-nums text-calories">{entry.calories} kcal</span>
 							<span>•</span>
-							<span class="text-rose-500 tabular-nums">{entry.proteins}g P</span>
+							<span class="text-protein tabular-nums">{entry.proteins}g P</span>
 							<span>•</span>
-							<span class="text-amber-500 tabular-nums">{entry.carbs}g C</span>
+							<span class="text-carbs tabular-nums">{entry.carbs}g C</span>
 							<span>•</span>
-							<span class="text-blue-500 tabular-nums">{entry.fats}g F</span>
+							<span class="text-fats tabular-nums">{entry.fats}g F</span>
+							{#if entry.fiber !== undefined && entry.fiber > 0}
+								<span>•</span>
+								<span class="text-fiber tabular-nums">{entry.fiber}g Fib</span>
+							{/if}
 						</div>
 					</div>
 				{/each}
@@ -676,9 +712,6 @@
 </main>
 
 <style>
-	.style-color-calories {
-		color: var(--color-calories);
-	}
 	.active-mode {
 		background-color: var(--color-fg);
 		color: var(--color-bg);

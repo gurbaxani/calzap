@@ -407,10 +407,10 @@
 								</div>
 
 								<!-- Protein Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-rose-50/20 p-5 border border-rose-100/60 dark:bg-rose-950/5 dark:border-rose-900/10 focus-within:ring-2 focus-within:ring-protein transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-protein/5 p-5 border border-protein/15 dark:border-protein/25 focus-within:ring-2 focus-within:ring-protein transition-all">
 									<div class="flex justify-between items-center">
 										<label for="target_proteins" class="text-xs font-black uppercase tracking-widest text-protein">Protein</label>
-										<span class="text-[10px] font-bold text-rose-500/70 bg-rose-500/5 px-1.5 py-0.5 rounded">{proteins * 4} kcal</span>
+										<span class="text-[10px] font-bold text-protein bg-protein/10 px-1.5 py-0.5 rounded">{proteins * 4} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
@@ -428,9 +428,9 @@
 												min="0"
 												step="1"
 												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
+												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-protein focus:outline-none"
 											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">g</span>
+											<span class="text-[10px] font-bold text-protein/75 ml-0.5">g</span>
 										</div>
 										<button 
 											type="button" 
@@ -443,10 +443,10 @@
 								</div>
 
 								<!-- Carbs Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-amber-50/20 p-5 border border-amber-100/60 dark:bg-amber-950/5 dark:border-amber-900/10 focus-within:ring-2 focus-within:ring-carbs transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-carbs/5 p-5 border border-carbs/15 dark:border-carbs/25 focus-within:ring-2 focus-within:ring-carbs transition-all">
 									<div class="flex justify-between items-center">
 										<label for="target_carbs" class="text-xs font-black uppercase tracking-widest text-carbs">Carbohydrates</label>
-										<span class="text-[10px] font-bold text-amber-600/70 bg-amber-600/5 px-1.5 py-0.5 rounded">{carbs * 4} kcal</span>
+										<span class="text-[10px] font-bold text-carbs bg-carbs/10 px-1.5 py-0.5 rounded">{carbs * 4} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
@@ -464,9 +464,9 @@
 												min="0"
 												step="1"
 												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
+												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-carbs focus:outline-none"
 											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">g</span>
+											<span class="text-[10px] font-bold text-carbs/75 ml-0.5">g</span>
 										</div>
 										<button 
 											type="button" 
@@ -479,10 +479,10 @@
 								</div>
 
 								<!-- Fats Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-emerald-50/20 p-5 border border-emerald-100/60 dark:bg-emerald-950/5 dark:border-emerald-900/10 focus-within:ring-2 focus-within:ring-fats transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-fats/5 p-5 border border-fats/15 dark:border-fats/25 focus-within:ring-2 focus-within:ring-fats transition-all">
 									<div class="flex justify-between items-center">
 										<label for="target_fats" class="text-xs font-black uppercase tracking-widest text-fats">Fats</label>
-										<span class="text-[10px] font-bold text-emerald-600/70 bg-emerald-600/5 px-1.5 py-0.5 rounded">{fats * 9} kcal</span>
+										<span class="text-[10px] font-bold text-fats bg-fats/10 px-1.5 py-0.5 rounded">{fats * 9} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
@@ -500,9 +500,9 @@
 												min="0"
 												step="1"
 												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
+												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-fats focus:outline-none"
 											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">g</span>
+											<span class="text-[10px] font-bold text-fats/75 ml-0.5">g</span>
 										</div>
 										<button 
 											type="button" 
@@ -515,10 +515,10 @@
 								</div>
 
 								<!-- Fiber Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-purple-50/20 p-5 border border-purple-100/60 dark:bg-purple-950/5 dark:border-purple-900/10 focus-within:ring-2 focus-within:ring-fiber transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-fiber/5 p-5 border border-fiber/15 dark:border-fiber/25 focus-within:ring-2 focus-within:ring-fiber transition-all">
 									<div class="flex justify-between items-center">
 										<label for="target_fiber" class="text-xs font-black uppercase tracking-widest text-fiber">Dietary Fiber</label>
-										<span class="text-[10px] font-bold text-purple-600/70 bg-purple-600/5 px-1.5 py-0.5 rounded">Essential digestion</span>
+										<span class="text-[10px] font-bold text-fiber bg-fiber/10 px-1.5 py-0.5 rounded">Essential digestion</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
@@ -536,9 +536,9 @@
 												min="0"
 												step="1"
 												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
+												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-fiber focus:outline-none"
 											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">g</span>
+											<span class="text-[10px] font-bold text-fiber/75 ml-0.5">g</span>
 										</div>
 										<button 
 											type="button" 
