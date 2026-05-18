@@ -3,6 +3,17 @@
 	import { onMount } from 'svelte';
 	import GoalSlider from '$lib/components/GoalSlider.svelte';
 
+	interface BeforeInstallPromptEvent extends Event {
+		readonly platforms: string[];
+		readonly userChoice: Promise<{
+			outcome: 'accepted' | 'dismissed';
+			platform: string;
+		}>;
+		prompt(): Promise<void>;
+	}
+
+	let installPrompt = $state<BeforeInstallPromptEvent | null>(null);
+
 	let calories = $state(2000);
 	let weight = $state(70);
 	let currentWeight = $state(70);
@@ -167,6 +178,18 @@
 			apiKey = store.userStats.google_ai_studio_api_key;
 			isKeySaved = true;
 		}
+
+		// PWA install handler
+		const handleBeforeInstall = (e: Event) => {
+			e.preventDefault();
+			installPrompt = e as BeforeInstallPromptEvent;
+		};
+
+		window.addEventListener('beforeinstallprompt', handleBeforeInstall as EventListener);
+
+		return () => {
+			window.removeEventListener('beforeinstallprompt', handleBeforeInstall as EventListener);
+		};
 	});
 </script>
 
@@ -519,6 +542,49 @@
 
 		<!-- Right Column: Personal details, backup, and AI settings (Secondary Focus) -->
 		<div class="lg:col-span-1 grid gap-6">
+			<!-- PWA Installation Card -->
+			{#if installPrompt}
+				<div class="p-8 rounded-3xl bg-(--surface) border border-calories/25 shadow-lg relative overflow-hidden group reveal-card" style="--delay: 2.1; background-color: oklch(from var(--color-calories) l c h / 0.03);">
+					<!-- Top decorative pulse circle -->
+					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-calories/8 group-hover:scale-110 transition-transform duration-500"></div>
+					
+					<div class="relative">
+						<div class="flex items-center gap-3 mb-4">
+							<div class="w-10 h-10 rounded-xl bg-calories/10 text-calories flex items-center justify-center font-black">
+								<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold">install_mobile</span>
+							</div>
+							<div>
+								<h2 class="text-xl font-bold tracking-tight">App Installation</h2>
+								<p class="text-xs text-muted font-semibold">Install Calzap to your device</p>
+							</div>
+						</div>
+
+						<p class="text-xs text-muted mb-5 leading-relaxed">
+							Install Calzap to your homescreen for lightning-fast, 1-tap logging. Works 100% offline at the gym, on a flight, or off the grid!
+						</p>
+
+						<div class="pt-5 border-t border-(--border)/40">
+							<button 
+								type="button"
+								onclick={async () => {
+									if (installPrompt) {
+										await installPrompt.prompt();
+										const { outcome } = await installPrompt.userChoice;
+										if (outcome === 'accepted') {
+											installPrompt = null;
+										}
+									}
+								}}
+								class="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-calories text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all text-sm shadow-md shadow-calories/25 cursor-pointer"
+							>
+								<span class="material-symbols-outlined text-[18px] select-none leading-none font-bold">download</span>
+								Install Calzap (Free)
+							</button>
+						</div>
+					</div>
+				</div>
+			{/if}
+
 			<!-- Data Management Card -->
 			<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group reveal-card" style="--delay: 2.3;">
 				<!-- Top decorative pulse circle -->
