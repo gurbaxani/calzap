@@ -5,7 +5,7 @@
 	function handleSubmit(e: Event) {
 		e.preventDefault();
 		if (foodDraft.name.trim()) {
-			goto('/add/quantity');
+			goto('/foods/quantity');
 		}
 	}
 </script>

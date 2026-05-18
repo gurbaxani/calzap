@@ -1,9 +1,9 @@
-import { FoodsUnitsOptions } from '../../pocketbase-types';
+
 
 export const foodDraft = $state({
 	name: '',
 	quantity: 100,
-	units: FoodsUnitsOptions.grams,
+	units: 'grams',
 	calories: undefined as number | undefined,
 	proteins: undefined as number | undefined,
 	carbs: undefined as number | undefined,
@@ -15,7 +15,7 @@ export const foodDraft = $state({
 export function resetFoodDraft() {
 	foodDraft.name = '';
 	foodDraft.quantity = 100;
-	foodDraft.units = FoodsUnitsOptions.grams;
+	foodDraft.units = 'grams';
 	foodDraft.calories = undefined;
 	foodDraft.proteins = undefined;
 	foodDraft.carbs = undefined;

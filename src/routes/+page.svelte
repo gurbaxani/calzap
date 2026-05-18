@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { auth } from "$lib/user.svelte";
+
 
 	// Interactive widget type definitions and reactive state
 	interface DemoFood {
@@ -117,14 +117,7 @@
 		},
 	];
 
-	// Derive the CTA path based on user login status to avoid ternary operators
-	const ctaPath = $derived.by(() => {
-		if (auth.isValid) {
-			return "/dashboard";
-		} else {
-			return "/signup";
-		}
-	});
+	const ctaPath = "/dashboard";
 </script>
 
 <svelte:head>

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { auth } from '$lib/user.svelte';
-	import { pb } from '$lib/pb';
+	import { store } from '$lib/store.svelte';
 	import { onMount } from 'svelte';
 
 	let calories = $state(2000);
@@ -14,8 +13,6 @@
 	let isLoading = $state(false);
 	let isSaving = $state(false);
 	let saveSuccess = $state(false);
-	let saveError = $state('');
-	let exists = $state(false);
 
 	// AI API Key states (Google AI Studio)
 	let apiKey = $state('');
@@ -51,90 +48,23 @@
 		return 'bg-zinc-900 hover:bg-zinc-800 text-white focus:ring-zinc-900/20 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-50/20';
 	});
 
-	async function fetchGoals() {
-		if (!auth.user?.id) {
-			return;
-		}
-
-		isLoading = true;
-		saveError = '';
-
-		try {
-			const record = await pb.collection('user_stats').getOne(auth.user.id);
-			
-			if (record.target_calories !== undefined && record.target_calories !== null) {
-				calories = record.target_calories;
-			} else {
-				calories = 2000;
-			}
-
-			if (record.target_proteins !== undefined && record.target_proteins !== null) {
-				proteins = record.target_proteins;
-			} else {
-				proteins = 150;
-			}
-
-			if (record.target_carbs !== undefined && record.target_carbs !== null) {
-				carbs = record.target_carbs;
-			} else {
-				carbs = 200;
-			}
-
-			if (record.target_fats !== undefined && record.target_fats !== null) {
-				fats = record.target_fats;
-			} else {
-				fats = 70;
-			}
-
-			if (record.target_fiber !== undefined && record.target_fiber !== null) {
-				fiber = record.target_fiber;
-			} else {
-				fiber = 30;
-			}
-
-			if (record.target_weight !== undefined && record.target_weight !== null) {
-				weight = record.target_weight;
-			} else {
-				weight = 70;
-			}
-
-			if (record.current_weight !== undefined && record.current_weight !== null) {
-				currentWeight = record.current_weight;
-			} else {
-				currentWeight = 70;
-			}
-			
-			exists = true;
-		} catch (err: any) {
-			if (err.status === 404) {
-				exists = false;
-				calories = 2000;
-				proteins = 150;
-				carbs = 200;
-				fats = 70;
-				fiber = 30;
-				weight = 70;
-				currentWeight = 70;
-			} else {
-				saveError = 'Failed to load nutritional goals: ' + err.message;
-			}
-		} finally {
-			isLoading = false;
-		}
+	function fetchGoals() {
+		calories = store.userStats.target_calories;
+		proteins = store.userStats.target_proteins;
+		carbs = store.userStats.target_carbs;
+		fats = store.userStats.target_fats;
+		fiber = store.userStats.target_fiber;
+		weight = store.userStats.target_weight;
+		currentWeight = store.userStats.current_weight;
 	}
 
-	async function handleSaveGoals(e: Event) {
+	function handleSaveGoals(e: Event) {
 		e.preventDefault();
-		if (!auth.user?.id) {
-			saveError = 'You must be logged in to save goals.';
-			return;
-		}
 
 		isSaving = true;
-		saveError = '';
 		saveSuccess = false;
 
-		const data = {
+		store.updateUserStats({
 			target_calories: Number(calories),
 			target_proteins: Number(proteins),
 			target_carbs: Number(carbs),
@@ -142,27 +72,13 @@
 			target_fiber: Number(fiber),
 			target_weight: Number(weight),
 			current_weight: Number(currentWeight)
-		};
+		});
 
-		try {
-			if (exists) {
-				await pb.collection('user_stats').update(auth.user.id, data);
-			} else {
-				await pb.collection('user_stats').create({
-					id: auth.user.id,
-					...data
-				});
-				exists = true;
-			}
-			saveSuccess = true;
-			setTimeout(() => {
-				saveSuccess = false;
-			}, 3000);
-		} catch (err: any) {
-			saveError = 'Failed to save goals: ' + err.message;
-		} finally {
-			isSaving = false;
-		}
+		isSaving = false;
+		saveSuccess = true;
+		setTimeout(() => {
+			saveSuccess = false;
+		}, 3000);
 	}
 
 	function handleSaveKey(e: Event) {
@@ -215,8 +131,7 @@
 		<p class="text-muted font-medium text-lg">Manage your account, macros, and fitness targets</p>
 	</header>
 
-	{#if auth.isValid && auth.user}
-		<!-- Asymmetric Grid Layout -->
+	<!-- Asymmetric Grid Layout -->
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 			
 			<!-- Left Column: Personal details & account status -->
@@ -227,53 +142,32 @@
 					
 					<div class="flex flex-col items-center text-center gap-4 mb-6 relative">
 						<div class="w-24 h-24 rounded-2xl bg-[var(--color-calories)] flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-blue-500/10">
-							{#if auth.user.email}
-								{auth.user.email.charAt(0).toUpperCase()}
-							{:else}
-								U
-							{/if}
+							L
 						</div>
 						<div>
 							<h2 class="text-2xl font-bold tracking-tight mb-1">
-								{#if auth.user.name}
-									{auth.user.name}
-								{:else}
-									User
-								{/if}
+								Local User
 							</h2>
-							<p class="text-sm text-muted font-semibold">{auth.user.email}</p>
+							<p class="text-sm text-muted font-semibold">Local Storage Only</p>
 						</div>
 					</div>
 
 					<div class="grid gap-3 py-5 border-t border-[var(--border)]">
 						<div class="flex justify-between items-center text-sm">
-							<span class="text-muted font-medium">Account ID</span>
-							<span class="font-mono text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">{auth.user.id}</span>
-						</div>
-						<div class="flex justify-between items-center text-sm">
-							<span class="text-muted font-medium">Verified Status</span>
-							{#if auth.user.verified}
-								<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-500/10 text-green-600 dark:text-green-400">
-									<span class="material-symbols-outlined text-[12px] select-none leading-none font-bold">check</span>
-									Verified
-								</span>
-							{:else}
-								<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">
-									<span class="material-symbols-outlined text-[12px] select-none leading-none font-bold">info</span>
-									Pending
-								</span>
-							{/if}
+							<span class="text-muted font-medium">Data Storage</span>
+							<span class="font-mono text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Browser</span>
 						</div>
 					</div>
 
 					<div class="pt-5 border-t border-[var(--border)]">
-						<a 
-							href="/logout" 
-							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500/20 text-red-500 font-bold hover:bg-red-500/5 transition-all text-sm active:scale-[0.98]"
+						<button 
+							type="button"
+							onclick={() => store.exportCSV()}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/5 transition-all text-sm active:scale-[0.98]"
 						>
-							<span class="material-symbols-outlined text-[16px] select-none leading-none">logout</span>
-							Sign Out Session
-						</a>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
+							Export Monthly CSV
+						</button>
 					</div>
 				</div>
 
@@ -404,11 +298,7 @@
 							<p class="text-sm font-bold text-muted">Retrieving nutritional profile...</p>
 						</div>
 					{:else}
-						{#if saveError}
-							<div class="mb-6 rounded-xl bg-red-50 dark:bg-red-950/20 p-4 ring-1 ring-inset ring-red-200 dark:ring-red-900/30" role="alert">
-								<p class="text-sm font-medium text-red-800 dark:text-red-200">{saveError}</p>
-							</div>
-						{/if}
+
 
 						<form onsubmit={handleSaveGoals} class="flex flex-col gap-6">
 							
@@ -715,12 +605,6 @@
 			</div>
 
 		</div>
-	{:else}
-		<div class="text-center py-20 bg-[var(--surface)] rounded-3xl border border-[var(--border)] border-dashed">
-			<h2 class="text-xl font-bold mb-4">Please log in to view your profile</h2>
-			<a href="/login" class="px-8 py-3 rounded-xl bg-[var(--fg)] text-[var(--bg)] font-bold">Log In</a>
-		</div>
-	{/if}
 </main>
 
 <style>

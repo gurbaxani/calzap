@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { foodDraft } from '$lib/foodDraft.svelte';
-	import { FoodsUnitsOptions } from '../../../../pocketbase-types';
+	const unitsOptions = ["grams", "ml", "oz", "lbs", "cups", "tbsp", "tsp", "pieces", "servings"];
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
 		if (foodDraft.quantity > 0) {
-			goto('/add/macros');
+			goto('/foods/macros');
 		}
 	}
 </script>
@@ -24,7 +24,7 @@
 		
 		<button 
 			type="button" 
-			onclick={() => goto('/add')}
+			onclick={() => goto('/foods')}
 			aria-label="Go back to name entry"
 			class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 		>
@@ -54,7 +54,7 @@
 						bind:value={foodDraft.units}
 						class="w-full appearance-none rounded-2xl bg-zinc-100/80 px-4 py-4 text-2xl font-bold text-zinc-900 focus:bg-zinc-200 focus:outline-none dark:bg-zinc-800/50 dark:text-zinc-50 dark:focus:bg-zinc-800 transition-colors"
 					>
-						{#each Object.values(FoodsUnitsOptions) as unit (unit)}
+						{#each unitsOptions as unit (unit)}
 							<option value={unit}>{unit}</option>
 						{/each}
 					</select>

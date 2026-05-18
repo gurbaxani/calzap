@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { auth } from "$lib/user.svelte";
+
 	import { page } from "$app/state";
 
 	const currentPath = $derived(page.url.pathname);
@@ -8,7 +8,7 @@
 </script>
 
 <!-- Add body padding to ensure content scrolling past fixed bottom dock -->
-{#if auth.isValid}
+{#if currentPath !== '/'}
 	<style>
 		body {
 			padding-bottom: 7rem !important;
@@ -16,7 +16,7 @@
 	</style>
 {/if}
 
-{#if !auth.isValid}
+{#if currentPath === '/'}
 	<header class="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-(--bg)/80 backdrop-blur-md transition-all duration-300">
 		<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 			<!-- Left: Stunning Logo -->
@@ -51,16 +51,10 @@
 			<!-- Right: CTA Links -->
 			<div class="flex items-center gap-3">
 				<a
-					href="/login"
-					class="font-bold text-xs uppercase tracking-wider text-muted hover:text-(--fg) transition-colors px-3 py-1.5"
-				>
-					Log in
-				</a>
-				<a
-					href="/signup"
+					href="/dashboard"
 					class="px-5 py-2.5 rounded-xl bg-fg text-bg font-bold text-xs uppercase tracking-wider hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-black/5"
 				>
-					Sign up
+					Open App
 				</a>
 			</div>
 		</div>
@@ -68,7 +62,7 @@
 {/if}
 
 <!-- Floating Mobile Dock Nav Bar -->
-{#if auth.isValid}
+{#if currentPath !== '/'}
 	<nav class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-[320px] z-50 bg-(--surface)/90 backdrop-blur-md border border-(--border) rounded-3xl p-2 shadow-2xl flex items-center justify-between dock-nav">
 		<!-- Dashboard Tab -->
 		<a
@@ -82,12 +76,12 @@
 
 		<!-- Add Food Tab -->
 		<a
-			href="/add"
+			href="/foods"
 			class="flex flex-col items-center justify-center gap-1 w-[72px] py-2 rounded-2xl transition-all navigation-tab"
-			class:active={isActive('/add')}
+			class:active={isActive('/foods')}
 		>
-			<span class="material-symbols-outlined text-[20px] leading-none">add_circle</span>
-			<span class="text-[9px] font-black uppercase tracking-wider">Add</span>
+			<span class="material-symbols-outlined text-[20px] leading-none">restaurant</span>
+			<span class="text-[9px] font-black uppercase tracking-wider">Foods</span>
 		</a>
 
 		<!-- Profile Tab -->

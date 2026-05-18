@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { pb } from '$lib/pb';
-	import { auth } from '$lib/user.svelte';
+	import { store } from '$lib/store.svelte';
 	import { foodDraft, resetFoodDraft } from '$lib/foodDraft.svelte';
 
 	let loading = $state(false);
@@ -69,27 +68,21 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 
-		if (!auth.user?.id) {
-			error = 'You must be logged in to add a food.';
-			return;
-		}
-
 		loading = true;
 		error = '';
 		success = false;
 
 		try {
-			await pb.collection('foods').create({
+			store.addFood({
 				name: foodDraft.name,
-				calories: foodDraft.calories,
-				proteins: foodDraft.proteins,
-				carbs: foodDraft.carbs,
-				fats: foodDraft.fats,
-				fiber: foodDraft.fiber,
-				quantity: foodDraft.quantity,
-				units: foodDraft.units,
-				notes: foodDraft.notes,
-				created_by: auth.user.id
+				calories: foodDraft.calories || 0,
+				proteins: foodDraft.proteins || 0,
+				carbs: foodDraft.carbs || 0,
+				fats: foodDraft.fats || 0,
+				fiber: foodDraft.fiber || 0,
+				quantity: foodDraft.quantity || 0,
+				units: foodDraft.units || 'grams',
+				notes: foodDraft.notes
 			});
 			success = true;
 			resetFoodDraft();
@@ -123,7 +116,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 			</div>
 			<button 
 				type="button" 
-				onclick={() => { success = false; goto('/add'); }}
+				onclick={() => { success = false; goto('/foods'); }}
 				class="mt-4 rounded-lg bg-white/10 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-white/20 dark:bg-black/5 dark:text-zinc-900 dark:hover:bg-black/10 active:scale-95"
 			>
 				Add Another
@@ -142,7 +135,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 			
 			<button 
 				type="button" 
-				onclick={() => goto('/add/quantity')}
+				onclick={() => goto('/foods/quantity')}
 				aria-label="Go back to quantity selection"
 				class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 			>

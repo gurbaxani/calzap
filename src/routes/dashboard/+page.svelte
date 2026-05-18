@@ -1,47 +1,25 @@
 <script lang="ts">
 	import MacroBar from "$lib/components/MacroBar.svelte";
-	import { auth } from "$lib/user.svelte";
-	import { pb } from "$lib/pb";
-	import { onMount } from "svelte";
-	import { goto } from "$app/navigation";
+	import { store } from "$lib/store.svelte";
 	import { slide } from "svelte/transition";
-	import type { FoodLogsResponse } from "../../../pocketbase-types";
-
-	let dailyTargets = $state({
-		calories: 2500,
-		protein: 180,
-		carbs: 250,
-		fats: 70,
-		fiber: 35,
-	});
 
 	let selectedDate = $state(new Date());
-	let logsToday = $state<FoodLogsResponse[]>([]);
-	let recentFoods = $state<
-		{
-			name: string;
-			calories: number;
-			proteins: number;
-			carbs: number;
-			fats: number;
-			fiber: number;
-		}[]
-	>([]);
 
-	let showConsumedCal = $state(false);
-	let showQuickAdd = $state(false);
-	let isSaving = $state(false);
+	// Filter logs for the selected date
+	const logsToday = $derived.by(() => {
+		const startOfDay = new Date(selectedDate);
+		startOfDay.setHours(0, 0, 0, 0);
 
-	let quickLog = $state({
-		name: "",
-		calories: undefined as number | undefined,
-		protein: undefined as number | undefined,
-		carbs: undefined as number | undefined,
-		fats: undefined as number | undefined,
-		fiber: undefined as number | undefined,
+		const endOfDay = new Date(selectedDate);
+		endOfDay.setHours(23, 59, 59, 999);
+
+		return store.foodLogs.filter(log => {
+			const d = new Date(log.consumed_at);
+			return d >= startOfDay && d <= endOfDay;
+		}).sort((a, b) => new Date(b.consumed_at).getTime() - new Date(a.consumed_at).getTime());
 	});
 
-	// Derive today's macro intake totals dynamically from database logs
+	// Derive today's macro intake totals dynamically from local store
 	const consumed = $derived.by(() => {
 		let totalCal = 0;
 		let totalProt = 0;
@@ -64,150 +42,25 @@
 		};
 	});
 
+	const dailyTargets = $derived(store.userStats);
+
 	const remainingCalories = $derived(
-		dailyTargets.calories - consumed.calories,
+		dailyTargets.target_calories - consumed.calories,
 	);
 
-	// Fetch target stats for the user (secured to current user)
-	async function fetchTargets() {
-		if (auth.user?.id) {
-			try {
-				const record = await pb
-					.collection("user_stats")
-					.getOne(auth.user.id, { requestKey: null });
+	let showConsumedCal = $state(false);
 
-				if (
-					record.target_calories !== undefined &&
-					record.target_calories !== null
-				) {
-					dailyTargets.calories = record.target_calories;
-				}
-				if (
-					record.target_proteins !== undefined &&
-					record.target_proteins !== null
-				) {
-					dailyTargets.protein = record.target_proteins;
-				}
-				if (
-					record.target_carbs !== undefined &&
-					record.target_carbs !== null
-				) {
-					dailyTargets.carbs = record.target_carbs;
-				}
-				if (
-					record.target_fats !== undefined &&
-					record.target_fats !== null
-				) {
-					dailyTargets.fats = record.target_fats;
-				}
-				if (
-					record.target_fiber !== undefined &&
-					record.target_fiber !== null
-				) {
-					dailyTargets.fiber = record.target_fiber;
-				}
-			} catch (err: unknown) {
-				// Fallback to defaults if stats do not exist yet
-			}
-		}
-	}
-
-	// Fetch logs created on the selected date (secured to current user)
-	async function fetchLogsForDate(date: Date) {
-		if (auth.user?.id) {
-			try {
-				const startOfDay = new Date(date);
-				startOfDay.setHours(0, 0, 0, 0);
-
-				const endOfDay = new Date(date);
-				endOfDay.setHours(23, 59, 59, 999);
-
-				const filterStr = pb.filter(
-					"user = {:userId} && consumed_at >= {:startOfDay} && consumed_at <= {:endOfDay}",
-					{
-						userId: auth.user.id,
-						startOfDay: startOfDay,
-						endOfDay: endOfDay,
-					},
-				);
-
-				const result = await pb
-					.collection("food_logs")
-					.getList<FoodLogsResponse>(1, 100, {
-						filter: filterStr,
-						sort: "-consumed_at",
-						requestKey: null,
-					});
-				logsToday = result.items;
-			} catch (err: unknown) {
-				console.error("Error fetching logs:", err);
-			}
-		}
-	}
-
-	async function fetchRecentFoods() {
-		if (auth.user?.id) {
-			try {
-				const result = await pb
-					.collection("food_logs")
-					.getList<FoodLogsResponse>(1, 30, {
-						filter: pb.filter("user = {:userId}", {
-							userId: auth.user.id,
-						}),
-						sort: "-consumed_at",
-						requestKey: null,
-					});
-
-				// Group and get unique foods by name
-				const uniqueMap = new Map<
-					string,
-					(typeof recentFoods)[number]
-				>();
-				for (const item of result.items) {
-					if (item.name && !uniqueMap.has(item.name)) {
-						uniqueMap.set(item.name, {
-							name: item.name,
-							calories: item.calories ?? 0,
-							proteins: item.proteins ?? 0,
-							carbs: item.carbs ?? 0,
-							fats: item.fats ?? 0,
-							fiber: item.fiber ?? 0,
-						});
-					}
-					if (uniqueMap.size >= 5) break;
-				}
-				recentFoods = Array.from(uniqueMap.values());
-			} catch (err: unknown) {
-				console.error("Error fetching recent foods:", err);
-			}
-		}
-	}
-
-	async function deleteLog(id: string) {
+	function deleteLog(id: string) {
 		if (!confirm("Are you sure you want to delete this log entry?")) {
 			return;
 		}
-		try {
-			const record = await pb
-				.collection("food_logs")
-				.getOne(id, { requestKey: null });
-			if (record.user !== auth.user?.id) {
-				console.error("Unauthorized operation");
-				return;
-			}
-			await pb.collection("food_logs").delete(id);
-			await fetchLogsForDate(selectedDate);
-			await fetchRecentFoods();
-		} catch (err: unknown) {
-			console.error("Failed to delete log entry:", err);
-		}
+		store.deleteFoodLog(id);
 	}
 
 	function changeDate(days: number) {
 		const newDate = new Date(selectedDate);
 		newDate.setDate(newDate.getDate() + days);
 		selectedDate = newDate;
-		fetchLogsForDate(selectedDate);
 	}
 
 	function formatSelectedDate(date: Date): string {
@@ -233,70 +86,6 @@
 			});
 		}
 	}
-
-	async function saveQuickLog() {
-		if (!auth.user?.id) return;
-		isSaving = true;
-		try {
-			await pb.collection("food_logs").create({
-				user: auth.user.id,
-				name: quickLog.name || "Quick Log",
-				calories: Number(quickLog.calories ?? 0),
-				proteins: Number(quickLog.protein ?? 0),
-				carbs: Number(quickLog.carbs ?? 0),
-				fats: Number(quickLog.fats ?? 0),
-				fiber: Number(quickLog.fiber ?? 0),
-				consumed_at: new Date(),
-			});
-			// Reset inputs
-			quickLog = {
-				name: "",
-				calories: undefined,
-				protein: undefined,
-				carbs: undefined,
-				fats: undefined,
-				fiber: undefined,
-			};
-			showQuickAdd = false;
-			await fetchLogsForDate(selectedDate);
-			await fetchRecentFoods();
-		} catch (err: unknown) {
-			console.error("Failed to create quick log:", err);
-		} finally {
-			isSaving = false;
-		}
-	}
-
-	async function logRecentFood(food: (typeof recentFoods)[number]) {
-		if (!auth.user?.id) return;
-		try {
-			await pb.collection("food_logs").create({
-				user: auth.user.id,
-				name: food.name,
-				calories: food.calories,
-				proteins: food.proteins,
-				carbs: food.carbs,
-				fats: food.fats,
-				fiber: food.fiber,
-				consumed_at: new Date(),
-			});
-			// Always reset selection to today when adding a new meal
-			selectedDate = new Date();
-			await fetchLogsForDate(selectedDate);
-		} catch (err: unknown) {
-			console.error("Failed to log recent food:", err);
-		}
-	}
-
-	onMount(() => {
-		if (!auth.isValid) {
-			goto("/login");
-		} else {
-			fetchTargets();
-			fetchLogsForDate(selectedDate);
-			fetchRecentFoods();
-		}
-	});
 </script>
 
 <svelte:head>
@@ -356,7 +145,7 @@
 							{consumed.calories}
 						</span>
 						<span class="text-lg font-bold text-muted"
-							>/ {dailyTargets.calories} kcal</span
+							>/ {dailyTargets.target_calories} kcal</span
 						>
 					{:else if remainingCalories >= 0}
 						<span
@@ -399,28 +188,28 @@
 		<MacroBar
 			label="Protein"
 			value={consumed.protein}
-			target={dailyTargets.protein}
+			target={dailyTargets.target_proteins}
 			unit="g"
 			color="var(--color-protein)"
 		/>
 		<MacroBar
 			label="Carbs"
 			value={consumed.carbs}
-			target={dailyTargets.carbs}
+			target={dailyTargets.target_carbs}
 			unit="g"
 			color="var(--color-carbs)"
 		/>
 		<MacroBar
 			label="Fats"
 			value={consumed.fats}
-			target={dailyTargets.fats}
+			target={dailyTargets.target_fats}
 			unit="g"
 			color="var(--color-fats)"
 		/>
 		<MacroBar
 			label="Fiber"
 			value={consumed.fiber}
-			target={dailyTargets.fiber}
+			target={dailyTargets.target_fiber}
 			unit="g"
 			color="var(--color-fiber)"
 		/>

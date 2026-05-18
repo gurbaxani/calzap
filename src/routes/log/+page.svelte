@@ -1,17 +1,16 @@
 <script lang="ts">
-	import { auth } from '$lib/user.svelte';
-	import { pb } from '$lib/pb';
+	import { store } from '$lib/store.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import type { FoodsResponse, FoodLogsResponse } from '../../../pocketbase-types';
+	import type { Food, FoodLog } from '$lib/store.svelte';
 
 	// Page modes: search foods or quick add custom meal
 	let mode = $state<'search' | 'custom'>('search');
 	
 	// Search state
 	let searchQuery = $state('');
-	let foodsList = $state<FoodsResponse[]>([]);
-	let selectedFood = $state<FoodsResponse | null>(null);
+	let foodsList = $state<Food[]>([]);
+	let selectedFood = $state<Food | null>(null);
 	let consumedQty = $state<number>(100);
 	
 	// Status states
@@ -28,87 +27,59 @@
 	let customFats = $state<number | undefined>(undefined);
 	let customFiber = $state<number | undefined>(undefined);
 
-	// Today's log history state
-	let logsToday = $state<FoodLogsResponse[]>([]);
-
-	// Targets for progress visualizers
-	let dailyTargets = $state({
-		calories: 2500,
-		protein: 180,
-		carbs: 250,
-		fats: 70,
-		fiber: 35
-	});
-
 	// Derived scale factor based on food's reference quantity and user's consumed quantity
 	const scale = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.quantity && selectedFood.quantity > 0) {
-				return consumedQty / selectedFood.quantity;
-			}
+		if (selectedFood && selectedFood.quantity && selectedFood.quantity > 0) {
+			return consumedQty / selectedFood.quantity;
 		}
 		return 1;
 	});
 
 	// Derived adjusted macros based on quantity scale
-	const adjCalories = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.calories !== undefined) {
-				return Math.round(selectedFood.calories * scale);
+	const adjCalories = $derived.by(() => selectedFood?.calories !== undefined ? Math.round(selectedFood.calories * scale) : 0);
+	const adjProtein = $derived.by(() => selectedFood?.proteins !== undefined ? Number((selectedFood.proteins * scale).toFixed(1)) : 0);
+	const adjCarbs = $derived.by(() => selectedFood?.carbs !== undefined ? Number((selectedFood.carbs * scale).toFixed(1)) : 0);
+	const adjFats = $derived.by(() => selectedFood?.fats !== undefined ? Number((selectedFood.fats * scale).toFixed(1)) : 0);
+	const adjFiber = $derived.by(() => selectedFood?.fiber !== undefined ? Number((selectedFood.fiber * scale).toFixed(1)) : 0);
+
+	// Load custom foods matching search pattern
+	function fetchFoods() {
+		isSearching = true;
+		try {
+			if (searchQuery.trim() !== '') {
+				foodsList = store.foods.filter(f => f.name.toLowerCase().includes(searchQuery.toLowerCase()));
+			} else {
+				foodsList = store.foods;
 			}
+		} finally {
+			isSearching = false;
 		}
-		return 0;
+	}
+
+    // Targets
+    const dailyTargets = $derived(store.userStats);
+
+	// Load logs created today
+	const logsToday = $derived.by(() => {
+		const startOfDay = new Date();
+		startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+		return store.foodLogs.filter(log => {
+            const logDate = new Date(log.consumed_at);
+            return logDate >= startOfDay && logDate <= endOfDay;
+        }).sort((a,b) => new Date(b.consumed_at).getTime() - new Date(a.consumed_at).getTime());
 	});
 
-	const adjProtein = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.proteins !== undefined) {
-				return Number((selectedFood.proteins * scale).toFixed(1));
-			}
-		}
-		return 0;
-	});
-
-	const adjCarbs = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.carbs !== undefined) {
-				return Number((selectedFood.carbs * scale).toFixed(1));
-			}
-		}
-		return 0;
-	});
-
-	const adjFats = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.fats !== undefined) {
-				return Number((selectedFood.fats * scale).toFixed(1));
-			}
-		}
-		return 0;
-	});
-
-	const adjFiber = $derived.by(() => {
-		if (selectedFood) {
-			if (selectedFood.fiber !== undefined) {
-				return Number((selectedFood.fiber * scale).toFixed(1));
-			}
-		}
-		return 0;
-	});
-
-	// Derived cumulative totals of logged macros for today
+    // Derived cumulative totals
 	const todayTotals = $derived.by(() => {
-		let totalCal = 0;
-		let totalProt = 0;
-		let totalCarb = 0;
-		let totalFat = 0;
-		let totalFib = 0;
+		let totalCal = 0, totalProt = 0, totalCarb = 0, totalFat = 0, totalFib = 0;
 		for (const item of logsToday) {
-			totalCal = totalCal + (item.calories ?? 0);
-			totalProt = totalProt + (item.proteins ?? 0);
-			totalCarb = totalCarb + (item.carbs ?? 0);
-			totalFat = totalFat + (item.fats ?? 0);
-			totalFib = totalFib + (item.fiber ?? 0);
+			totalCal += item.calories || 0;
+			totalProt += item.proteins || 0;
+			totalCarb += item.carbs || 0;
+			totalFat += item.fats || 0;
+			totalFib += item.fiber || 0;
 		}
 		return {
 			calories: totalCal,
@@ -119,96 +90,13 @@
 		};
 	});
 
-	// Load custom foods matching search pattern (secured to current user)
-	async function fetchFoods() {
-		if (!auth.user?.id) {
-			return;
-		}
-		isSearching = true;
-		try {
-			let filterStr = '';
-			if (searchQuery.trim() !== '') {
-				filterStr = pb.filter('created_by = {:userId} && name ~ {:query}', {
-					userId: auth.user.id,
-					query: searchQuery.trim()
-				});
-			} else {
-				filterStr = pb.filter('created_by = {:userId}', {
-					userId: auth.user.id
-				});
-			}
-			const result = await pb.collection('foods').getList<FoodsResponse>(1, 30, {
-				filter: filterStr,
-				sort: '-created',
-				requestKey: null
-			});
-			foodsList = result.items;
-		} catch (err: unknown) {
-			console.error('Error fetching foods:', err);
-		} finally {
-			isSearching = false;
-		}
-	}
-
-	// Fetch target stats for the user to compare against logged values
-	async function fetchTargets() {
-		if (auth.user?.id) {
-			try {
-				const record = await pb.collection('user_stats').getOne(auth.user.id, { requestKey: null });
-				if (record.target_calories !== undefined && record.target_calories !== null) {
-					dailyTargets.calories = record.target_calories;
-				}
-				if (record.target_proteins !== undefined && record.target_proteins !== null) {
-					dailyTargets.protein = record.target_proteins;
-				}
-				if (record.target_carbs !== undefined && record.target_carbs !== null) {
-					dailyTargets.carbs = record.target_carbs;
-				}
-				if (record.target_fats !== undefined && record.target_fats !== null) {
-					dailyTargets.fats = record.target_fats;
-				}
-				if (record.target_fiber !== undefined && record.target_fiber !== null) {
-					dailyTargets.fiber = record.target_fiber;
-				}
-			} catch (err: unknown) {
-				// Fallback to default targets
-			}
-		}
-	}
-
-	// Load logs created today (secured to current user)
-	async function fetchLogsToday() {
-		if (!auth.user?.id) {
-			return;
-		}
-		try {
-			const startOfDay = new Date();
-			startOfDay.setHours(0, 0, 0, 0);
-			
-			const filterStr = pb.filter('user = {:userId} && consumed_at >= {:startOfDay}', {
-				userId: auth.user.id,
-				startOfDay: startOfDay
-			});
-			
-			const result = await pb.collection('food_logs').getList<FoodLogsResponse>(1, 50, {
-				filter: filterStr,
-				sort: '-consumed_at',
-				requestKey: null
-			});
-			
-			logsToday = result.items;
-		} catch (err: unknown) {
-			console.error('Error fetching today\'s logs:', err);
-		}
-	}
-
 	// Form input handler to trigger search
 	function handleSearchInput() {
 		fetchFoods();
 	}
 
 	// Selection handler
-	function selectFoodItem(food: FoodsResponse) {
+	function selectFoodItem(food: Food) {
 		selectedFood = food;
 		if (food.quantity !== undefined && food.quantity !== null) {
 			consumedQty = food.quantity;
@@ -220,11 +108,7 @@
 	}
 
 	// Log food selected from catalog
-	async function logSelectedFood() {
-		if (!auth.user?.id) {
-			error = 'You must be logged in.';
-			return;
-		}
+	function logSelectedFood() {
 		if (!selectedFood) {
 			error = 'No food selected.';
 			return;
@@ -233,40 +117,29 @@
 		error = '';
 		successMsg = '';
 		try {
-			await pb.collection('food_logs').create({
-				user: auth.user.id,
-				food: selectedFood.id,
+			store.addFoodLog({
 				name: selectedFood.name,
 				calories: adjCalories,
 				proteins: adjProtein,
 				carbs: adjCarbs,
 				fats: adjFats,
 				fiber: adjFiber,
-				consumed_at: new Date()
+				consumed_at: new Date().toISOString()
 			});
 			
 			successMsg = `Successfully logged ${selectedFood.name}!`;
 			selectedFood = null;
 			consumedQty = 100;
-			await fetchLogsToday();
 		} catch (err: unknown) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'Failed to log food';
-			}
+			error = 'Failed to log food';
 		} finally {
 			isLogging = false;
 		}
 	}
 
 	// Log a quick meal with custom name & macros
-	async function logCustomMeal(e: Event) {
+	function logCustomMeal(e: Event) {
 		e.preventDefault();
-		if (!auth.user?.id) {
-			error = 'You must be logged in to log a meal.';
-			return;
-		}
 		if (customName.trim() === '') {
 			error = 'Please enter a name for the meal.';
 			return;
@@ -275,15 +148,14 @@
 		error = '';
 		successMsg = '';
 		try {
-			await pb.collection('food_logs').create({
-				user: auth.user.id,
+			store.addFoodLog({
 				name: customName,
 				calories: customCalories ?? 0,
 				proteins: customProtein ?? 0,
 				carbs: customCarbs ?? 0,
 				fats: customFats ?? 0,
 				fiber: customFiber ?? 0,
-				consumed_at: new Date()
+				consumed_at: new Date().toISOString()
 			});
 			
 			successMsg = `Logged custom meal: ${customName}`;
@@ -293,110 +165,68 @@
 			customCarbs = undefined;
 			customFats = undefined;
 			customFiber = undefined;
-			
-			await fetchLogsToday();
 		} catch (err: unknown) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'Failed to log custom meal';
-			}
+			error = 'Failed to log custom meal';
 		} finally {
 			isLogging = false;
 		}
 	}
 
 	// Delete log entry
-	async function deleteLog(id: string) {
+	function deleteLog(id: string) {
 		error = '';
 		successMsg = '';
 		try {
-			const record = await pb.collection('food_logs').getOne(id, { requestKey: null });
-			if (record.user !== auth.user?.id) {
-				error = 'Unauthorized operation';
-				return;
-			}
-			await pb.collection('food_logs').delete(id);
+			store.deleteFoodLog(id);
 			successMsg = 'Log entry deleted.';
-			await fetchLogsToday();
 		} catch (err: unknown) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'Failed to delete log entry';
-			}
+			error = 'Failed to delete log entry';
 		}
 	}
 
 	// Quickly re-log a meal that has already been logged today
-	async function repeatLog(log: FoodLogsResponse) {
-		if (!auth.user?.id) {
-			error = 'You must be logged in.';
-			return;
-		}
+	function repeatLog(log: FoodLog) {
 		error = '';
 		successMsg = '';
 		try {
-			await pb.collection('food_logs').create({
-				user: auth.user.id,
-				food: log.food || undefined,
+			store.addFoodLog({
 				name: log.name,
 				calories: log.calories,
 				proteins: log.proteins,
 				carbs: log.carbs,
 				fats: log.fats,
 				fiber: log.fiber,
-				consumed_at: new Date()
+				consumed_at: new Date().toISOString()
 			});
 			successMsg = `Logged "${log.name}" again!`;
-			await fetchLogsToday();
 		} catch (err: unknown) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'Failed to repeat log';
-			}
+			error = 'Failed to repeat log';
 		}
 	}
 
 	// Delete defined food from catalog
-	async function deleteDefinedFood(id: string) {
+	function deleteDefinedFood(id: string) {
 		if (!confirm('Are you sure you want to delete this food definition? This will not affect your past log history.')) {
 			return;
 		}
 		error = '';
 		successMsg = '';
 		try {
-			const record = await pb.collection('foods').getOne(id, { requestKey: null });
-			if (record.created_by !== auth.user?.id) {
-				error = 'Unauthorized operation';
-				return;
-			}
-			await pb.collection('foods').delete(id);
+			store.deleteFood(id);
 			successMsg = 'Food definition deleted.';
 			
 			if (selectedFood?.id === id) {
 				selectedFood = null;
 			}
-			await fetchFoods();
+			fetchFoods();
 		} catch (err: unknown) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'Failed to delete food definition';
-			}
+			error = 'Failed to delete food definition';
 		}
 	}
 
 	// Initialize
 	onMount(() => {
-		if (!auth.isValid) {
-			goto('/login');
-		} else {
-			fetchFoods();
-			fetchTargets();
-			fetchLogsToday();
-		}
+		fetchFoods();
 	});
 </script>
 
@@ -426,7 +256,7 @@
 
 		<!-- Optional link to add custom food definitions -->
 		<a
-			href="/add"
+			href="/foods"
 			id="link-create-food"
 			class="px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-xs uppercase tracking-wider transition-all text-center"
 		>
@@ -582,7 +412,7 @@
 								<p class="text-zinc-500 font-bold text-base">No catalog foods found</p>
 								<p class="text-zinc-400 text-xs max-w-xs">Define custom food items with exact macronutrient counts first to easily log them.</p>
 								<a
-									href="/add"
+									href="/foods"
 									class="px-6 py-2.5 rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 text-xs font-bold uppercase tracking-wider transition-all"
 								>
 									Define a Food
@@ -729,7 +559,7 @@
 				<span class="text-4xl font-black tracking-tight tabular-nums style-color-calories">
 					{todayTotals.calories}
 				</span>
-				<span class="text-xs font-bold text-zinc-400">/ {dailyTargets.calories} kcal</span>
+				<span class="text-xs font-bold text-zinc-400">/ {dailyTargets.target_calories} kcal</span>
 			</div>
 		</div>
 
@@ -739,12 +569,12 @@
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
 					<span class="text-rose-500">Protein</span>
-					<span class="tabular-nums text-zinc-400">{todayTotals.protein}g / {dailyTargets.protein}g</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.protein}g / {dailyTargets.target_proteins}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
 					<div 
 						class="h-full rounded-full transition-all duration-500" 
-						style="background-color: var(--color-protein); width: {Math.min(100, (todayTotals.protein / dailyTargets.protein) * 100)}%"
+						style="background-color: var(--color-protein); width: {Math.min(100, (todayTotals.protein / dailyTargets.target_proteins) * 100)}%"
 					></div>
 				</div>
 			</div>
@@ -753,12 +583,12 @@
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
 					<span class="text-amber-500">Carbs</span>
-					<span class="tabular-nums text-zinc-400">{todayTotals.carbs}g / {dailyTargets.carbs}g</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.carbs}g / {dailyTargets.target_carbs}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
 					<div 
 						class="h-full rounded-full transition-all duration-500" 
-						style="background-color: var(--color-carbs); width: {Math.min(100, (todayTotals.carbs / dailyTargets.carbs) * 100)}%"
+						style="background-color: var(--color-carbs); width: {Math.min(100, (todayTotals.carbs / dailyTargets.target_carbs) * 100)}%"
 					></div>
 				</div>
 			</div>
@@ -767,12 +597,12 @@
 			<div class="flex flex-col gap-1.5">
 				<div class="flex justify-between text-xs font-bold">
 					<span class="text-blue-500">Fats</span>
-					<span class="tabular-nums text-zinc-400">{todayTotals.fats}g / {dailyTargets.fats}g</span>
+					<span class="tabular-nums text-zinc-400">{todayTotals.fats}g / {dailyTargets.target_fats}g</span>
 				</div>
 				<div class="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
 					<div 
 						class="h-full rounded-full transition-all duration-500" 
-						style="background-color: var(--color-fats); width: {Math.min(100, (todayTotals.fats / dailyTargets.fats) * 100)}%"
+						style="background-color: var(--color-fats); width: {Math.min(100, (todayTotals.fats / dailyTargets.target_fats) * 100)}%"
 					></div>
 				</div>
 			</div>
