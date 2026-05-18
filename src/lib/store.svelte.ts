@@ -44,11 +44,11 @@ class Store {
 	foods = $state<Food[]>([]);
 	foodLogs = $state<FoodLog[]>([]);
 	userStats = $state<UserStats>({
-		target_calories: 2500,
-		target_proteins: 180,
-		target_carbs: 250,
-		target_fats: 70,
-		target_fiber: 35,
+		target_calories: 2000,
+		target_proteins: 150,
+		target_carbs: 200,
+		target_fats: 65,
+		target_fiber: 30,
 		target_weight: 70,
 		current_weight: 70,
 		google_ai_studio_api_key: '',

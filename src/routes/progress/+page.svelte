@@ -79,7 +79,7 @@
 	// Maximum Calories in range to scale chart
 	const maxCalories = $derived.by(() => {
 		const values = dailyHistory.map(h => h.calories);
-		const target = store.userStats.target_calories || 2500;
+		const target = store.userStats.target_calories || 2000;
 		return Math.max(...values, target, 2000);
 	});
 
@@ -278,49 +278,54 @@
 			</div>
 		</div>
 
-		<!-- The Chart Area -->
-		<div class="relative h-64 w-full flex items-end justify-between gap-1.5 md:gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-1 pt-6 px-1">
-			
-			<!-- Target Calorie Line (Dashed) -->
+		<!-- The Chart Area with smooth scroll on mobile -->
+		<div class="w-full overflow-x-auto pb-2 pt-2 scrollbar-thin select-none">
 			<div 
-				class="absolute left-0 right-0 border-t border-dashed border-zinc-400 dark:border-zinc-600 z-10 pointer-events-none flex items-center transition-all duration-300"
-				style="bottom: {(store.userStats.target_calories / maxCalories) * 100}%"
+				class="relative h-64 flex items-end justify-between gap-1.5 md:gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-1 pt-6 px-1 transition-all duration-300"
+				style="width: {rangeDays === 7 ? '100%' : rangeDays === 14 ? '135%' : '240%'}; min-width: {rangeDays === 7 ? '100%' : rangeDays === 14 ? '520px' : '960px'};"
 			>
-				<span class="bg-zinc-200/90 dark:bg-zinc-800/90 text-[8px] font-black uppercase tracking-wider text-muted px-1.5 py-0.5 rounded-md ml-2 border border-zinc-300 dark:border-zinc-700 shadow-xs select-none">
-					Goal: {store.userStats.target_calories} kcal
-				</span>
-			</div>
-
-			<!-- Bars -->
-			{#each dailyHistory as day, index (day.date.toDateString())}
-				{@const barHeight = Math.min((day.calories / maxCalories) * 100, 100)}
-				{@const isOver = day.calories > store.userStats.target_calories}
-				<button
-					type="button"
-					onclick={() => activeDetailIndex = index}
-					onmouseenter={() => activeDetailIndex = index}
-					class="flex-1 group flex flex-col items-center gap-2 h-full justify-end focus:outline-hidden cursor-pointer"
+				
+				<!-- Target Calorie Line (Dashed) -->
+				<div 
+					class="absolute left-0 right-0 border-t border-dashed border-zinc-400 dark:border-zinc-600 z-10 pointer-events-none flex items-center transition-all duration-300"
+					style="bottom: {(store.userStats.target_calories / maxCalories) * 88}%"
 				>
-					<div class="w-full flex-1 flex flex-col justify-end relative h-full">
-						{#if day.logged}
-							<div 
-								class="w-full rounded-t-md transition-all duration-500 ease-out relative group-hover:scale-x-105 {isOver ? 'bg-rose-500 shadow-xs shadow-rose-500/20' : 'bg-calories shadow-xs shadow-(--color-calories)/20'} {activeDetailIndex === index ? 'ring-2 ring-(--fg) scale-x-105' : ''}"
-								style="height: {barHeight}%"
-							>
-							</div>
-						{:else}
-							<!-- Empty day track -->
-							<div class="w-full h-1 rounded-t-xs bg-zinc-200 dark:bg-zinc-800 transition-all {activeDetailIndex === index ? 'bg-zinc-300 dark:bg-zinc-700' : ''}"></div>
-						{/if}
-					</div>
+					<span class="bg-zinc-200/90 dark:bg-zinc-800/90 text-[8px] font-black uppercase tracking-wider text-muted px-1.5 py-0.5 rounded-md ml-2 border border-zinc-300 dark:border-zinc-700 shadow-xs select-none sticky left-2">
+						Goal: {store.userStats.target_calories} kcal
+					</span>
+				</div>
 
-					<!-- X-axis Label -->
-					<div class="flex flex-col items-center">
-						<span class="text-[9px] font-black uppercase tracking-tight text-muted/80">{day.weekday}</span>
-						<span class="text-[8px] font-bold text-muted/60">{day.date.getDate()}</span>
-					</div>
-				</button>
-			{/each}
+				<!-- Bars -->
+				{#each dailyHistory as day, index (day.date.toDateString())}
+					{@const barHeight = Math.min((day.calories / maxCalories) * 88, 88)}
+					{@const isOver = day.calories > store.userStats.target_calories}
+					<button
+						type="button"
+						onclick={() => activeDetailIndex = index}
+						onmouseenter={() => activeDetailIndex = index}
+						class="flex-1 group flex flex-col items-center gap-2 h-full justify-end focus:outline-hidden cursor-pointer"
+					>
+						<div class="w-full flex-1 flex flex-col justify-end relative h-full">
+							{#if day.logged}
+								<div 
+									class="w-full rounded-t-md transition-all duration-500 ease-out relative group-hover:scale-x-105 {isOver ? 'bg-rose-500 shadow-xs shadow-rose-500/20' : 'bg-calories shadow-xs shadow-(--color-calories)/20'} {activeDetailIndex === index ? 'ring-2 ring-(--fg) scale-x-105' : ''}"
+									style="height: {barHeight}%"
+								>
+								</div>
+							{:else}
+								<!-- Empty day track -->
+								<div class="w-full h-1 rounded-t-xs bg-zinc-200 dark:bg-zinc-800 transition-all {activeDetailIndex === index ? 'bg-zinc-300 dark:bg-zinc-700' : ''}"></div>
+							{/if}
+						</div>
+
+						<!-- X-axis Label -->
+						<div class="flex flex-col items-center">
+							<span class="text-[9px] font-black uppercase tracking-tight text-muted/80">{day.weekday}</span>
+							<span class="text-[8px] font-bold text-muted/60">{day.date.getDate()}</span>
+						</div>
+					</button>
+				{/each}
+			</div>
 		</div>
 
 		<!-- Day Details Expanded Panel -->
@@ -621,5 +626,19 @@
 			opacity: 1;
 			animation: none;
 		}
+	}
+
+	.scrollbar-thin::-webkit-scrollbar {
+		height: 6px;
+	}
+	.scrollbar-thin::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.scrollbar-thin::-webkit-scrollbar-thumb {
+		background: var(--color-border);
+		border-radius: 9999px;
+	}
+	.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+		background: var(--color-text-muted);
 	}
 </style>

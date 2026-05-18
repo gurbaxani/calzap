@@ -254,7 +254,7 @@
 										customFiber = Math.round((calories / 1000) * 14);
 										autosaveGoals();
 									}}
-									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-calories) {dietStyle === 'balanced' ? 'border-calories bg-calories/5 shadow-[0_0_12px_var(--color-calories)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-calories {dietStyle === 'balanced' ? 'border-calories bg-calories/5 shadow-[0_0_12px_var(--color-calories)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
 								>
 									<div>
 										<span class="material-symbols-outlined text-[24px] mb-2 block text-calories" style="font-variation-settings: 'FILL' 1;">scale</span>
@@ -281,7 +281,7 @@
 										customFiber = Math.round((calories / 1000) * 14);
 										autosaveGoals();
 									}}
-									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-protein) {dietStyle === 'high_protein' ? 'border-protein bg-protein/5 shadow-[0_0_12px_var(--color-protein)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-protein {dietStyle === 'high_protein' ? 'border-protein bg-protein/5 shadow-[0_0_12px_var(--color-protein)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
 								>
 									<div>
 										<span class="material-symbols-outlined text-[24px] mb-2 block text-protein" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
@@ -308,7 +308,7 @@
 										customFiber = Math.round((calories / 1000) * 14);
 										autosaveGoals();
 									}}
-									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-carbs) {dietStyle === 'low_carb' ? 'border-carbs bg-carbs/5 shadow-[0_0_12px_var(--color-carbs)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-carbs {dietStyle === 'low_carb' ? 'border-carbs bg-carbs/5 shadow-[0_0_12px_var(--color-carbs)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
 								>
 									<div>
 										<span class="material-symbols-outlined text-[24px] mb-2 block text-carbs" style="font-variation-settings: 'FILL' 1;">grass</span>
