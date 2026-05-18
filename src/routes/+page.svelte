@@ -1094,14 +1094,14 @@
 				<p class="text-[11px] text-muted/70 font-semibold">Licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer" class="underline hover:text-(--fg) transition-colors">GNU AGPL v3.0</a>.</p>
 			</div>
 			<div class="flex items-center gap-6">
-				<a href="/login" class="hover:text-(--fg) transition-colors"
-					>Log In</a
-				>
-				<a href="/signup" class="hover:text-(--fg) transition-colors"
-					>Sign Up</a
-				>
 				<a href="/dashboard" class="hover:text-(--fg) transition-colors"
 					>Dashboard</a
+				>
+				<a href="/foods" class="hover:text-(--fg) transition-colors"
+					>Foods</a
+				>
+				<a href="/profile" class="hover:text-(--fg) transition-colors"
+					>Profile</a
 				>
 			</div>
 		</div>
