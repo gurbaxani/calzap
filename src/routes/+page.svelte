@@ -221,6 +221,7 @@
 						>
 							<span
 								class="material-symbols-outlined text-[18px] leading-none"
+								style="font-variation-settings: 'FILL' 1;"
 								>bolt</span
 							>
 							Zero Lag
@@ -618,6 +619,7 @@
 					>
 						<span
 							class="material-symbols-outlined text-[24px] select-none"
+							style="font-variation-settings: 'FILL' 1;"
 							>bolt</span
 						>
 					</div>
@@ -1075,6 +1077,7 @@
 					<span>Start Logging (It's Free)</span>
 					<span
 						class="material-symbols-outlined ml-2.5 transition-transform group-hover:translate-x-1 select-none text-[22px] leading-none"
+						style="font-variation-settings: 'FILL' 1;"
 						>bolt</span
 					>
 				</a>

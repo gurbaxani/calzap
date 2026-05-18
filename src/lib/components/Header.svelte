@@ -32,6 +32,7 @@
 				>
 					<span
 						class="material-symbols-outlined text-[20px] select-none"
+						style="font-variation-settings: 'FILL' 1;"
 						>bolt</span
 					>
 				</div>
@@ -65,9 +66,10 @@
 			<div class="flex items-center gap-3">
 				<a
 					href="/dashboard"
-					class="px-5 py-2.5 rounded-xl bg-fg text-bg font-bold text-xs uppercase tracking-wider hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-black/5"
+					class="group px-6 py-3 rounded-2xl bg-calories text-white font-black text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-[0.97] hover:shadow-lg hover:shadow-(--color-calories)/30 hover:bg-calories/90 transition-all flex items-center gap-2 shadow-md shadow-black/5"
 				>
-					Open App
+					<span>Open App</span>
+					<span class="material-symbols-outlined text-[14px] leading-none transition-transform group-hover:translate-x-0.5 select-none" style="font-variation-settings: 'FILL' 1;">bolt</span>
 				</a>
 			</div>
 		</div>
