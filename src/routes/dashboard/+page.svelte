@@ -272,18 +272,29 @@
 								>
 									{entry.name}
 								</h4>
-								<span
-									class="text-[10px] text-zinc-400 font-semibold mt-0.5"
-								>
-									{#if entry.consumed_at}
-										{new Date(
-											entry.consumed_at,
-										).toLocaleTimeString([], {
-											hour: "2-digit",
-											minute: "2-digit",
-										})}
+								<div class="flex items-center gap-2 mt-0.5">
+									<span class="text-[10px] text-zinc-400 font-semibold">
+										{#if entry.consumed_at}
+											{new Date(
+												entry.consumed_at,
+											).toLocaleTimeString([], {
+												hour: "2-digit",
+												minute: "2-digit",
+											})}
+										{/if}
+									</span>
+									{#if entry.mealType}
+										{@const badgeColors = 
+											entry.mealType === 'Breakfast' ? 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30' :
+											entry.mealType === 'Lunch' ? 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30' :
+											entry.mealType === 'Dinner' ? 'text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900/30' :
+											'text-rose-600 bg-rose-50 dark:text-rose-400 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/30'
+										}
+										<span class="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md border {badgeColors}">
+											{entry.mealType}
+										</span>
 									{/if}
-								</span>
+								</div>
 							</div>
 
 							<button

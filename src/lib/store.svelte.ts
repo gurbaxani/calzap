@@ -23,6 +23,7 @@ export interface FoodLog {
 	fats: number;
 	fiber: number;
 	consumed_at: string;
+	mealType?: string;
 }
 
 export interface UserStats {
