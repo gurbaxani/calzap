@@ -45,20 +45,56 @@
 			<nav
 				class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-wider text-muted"
 			>
-				<a
-					href="/#problem-solution-section"
-					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
-					>Why Calzap</a
-				>
-				<a
-					href="/#faq-section"
-					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
-					>FAQs</a
-				>
+				<!-- Product Dropdown Menu -->
+				<div class="relative group py-2">
+					<button
+						type="button"
+						class="hover:text-(--fg) flex items-center gap-1 transition-colors cursor-pointer select-none py-2 text-[10px] font-black uppercase tracking-wider bg-transparent border-0 p-0"
+					>
+						<span>Product</span>
+						<span class="material-symbols-outlined text-[14px] leading-none transition-transform duration-200 group-hover:rotate-180">keyboard_arrow_down</span>
+					</button>
+
+					<!-- Dropdown Submenu Container -->
+					<div
+						class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-2xl bg-(--surface)/95 border border-(--border) p-2 shadow-2xl backdrop-blur-lg opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50 flex flex-col gap-1"
+					>
+						<a
+							href="/#problem-solution-section"
+							class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-left hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors text-[9px] font-black uppercase tracking-wider text-muted hover:text-(--fg)"
+						>
+							<span class="material-symbols-outlined text-[16px] leading-none text-rose-500" style="font-variation-settings: 'FILL' 1;">error</span>
+							<span>Problem</span>
+						</a>
+						<a
+							href="/#benefits-section"
+							class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-left hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors text-[9px] font-black uppercase tracking-wider text-muted hover:text-(--fg)"
+						>
+							<span class="material-symbols-outlined text-[16px] leading-none text-carbs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+							<span>Solution</span>
+						</a>
+						<a
+							href="/#features-section"
+							class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-left hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors text-[9px] font-black uppercase tracking-wider text-muted hover:text-(--fg)"
+						>
+							<span class="material-symbols-outlined text-[16px] leading-none text-calories" style="font-variation-settings: 'FILL' 1;">bolt</span>
+							<span>Features</span>
+						</a>
+					</div>
+				</div>
+
+				<!-- Pricing link -->
 				<a
 					href="/#pricing-section"
 					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
 					>Pricing</a
+				>
+
+				<!-- FAQs link -->
+				<a
+					href="/#faq-section"
+					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
+					>FAQs</a
 				>
 			</nav>
 
