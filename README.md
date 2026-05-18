@@ -1,5 +1,7 @@
 # ⚡ Calzap: High-Performance, Privacy-First Nutrient & Calorie Tracker
 
+🔗 **Live Production App**: [calzap.ashwinig.com](https://calzap.ashwinig.com)
+
 Calzap is an ultra-lightweight, offline-first, zero-bloat calorie and macronutrient tracking web application engineered with **Svelte 5 (Runes)**, **TypeScript**, and **Tailwind CSS v4**. 
 
 Built for speed, efficiency, and data isolation, Calzap contains no ads, no trackers, no cloud accounts, and no paywalls. It allows athletes and lifters to track their core nutritional metrics—**Calories, Protein, Carbs, Fats, and Fiber**—in under 10 seconds. Calzap is designed to run entirely in the browser client with immediate responsiveness, utilizing local storage systems and secure, client-configured AI microservices.
@@ -273,7 +275,7 @@ pnpm build
 pnpm preview
 ```
 
-The resulting optimized static build is exported directly to the `./build` folder. It can be immediately hosted on any edge server network (e.g., GitHub Pages, Vercel, Netlify, Cloudflare Pages) with absolute zero runtime server configuration.
+The resulting optimized static build is exported directly to the `./build` folder. It can be immediately hosted on any edge server network (e.g., GitHub Pages, Vercel, Netlify, Cloudflare Pages) with absolute zero runtime server configuration. The live production instance is deployed at [calzap.ashwinig.com](https://calzap.ashwinig.com).
 
 ---
 
