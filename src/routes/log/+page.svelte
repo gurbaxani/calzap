@@ -416,9 +416,7 @@
 				class="flex h-10 w-10 items-center justify-center rounded-full bg-(--surface) text-(--fg) border border-(--border) hover:bg-(--border) transition-colors active:scale-95 cursor-pointer"
 				aria-label="Back to dashboard"
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-				</svg>
+				<span class="material-symbols-outlined text-[20px] select-none leading-none">arrow_back</span>
 			</button>
 			<div>
 				<h1 class="text-2xl font-black tracking-tight">Log Fuel</h1>
@@ -488,9 +486,7 @@
 						class="w-full rounded-2xl bg-(--surface) border border-(--border) px-5 py-4 pl-12 font-bold text-base focus:outline-hidden focus:border-zinc-400 dark:focus:border-zinc-600 transition-all placeholder:text-zinc-400"
 					/>
 					<div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
-							<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
-						</svg>
+						<span class="material-symbols-outlined text-[20px] select-none leading-none">search</span>
 					</div>
 				</div>
 
@@ -619,9 +615,7 @@
 											class="px-4 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 dark:text-red-400 dark:border-red-900/30 flex items-center justify-center transition-all active:scale-95 cursor-pointer"
 											title="Delete food definition"
 										>
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
-												<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 6.14m-1.66-6.14-.34 6.14M12 18.75m-9-13.5h18M5.25 5.25l.844 14.166a2.25 2.25 0 0 0 2.247 2.114h6.318a2.25 2.25 0 0 0 2.247-2.114L18.75 5.25M9 5.25V4.5a3.75 3.75 0 1 1 7.5 0v.75m-8.25 0h9" />
-											</svg>
+											<span class="material-symbols-outlined text-[16px] select-none leading-none">delete</span>
 										</button>
 									</div>
 								{/each}
@@ -819,9 +813,7 @@
 									class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors cursor-pointer"
 									title="Log this again"
 								>
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-									</svg>
+									<span class="material-symbols-outlined text-[16px] select-none leading-none">replay</span>
 								</button>
 								<!-- Delete button -->
 								<button
@@ -830,9 +822,7 @@
 									class="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-(--border) text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
 									title="Delete log"
 								>
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
-										<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 6.14m-1.66-6.14-.34 6.14M12 18.75m-9-13.5h18M5.25 5.25l.844 14.166a2.25 2.25 0 0 0 2.247 2.114h6.318a2.25 2.25 0 0 0 2.247-2.114L18.75 5.25M9 5.25V4.5a3.75 3.75 0 1 1 7.5 0v.75m-8.25 0h9" />
-									</svg>
+									<span class="material-symbols-outlined text-[16px] select-none leading-none">delete</span>
 								</button>
 							</div>
 						</div>

@@ -115,9 +115,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 	{#if success}
 		<div class="flex flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-900 py-12 px-6 text-center shadow-2xl dark:bg-zinc-100" role="status">
 			<div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 dark:bg-emerald-500/10 dark:text-emerald-600">
-				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-				</svg>
+				<span class="material-symbols-outlined text-[24px] select-none leading-none font-bold">check</span>
 			</div>
 			<div>
 				<h3 class="text-2xl font-bold tracking-tight text-white dark:text-zinc-900">Saved!</h3>
@@ -148,9 +146,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 				aria-label="Go back to quantity selection"
 				class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 			>
-				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-				</svg>
+				<span class="material-symbols-outlined text-[20px] select-none leading-none">arrow_back</span>
 			</button>
 		</header>
 
@@ -162,13 +158,10 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 				class="group flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-fiber)]/10 px-4 py-4 text-sm font-bold text-[var(--color-fiber)] transition-all hover:bg-[var(--color-fiber)]/20 focus:outline-none focus:ring-4 focus:ring-[var(--color-fiber)]/20 active:scale-[0.98] border border-[var(--color-fiber)]/20 disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				{#if estimating}
-					<svg class="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-					</svg>
+					<span class="material-symbols-outlined animate-spin text-[20px] leading-none select-none">sync</span>
 					<span>Estimating with AI...</span>
 				{:else}
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+					<span class="material-symbols-outlined text-[18px] select-none leading-none">auto_awesome</span>
 					<span>Estimate Macros with AI</span>
 				{/if}
 			</button>
@@ -256,10 +249,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 					class="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-4 text-lg font-bold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-50/20 active:scale-[0.98]"
 				>
 					{#if loading}
-						<svg class="h-5 w-5 animate-spin text-white dark:text-zinc-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-							<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-						</svg>
+						<span class="material-symbols-outlined animate-spin text-[20px] leading-none select-none">sync</span>
 						<span>Saving...</span>
 					{:else}
 						<span>Save Food</span>

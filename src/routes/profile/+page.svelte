@@ -254,12 +254,12 @@
 							<span class="text-muted font-medium">Verified Status</span>
 							{#if auth.user.verified}
 								<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-500/10 text-green-600 dark:text-green-400">
-									<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+									<span class="material-symbols-outlined text-[12px] select-none leading-none font-bold">check</span>
 									Verified
 								</span>
 							{:else}
 								<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">
-									<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+									<span class="material-symbols-outlined text-[12px] select-none leading-none font-bold">info</span>
 									Pending
 								</span>
 							{/if}
@@ -271,7 +271,7 @@
 							href="/logout" 
 							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500/20 text-red-500 font-bold hover:bg-red-500/5 transition-all text-sm active:scale-[0.98]"
 						>
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">logout</span>
 							Sign Out Session
 						</a>
 					</div>
@@ -285,7 +285,7 @@
 					<div class="relative">
 						<div class="flex items-center gap-3 mb-4">
 							<div class="w-10 h-10 rounded-xl bg-[var(--color-fiber)]/10 text-[var(--color-fiber)] flex items-center justify-center font-black">
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+								<span class="material-symbols-outlined text-[20px] select-none leading-none">auto_awesome</span>
 							</div>
 							<div>
 								<h2 class="text-xl font-bold tracking-tight">AI Settings</h2>
@@ -317,9 +317,9 @@
 										aria-label="Toggle password visibility"
 									>
 										{#if showKey}
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility_off</span>
 										{:else}
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility</span>
 										{/if}
 									</button>
 								</div>
@@ -331,7 +331,7 @@
 									class="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all text-sm active:scale-[0.98] {keyButtonClasses}"
 								>
 									{#if keySaveSuccess}
-										<svg class="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+										<span class="material-symbols-outlined text-[16px] select-none leading-none font-bold animate-bounce text-white">check</span>
 										<span>Key Saved!</span>
 									{:else}
 										{#if isKeySaved}
@@ -348,7 +348,7 @@
 										onclick={handleDeleteKey}
 										class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-rose-500/20 text-rose-500 font-bold hover:bg-rose-500/5 transition-all text-sm active:scale-[0.98]"
 									>
-										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+										<span class="material-symbols-outlined text-[14px] select-none leading-none">delete</span>
 										<span>Delete Saved Key</span>
 									</button>
 								{/if}
@@ -366,7 +366,7 @@
 									class="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-fiber)] hover:underline"
 								>
 									Get a free API Key from Google AI Studio
-									<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+									<span class="material-symbols-outlined text-[10px] select-none leading-none font-bold">open_in_new</span>
 								</a>
 							</div>
 						</form>
@@ -400,10 +400,7 @@
 
 					{#if isLoading}
 						<div class="flex flex-col items-center justify-center py-20 gap-4">
-							<svg class="h-10 w-10 animate-spin text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-							</svg>
+							<span class="material-symbols-outlined animate-spin text-[40px] leading-none select-none text-zinc-500">sync</span>
 							<p class="text-sm font-bold text-muted">Retrieving nutritional profile...</p>
 						</div>
 					{:else}
@@ -701,14 +698,11 @@
 								class="group relative flex w-full items-center justify-center gap-2 rounded-xl px-6 py-4 text-lg font-bold transition-all focus:outline-none focus:ring-4 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 {buttonClasses}"
 							>
 								{#if isSaving}
-									<svg class="h-5 w-5 animate-spin text-white dark:text-zinc-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-										<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-										<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-									</svg>
+									<span class="material-symbols-outlined animate-spin text-[20px] leading-none select-none">sync</span>
 									<span>Saving changes...</span>
 								{:else}
 									{#if saveSuccess}
-										<svg class="w-5 h-5 text-white animate-bounce" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+										<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold animate-bounce text-white">check</span>
 										<span>Saved Successfully!</span>
 									{:else}
 										<span>Save Nutritional Budget</span>

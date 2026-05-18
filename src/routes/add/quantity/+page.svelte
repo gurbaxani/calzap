@@ -28,9 +28,7 @@
 			aria-label="Go back to name entry"
 			class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
 		>
-			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-			</svg>
+			<span class="material-symbols-outlined text-[20px] select-none leading-none">arrow_back</span>
 		</button>
 	</header>
 
@@ -61,9 +59,7 @@
 						{/each}
 					</select>
 					<div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-						<svg class="h-6 w-6 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-						</svg>
+						<span class="material-symbols-outlined text-[24px] text-zinc-500 select-none leading-none">keyboard_arrow_down</span>
 					</div>
 				</div>
 			</div>
@@ -88,9 +84,7 @@
 				class="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-4 text-lg font-bold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-50/20 active:scale-[0.98]"
 			>
 				<span>Continue</span>
-				<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-				</svg>
+				<span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1 select-none leading-none">arrow_forward</span>
 			</button>
 		</div>
 	</form>

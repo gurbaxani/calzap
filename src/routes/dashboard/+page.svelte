@@ -317,20 +317,7 @@
 				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
 				aria-label="Previous day"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="2.5"
-					stroke="currentColor"
-					class="size-5"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M15.75 19.5 8.25 12l7.5-7.5"
-					/>
-				</svg>
+				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_left</span>
 			</button>
 
 			<span
@@ -345,20 +332,7 @@
 				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
 				aria-label="Next day"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="2.5"
-					stroke="currentColor"
-					class="size-5"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="m8.25 4.5 7.5 7.5-7.5 7.5"
-					/>
-				</svg>
+				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_right</span>
 			</button>
 		</div>
 
@@ -512,20 +486,7 @@
 								title="Delete log"
 								aria-label="Delete log entry"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="2.5"
-									stroke="currentColor"
-									class="size-4"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="m14.74 9-.34 6.14m-1.66-6.14-.34 6.14M12 18.75m-9-13.5h18M5.25 5.25l.844 14.166a2.25 2.25 0 0 0 2.247 2.114h6.318a2.25 2.25 0 0 0 2.247-2.114L18.75 5.25M9 5.25V4.5a3.75 3.75 0 1 1 7.5 0v.75m-8.25 0h9"
-									/>
-								</svg>
+								<span class="material-symbols-outlined text-[16px] select-none leading-none">delete</span>
 							</button>
 						</div>
 

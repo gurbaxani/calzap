@@ -40,7 +40,7 @@
 	<section class="grid md:grid-cols-3 gap-12 px-6 py-24 max-w-6xl mx-auto w-full">
 		<div class="flex flex-col gap-4">
 			<div class="w-12 h-12 rounded-2xl bg-[var(--color-protein)]/10 flex items-center justify-center text-[var(--color-protein)]">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+				<span class="material-symbols-outlined text-[24px] select-none">monitoring</span>
 			</div>
 			<h3 class="text-xl font-bold tracking-tight">Pure Utility</h3>
 			<p class="text-muted leading-relaxed font-medium">Focused entirely on the 5 core metrics that matter: Calories, Protein, Carbs, Fats, and Fiber.</p>
@@ -48,7 +48,7 @@
 		
 		<div class="flex flex-col gap-4">
 			<div class="w-12 h-12 rounded-2xl bg-[var(--color-carbs)]/10 flex items-center justify-center text-[var(--color-carbs)]">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+				<span class="material-symbols-outlined text-[24px] select-none">schedule</span>
 			</div>
 			<h3 class="text-xl font-bold tracking-tight">10-Second Entry</h3>
 			<p class="text-muted leading-relaxed font-medium">Engineered for high-frequency, low-duration sessions. Log your meal and get back to your day.</p>
@@ -56,7 +56,7 @@
 
 		<div class="flex flex-col gap-4">
 			<div class="w-12 h-12 rounded-2xl bg-[var(--color-fats)]/10 flex items-center justify-center text-[var(--color-fats)]">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+				<span class="material-symbols-outlined text-[24px] select-none">shield</span>
 			</div>
 			<h3 class="text-xl font-bold tracking-tight">Privacy First</h3>
 			<p class="text-muted leading-relaxed font-medium">Your data stays yours. No tracking pixels, no selling your habits to third-party advertisers.</p>
