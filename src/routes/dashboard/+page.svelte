@@ -2,8 +2,11 @@
 	import MacroBar from "$lib/components/MacroBar.svelte";
 	import { store } from "$lib/store.svelte";
 	import { slide } from "svelte/transition";
+	import ConfirmModal from "$lib/components/ConfirmModal.svelte";
 
 	let selectedDate = $state(new Date());
+	let isDeleteModalOpen = $state(false);
+	let logIdToDelete = $state<string | null>(null);
 
 	// Filter logs for the selected date
 	const logsToday = $derived.by(() => {
@@ -51,10 +54,21 @@
 	let showConsumedCal = $state(false);
 
 	function deleteLog(id: string) {
-		if (!confirm("Are you sure you want to delete this log entry?")) {
-			return;
+		logIdToDelete = id;
+		isDeleteModalOpen = true;
+	}
+
+	function confirmDelete() {
+		if (logIdToDelete) {
+			store.deleteFoodLog(logIdToDelete);
 		}
-		store.deleteFoodLog(id);
+		isDeleteModalOpen = false;
+		logIdToDelete = null;
+	}
+
+	function cancelDelete() {
+		isDeleteModalOpen = false;
+		logIdToDelete = null;
 	}
 
 	function changeDate(days: number) {
@@ -340,6 +354,14 @@
 		{/if}
 	</section>
 </main>
+
+<ConfirmModal
+	isOpen={isDeleteModalOpen}
+	title="Delete Log Entry"
+	message="Are you sure you want to delete this log entry?"
+	onConfirm={confirmDelete}
+	onCancel={cancelDelete}
+/>
 
 <style>
 	.text-muted {

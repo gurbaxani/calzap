@@ -104,6 +104,11 @@ class Store {
 		this.save();
 	}
 
+	updateFood(id: string, updatedFields: Partial<Omit<Food, "id">>) {
+		this.foods = this.foods.map(f => f.id === id ? { ...f, ...updatedFields } : f);
+		this.save();
+	}
+
 	addFoodLog(log: Omit<FoodLog, "id">) {
 		const newLog = { ...log, id: generateId() };
 		this.foodLogs.push(newLog);

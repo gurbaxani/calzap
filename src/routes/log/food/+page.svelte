@@ -3,8 +3,11 @@
 	import { goto } from '$app/navigation';
 	import { logDraft } from '$lib/logDraft.svelte';
 	import type { Food } from '$lib/store.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let searchQuery = $state('');
+	let isDeleteModalOpen = $state(false);
+	let foodIdToDelete = $state<string | null>(null);
 
 	// Derived filtered foods based on search query
 	const foodsList = $derived.by(() => {
@@ -24,15 +27,26 @@
 		goto('/log/quantity');
 	}
 
-	function deleteDefinedFood(id: string) {
-		if (!confirm('Are you sure you want to delete this food definition? This will not affect your past log history.')) {
-			return;
+	function triggerDeleteFood(id: string) {
+		foodIdToDelete = id;
+		isDeleteModalOpen = true;
+	}
+
+	function confirmDelete() {
+		if (foodIdToDelete) {
+			try {
+				store.deleteFood(foodIdToDelete);
+			} catch (err: unknown) {
+				console.error('Failed to delete food definition:', err);
+			}
 		}
-		try {
-			store.deleteFood(id);
-		} catch (err: unknown) {
-			console.error('Failed to delete food definition:', err);
-		}
+		isDeleteModalOpen = false;
+		foodIdToDelete = null;
+	}
+
+	function cancelDelete() {
+		isDeleteModalOpen = false;
+		foodIdToDelete = null;
 	}
 </script>
 
@@ -124,7 +138,7 @@
 							<button
 								type="button"
 								id="delete-food-{item.id}"
-								onclick={() => deleteDefinedFood(item.id)}
+								onclick={() => triggerDeleteFood(item.id)}
 								class="px-4 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 dark:text-red-400 dark:border-red-900/30 flex items-center justify-center transition-all active:scale-95 cursor-pointer"
 								title="Delete food definition"
 							>
@@ -137,3 +151,11 @@
 		</div>
 	</div>
 </div>
+
+<ConfirmModal
+	isOpen={isDeleteModalOpen}
+	title="Delete Food Definition"
+	message="Are you sure you want to delete this food definition? This will not affect your past log history."
+	onConfirm={confirmDelete}
+	onCancel={cancelDelete}
+/>
