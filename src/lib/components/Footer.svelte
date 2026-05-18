@@ -40,9 +40,9 @@
 						Application
 					</h4>
 					<div class="flex flex-col gap-2.5 text-sm font-bold text-muted items-start md:items-end">
-						<a href="/dashboard" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Open Dashboard</a>
-						<a href="/foods" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Food Directory</a>
-						<a href="/profile" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Profile Settings</a>
+						<a href="/dashboard" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Open Dashboard</a>
+						<a href="/foods" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Food Directory</a>
+						<a href="/profile" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Profile Settings</a>
 					</div>
 				</div>
 
@@ -52,9 +52,9 @@
 						Legal & Trust
 					</h4>
 					<div class="flex flex-col gap-2.5 text-sm font-bold text-muted items-start md:items-end">
-						<a href="/terms" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Terms of Service</a>
-						<a href="/privacy" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Privacy Policy</a>
-						<a href="/cookies" class="hover:text-(--fg) transition-colors hover:translate-x-0.5 md:hover:-translate-x-0.5 transition-transform duration-200">Cookies Policy</a>
+						<a href="/terms" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Terms of Service</a>
+						<a href="/privacy" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Privacy Policy</a>
+						<a href="/cookies" class="hover:text-(--fg) transition hover:translate-x-0.5 md:hover:-translate-x-0.5 duration-200">Cookies Policy</a>
 					</div>
 				</div>
 			</div>
