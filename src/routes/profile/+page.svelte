@@ -172,70 +172,67 @@
 					<!-- Top decorative pulse circle -->
 					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-calories/5 group-hover:scale-110 transition-transform duration-500"></div>
 					
-					<div class="flex flex-col items-center text-center gap-4 mb-6 relative">
-						<div class="w-24 h-24 rounded-2xl bg-calories flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-blue-500/10">
-							L
+					<div class="relative">
+						<div class="flex items-center gap-3 mb-4">
+							<div class="w-10 h-10 rounded-xl bg-calories/10 text-calories flex items-center justify-center font-black">
+								<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold">database</span>
+							</div>
+							<div>
+								<h2 class="text-xl font-bold tracking-tight">Data Management</h2>
+								<p class="text-xs text-muted font-semibold">Import, export, and backup logs</p>
+							</div>
 						</div>
-						<div>
-							<h2 class="text-2xl font-bold tracking-tight mb-1">
-								Local User
-							</h2>
-							<p class="text-sm text-muted font-semibold">Local Storage Only</p>
+
+						<p class="text-xs text-muted mb-5 leading-relaxed">
+							All your nutritional records are stored offline directly in your browser's local database. Use the options below to backup or export your stats.
+						</p>
+
+						<div class="pt-5 border-t border-(--border) flex flex-col gap-3">
+							<button 
+								type="button"
+								onclick={() => store.exportCSV()}
+								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/5 transition-all text-sm active:scale-[0.98]"
+							>
+								<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
+								Export Monthly CSV
+							</button>
+
+							<button 
+								type="button"
+								onclick={() => store.exportBackup()}
+								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 font-bold transition-all text-sm active:scale-[0.98]"
+							>
+								<span class="material-symbols-outlined text-[16px] select-none leading-none">backup</span>
+								Export JSON Backup
+							</button>
+
+							<input 
+								type="file" 
+								id="backup-file-input" 
+								accept=".json" 
+								onchange={handleImportBackup} 
+								class="hidden" 
+							/>
+
+							<button 
+								type="button"
+								onclick={() => {
+									const input = document.getElementById('backup-file-input');
+									if (input) input.click();
+								}}
+								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-zinc-500/20 text-zinc-500 hover:bg-zinc-500/5 transition-all text-sm active:scale-[0.98]"
+							>
+								<span class="material-symbols-outlined text-[16px] select-none leading-none">upload</span>
+								Import JSON Backup
+							</button>
+
+							{#if importSuccess}
+								<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">Backup imported successfully!</p>
+							{/if}
+							{#if importError}
+								<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">{importError}</p>
+							{/if}
 						</div>
-					</div>
-
-					<div class="grid gap-3 py-5 border-t border-(--border)">
-						<div class="flex justify-between items-center text-sm">
-							<span class="text-muted font-medium">Data Storage</span>
-							<span class="font-mono text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Browser</span>
-						</div>
-					</div>
-
-					<div class="pt-5 border-t border-(--border) flex flex-col gap-3">
-						<button 
-							type="button"
-							onclick={() => store.exportCSV()}
-							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/5 transition-all text-sm active:scale-[0.98]"
-						>
-							<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
-							Export Monthly CSV
-						</button>
-
-						<button 
-							type="button"
-							onclick={() => store.exportBackup()}
-							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 font-bold transition-all text-sm active:scale-[0.98]"
-						>
-							<span class="material-symbols-outlined text-[16px] select-none leading-none">backup</span>
-							Export JSON Backup
-						</button>
-
-						<input 
-							type="file" 
-							id="backup-file-input" 
-							accept=".json" 
-							onchange={handleImportBackup} 
-							class="hidden" 
-						/>
-
-						<button 
-							type="button"
-							onclick={() => {
-								const input = document.getElementById('backup-file-input');
-								if (input) input.click();
-							}}
-							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-zinc-500/20 text-zinc-500 hover:bg-zinc-500/5 transition-all text-sm active:scale-[0.98]"
-						>
-							<span class="material-symbols-outlined text-[16px] select-none leading-none">upload</span>
-							Import JSON Backup
-						</button>
-
-						{#if importSuccess}
-							<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">Backup imported successfully!</p>
-						{/if}
-						{#if importError}
-							<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">{importError}</p>
-						{/if}
 					</div>
 				</div>
 
