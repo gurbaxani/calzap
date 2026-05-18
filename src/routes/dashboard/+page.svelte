@@ -474,7 +474,7 @@
 			>
 				<p class="font-bold text-sm">No food tracked for this date</p>
 				<p class="text-xs text-zinc-500 mt-1">
-					Tap Log Meal or Quick Add to start tracking!
+					Tap the <span class="font-black">+</span> icon to start tracking!
 				</p>
 			</div>
 		{:else}
