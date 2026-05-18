@@ -33,6 +33,7 @@ export interface UserStats {
 	target_fiber: number;
 	target_weight: number;
 	current_weight: number;
+	google_ai_studio_api_key?: string;
 }
 
 function generateId() {
@@ -50,20 +51,11 @@ class Store {
 		target_fiber: 35,
 		target_weight: 70,
 		current_weight: 70,
+		google_ai_studio_api_key: '',
 	});
 
 	constructor() {
 		if (browser) {
-			// Instant load from localStorage (fast cache / revalidation source)
-			const storedFoods = localStorage.getItem('foods');
-			if (storedFoods) this.foods = JSON.parse(storedFoods);
-
-			const storedLogs = localStorage.getItem('foodLogs');
-			if (storedLogs) this.foodLogs = JSON.parse(storedLogs);
-
-			const storedStats = localStorage.getItem('userStats');
-			if (storedStats) this.userStats = JSON.parse(storedStats);
-
 			// Async load fully complete database from IndexedDB to ensure consistency & durability
 			this.loadIndexedDB();
 		}
@@ -75,42 +67,28 @@ class Store {
 			const idbFoods = await dbManager.getFoods();
 			if (idbFoods && idbFoods.length > 0) {
 				this.foods = idbFoods;
-			} else if (this.foods.length > 0) {
-				// If IndexedDB is empty but localStorage has data, sync it over to IndexedDB
-				await dbManager.saveFoods(this.foods);
 			}
 
 			const idbLogs = await dbManager.getFoodLogs();
 			if (idbLogs && idbLogs.length > 0) {
 				this.foodLogs = idbLogs;
-			} else if (this.foodLogs.length > 0) {
-				await dbManager.saveFoodLogs(this.foodLogs);
 			}
 
 			const idbStats = await dbManager.getUserStats();
 			if (idbStats) {
 				this.userStats = idbStats;
-			} else {
-				await dbManager.saveUserStats(this.userStats);
 			}
 		} catch (err) {
-			console.error("Failed to load/sync from IndexedDB:", err);
+			console.error("Failed to load from IndexedDB:", err);
 		}
 	}
 
 	save() {
-		if (browser) {
-			// Write to fast cache (localStorage)
-			localStorage.setItem('foods', JSON.stringify(this.foods));
-			localStorage.setItem('foodLogs', JSON.stringify(this.foodLogs));
-			localStorage.setItem('userStats', JSON.stringify(this.userStats));
-
-			// Write to IndexedDB
-			if (dbManager) {
-				dbManager.saveFoods(this.foods).catch(console.error);
-				dbManager.saveFoodLogs(this.foodLogs).catch(console.error);
-				dbManager.saveUserStats(this.userStats).catch(console.error);
-			}
+		if (browser && dbManager) {
+			// Write strictly to IndexedDB
+			dbManager.saveFoods(this.foods).catch(console.error);
+			dbManager.saveFoodLogs(this.foodLogs).catch(console.error);
+			dbManager.saveUserStats(this.userStats).catch(console.error);
 		}
 	}
 

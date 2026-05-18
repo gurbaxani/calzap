@@ -84,12 +84,12 @@
 	function handleSaveKey(e: Event) {
 		e.preventDefault();
 		if (!apiKey.trim()) {
-			localStorage.removeItem('google_ai_studio_api_key');
+			store.updateUserStats({ google_ai_studio_api_key: '' });
 			isKeySaved = false;
 			keySaveSuccess = false;
 			return;
 		}
-		localStorage.setItem('google_ai_studio_api_key', apiKey.trim());
+		store.updateUserStats({ google_ai_studio_api_key: apiKey.trim() });
 		isKeySaved = true;
 		keySaveSuccess = true;
 		keyDeleteSuccess = false;
@@ -99,7 +99,7 @@
 	}
 
 	function handleDeleteKey() {
-		localStorage.removeItem('google_ai_studio_api_key');
+		store.updateUserStats({ google_ai_studio_api_key: '' });
 		apiKey = '';
 		isKeySaved = false;
 		keyDeleteSuccess = true;
@@ -141,12 +141,12 @@
 		reader.readAsText(file);
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		await store.loadIndexedDB();
 		fetchGoals();
 		
-		const savedKey = localStorage.getItem('google_ai_studio_api_key');
-		if (savedKey) {
-			apiKey = savedKey;
+		if (store.userStats.google_ai_studio_api_key) {
+			apiKey = store.userStats.google_ai_studio_api_key;
 			isKeySaved = true;
 		}
 	});

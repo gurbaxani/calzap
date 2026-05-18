@@ -9,7 +9,7 @@
 	let success = $state(false);
 
 	async function estimateMacros() {
-		const apiKey = localStorage.getItem('google_ai_studio_api_key');
+		const apiKey = store.userStats.google_ai_studio_api_key;
 		if (!apiKey) {
 			error = 'Google AI Studio API key not found. Please add it in your profile settings.';
 			return;

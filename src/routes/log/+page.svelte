@@ -225,7 +225,8 @@
 	}
 
 	// Initialize
-	onMount(() => {
+	onMount(async () => {
+		await store.loadIndexedDB();
 		fetchFoods();
 	});
 </script>
