@@ -92,29 +92,28 @@
 
 	const faqs = [
 		{
-			question: "Is Fuel really free of ads and social feeds?",
-			answer: "Yes, absolutely. I believe that utility tools should remain utility tools. Fuel contains zero social elements, zero newsfeeds, and zero advertisements. Every pixel and line of code is dedicated solely to helping you track your nutrition as efficiently as possible.",
+			question: "Is this actually free, or is there a catch?",
+			answer: "It's 100% free. No ads, no popups, no premium upsells. I built this for myself because I was sick of sluggish fitness trackers trying to sell me premium subscriptions just to add a custom food. I'm keeping it free and fast for everyone, no strings attached.",
 		},
 		{
-			question: "How does the 10-second logging system work?",
-			answer: "It is built on optimization. When you open the app, you can search for a food or tap any of your recent items on the dashboard to log them instantly. There are no confirmation popups, no loading spinner delays, and no complex menus—just immediate data entries.",
+			question: "How is this faster than other calorie trackers?",
+			answer: "By cutting out the junk. When you open Fuel, there is no home feed to load or pop-up warning to dismiss. You search, you select, and you log. Your most frequent foods sit right on your dashboard for a 1-tap quick clone. No spinners, no delays, no nonsense.",
 		},
 		{
-			question:
-				"Can I set different nutrient targets for my bulking and cutting phases?",
-			answer: "Yes, you have complete control over your goals. From your profile tab, you can customize your target metrics for calories, protein, carbohydrates, fats, and fiber at any time to seamlessly match your evolving physical requirements and training phases.",
+			question: "Can I customize my daily macro targets?",
+			answer: "Yes. You can edit your targets for Calories, Protein, Carbs, Fats, and Fiber inside your profile at any time. Whether you're bulking, cutting, or just trying to hit a specific fiber goal, you have full control.",
 		},
 		{
-			question: "Is my tracking data secure and private?",
-			answer: "Your privacy is my priority. I employ strict data isolation protocols: every single database query is filtered securely by your unique, authenticated user ID to prevent any data leakage. Your data belongs solely to you.",
+			question: "Is my data private?",
+			answer: "Yes. I don't track your location, harvest your search history, or sell your food habits to advertising networks. Your logs are completely isolated to your authenticated account on a secure cloud database.",
 		},
 		{
-			question: "Does the app support offline usage or slow connections?",
-			answer: "Fuel is engineered with lightweight code and client-side reactive states. The Svelte 5 structure ensures that inputs are registered instantaneously with zero lag, providing snappy visual feedback even when you are on a weak gym Wi-Fi connection.",
+			question: "Does it work on terrible gym Wi-Fi?",
+			answer: "Yes. Fuel uses hyper-lightweight code and instant Svelte reactive states. Your inputs register immediately, and the UI doesn't freeze or wait for slow networks to respond. It's built to be fast even in deep basement weight rooms.",
 		},
 		{
-			question: "How is the daily calorie budget calculated?",
-			answer: "The app dynamically tracks your remaining calories by subtracting your logged food values from your daily target. A simple tap on the main calorie dashboard toggles between showing how many calories you have left to eat versus your total consumed amount.",
+			question: "How does the calorie tracker work?",
+			answer: "It's straightforward subtraction. Fuel takes your target and subtracts your logs. Tap the main calorie ring to toggle between 'Remaining' and 'Consumed' calories in a single tap.",
 		},
 	];
 
@@ -171,24 +170,22 @@
 							class="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-calories)]"
 						></span>
 					</span>
-					Performance Grade Utility
+					Zero Bloat. Pure Math.
 				</div>
 
 				<h1
 					class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] max-w-2xl text-balance"
 				>
-					Reach Your Peak Physical Potential in <span
+					Log your macros in <span
 						class="text-[var(--color-calories)]"
-						>10 Snappy Seconds</span
-					> a Day.
+						>10 raw seconds</span
+					>. Stop wasting time.
 				</h1>
 
 				<p
 					class="text-lg sm:text-xl text-muted max-w-[62ch] font-medium leading-relaxed"
 				>
-					Fuel is the zero-bloat, distraction-free macro tracker that
-					cuts through the noise so you can log your fuel, hit your
-					targets, and get back to your workout.
+					No feeds, no premium upsells, no ads. Fuel is a lightning-fast macro tracker designed to keep your diet mathematically perfect so you can get back to the gym.
 				</p>
 
 				<div class="w-full sm:w-auto">
@@ -197,7 +194,7 @@
 						href={ctaPath}
 						class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4.5 rounded-2xl bg-(--fg) text-(--bg) font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 group"
 					>
-						<span>Get Started Instantly</span>
+						<span>Start Logging (Free)</span>
 						<span
 							class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1 select-none text-[20px] leading-none"
 							>arrow_forward</span
@@ -217,13 +214,12 @@
 								class="material-symbols-outlined text-[18px] leading-none"
 								>done_all</span
 							>
-							100% Adherence
+							100% Hit Rate
 						</div>
 						<p
 							class="text-xs text-muted leading-relaxed font-semibold"
 						>
-							Real-time remaining calorie and macro feedback helps
-							you hit your daily goals down to the single gram.
+							Remaining calories and macro bars adjust instantly so you hit your daily targets to the single gram.
 						</p>
 					</div>
 					<div class="flex flex-col gap-1.5">
@@ -234,13 +230,12 @@
 								class="material-symbols-outlined text-[18px] leading-none"
 								>bolt</span
 							>
-							Zero Fatigue
+							Zero Lag
 						</div>
 						<p
 							class="text-xs text-muted leading-relaxed font-semibold"
 						>
-							High-frequency search and 1-tap quick logs ensure
-							you never abandon your food tracking routine.
+							Instant search and 1-tap history duplications make it physically impossible to quit logging.
 						</p>
 					</div>
 					<div class="flex flex-col gap-1.5">
@@ -251,14 +246,12 @@
 								class="material-symbols-outlined text-[18px] leading-none"
 								>do_not_disturb_on</span
 							>
-							Clutter-Free
+							No Social Junk
 						</div>
 						<p
 							class="text-xs text-muted leading-relaxed font-semibold"
 						>
-							No social feeds, no sponsored ads, and no
-							popups—just high-fidelity data that respects your
-							time.
+							No social feeds, no influence pushers, and no popups. Just pure utility that respects your time.
 						</p>
 					</div>
 				</div>
@@ -545,12 +538,12 @@
 				<div
 					class="text-[var(--color-protein)] font-black text-xs uppercase tracking-widest select-none"
 				>
-					The Friction Problem
+					The Friction Bloat
 				</div>
 				<h2
 					class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1] text-balance"
 				>
-					Why Traditional Macro Trackers Fail Gym-Goers
+					Why every other macro tracker sucks.
 				</h2>
 			</div>
 
@@ -559,33 +552,13 @@
 				class="lg:col-span-7 flex flex-col gap-6 text-muted text-base sm:text-lg leading-relaxed font-medium max-w-[65ch]"
 			>
 				<p>
-					Tracking your macros shouldn't feel like a part-time job.
-					Most fitness apps on the market today have lost their way,
-					morphing from simple logs into noisy social networks packed
-					with bloated feeds, intrusive ads, and pop-up paywalls.
-					Instead of quickly entering your lunch, you are forced to
-					watch video ads, dismiss upgrade screens, and scroll past
-					influencers.
+					Tracking macros shouldn't feel like a chore. The apps you know have turned into bloatware: noisy social feeds, 30-second video ads, and constant pop-ups trying to upsell you. You just want to log your lunch, but you're forced to dodge upgrade screens and watch fitness influencers instead.
 				</p>
 				<p>
-					Imagine standing in the kitchen after a grueling workout,
-					exhausted and hungry, only to spend five minutes fighting
-					with a sluggish UI just to log a scoop of whey protein. Or
-					worse, being hit with a paywall when trying to input a
-					custom meal or view your basic fiber intake. This log
-					fatigue builds up day after day, eventually causing you to
-					abandon tracking altogether and stall your physical
-					progress.
+					Picture standing in the kitchen after a heavy training session, tired and hungry. You spend five minutes fighting a laggy interface just to log a single scoop of whey. Or worse, you get hit with a $12/month paywall just to input a custom meal or see your fiber intake. This annoyance builds up until you eventually quit tracking altogether and lose your gains.
 				</p>
 				<p class="text-(--fg) font-bold">
-					Fuel changes the game by returning to absolute utility. I
-					built a hyper-focused, lightning-fast tracking interface
-					specifically for gym-goers, lifters, and busy professionals.
-					With no social feeds, zero ads, and an ultra-responsive,
-					mobile-first design, you can search, log, and analyze your
-					five core metrics (Calories, Protein, Carbs, Fats, and
-					Fiber) in under 10 seconds. It is the raw utility you need
-					to power your performance.
+					I built Fuel to fix this. It is a completely free, lightning-fast tracker designed for lifters who value their time. No social junk, zero ads, no paywalls. You can search, log, and monitor your five core metrics (Calories, Protein, Carbs, Fats, and Fiber) in under 10 seconds. It's just pure, fast utility to help you hit your numbers.
 				</p>
 			</div>
 		</section>
@@ -608,12 +581,12 @@
 				<div
 					class="text-[var(--color-carbs)] font-black text-xs uppercase tracking-widest select-none"
 				>
-					Engineered for Success
+					No Bullshit Features
 				</div>
 				<h2
 					class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1]"
 				>
-					Engineered for Peak Performance
+					Track without thinking.
 				</h2>
 			</div>
 
@@ -633,14 +606,12 @@
 					</div>
 					<div class="flex flex-col gap-2">
 						<h3 class="text-xl font-bold tracking-tight">
-							Master Your Macros Without the Mental Fatigue
+							Get your numbers in one glance
 						</h3>
 						<p
 							class="text-sm text-muted leading-relaxed font-semibold"
 						>
-							An instant, high-contrast, dual-mode calorie ring
-							and segmented grid that visualizes your protein,
-							carbs, fats, and fiber intake in one glance.
+							A high-contrast calorie ring and macro grid showing your remaining protein, carbs, fats, and fiber instantly. No complex menus needed.
 						</p>
 					</div>
 				</div>
@@ -659,14 +630,12 @@
 					</div>
 					<div class="flex flex-col gap-2">
 						<h3 class="text-xl font-bold tracking-tight">
-							Log Meals in the Blink of an Eye
+							Log in two taps. Literally.
 						</h3>
 						<p
 							class="text-sm text-muted leading-relaxed font-semibold"
 						>
-							An ultra-responsive global search log paired with a
-							1-tap recent meal logging system that instantly
-							copies recurring meals.
+							A lightning-fast search box and 1-tap quick logs to copy your recurring meals instantly. Zero load states or delay.
 						</p>
 					</div>
 				</div>
@@ -680,20 +649,17 @@
 					>
 						<span
 							class="material-symbols-outlined text-[24px] select-none"
-							>recipe</span
+							>restaurant</span
 						>
 					</div>
 					<div class="flex flex-col gap-2">
 						<h3 class="text-xl font-bold tracking-tight">
-							Create Custom Recipes and Foods Effortlessly
+							Add custom foods instantly
 						</h3>
 						<p
 							class="text-sm text-muted leading-relaxed font-semibold"
 						>
-							A streamlined 3-step wizard that lets you name your
-							foods, define custom portions, and assign exact
-							macronutrient distributions to build a personalized
-							library.
+							Define custom foods and meals in five seconds. Enter the weight, drop the macros, save it to your library, and get out.
 						</p>
 					</div>
 				</div>
@@ -718,12 +684,12 @@
 				<div
 					class="text-[var(--color-fats)] font-black text-xs uppercase tracking-widest select-none"
 				>
-					Complete Feature Set
+					Zero Fat. All Muscle.
 				</div>
 				<h2
 					class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1]"
 				>
-					Every Feature Built for Speed and Utility
+					Exactly what you need. Nothing you don't.
 				</h2>
 			</div>
 
@@ -734,7 +700,7 @@
 					<h3
 						class="text-xs font-black uppercase tracking-wider text-[var(--color-calories)] pb-3 border-b border-[var(--border)]"
 					>
-						01. Logging Speed
+						01. Lightning Logging
 					</h3>
 					<div class="flex flex-col gap-6">
 						<div class="flex items-start gap-3">
@@ -744,14 +710,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									10-Second Search & Quick-Log
+									10-Second Quick Log
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Locate any food instantly or input a custom
-									meal description to update your dashboard in
-									real-time.
+									Search the library, find your food, enter the weight, and hit save. Done in under 10 seconds.
 								</p>
 							</div>
 						</div>
@@ -762,14 +726,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									1-Tap Recent Food Duplicator
+									1-Tap Food Clone
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Instantly re-log your regular meals from the
-									dashboard with a single tap, completely
-									bypassing search.
+									Log your daily breakfast or chicken-and-rice bowl straight from the history feed in one tap.
 								</p>
 							</div>
 						</div>
@@ -780,14 +742,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									3-Step Custom Food Creator
+									5-Second Food Creator
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									A logical, friction-free wizard to add
-									custom grocery items, meals, or supplements
-									to your personal database.
+									No barcode scans or complex wizards. Type the name, input the weight and macros, and save it.
 								</p>
 							</div>
 						</div>
@@ -799,7 +759,7 @@
 					<h3
 						class="text-xs font-black uppercase tracking-wider text-[var(--color-protein)] pb-3 border-b border-[var(--border)]"
 					>
-						02. Data & Analytics
+						02. Visual Math
 					</h3>
 					<div class="flex flex-col gap-6">
 						<div class="flex items-start gap-3">
@@ -809,14 +769,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									5-Core Nutrient Tracking
+									5 Core Metrics
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Visual progress indicators for Calories,
-									Protein, Carbs, Fats, and Fiber to keep your
-									nutrition balanced.
+									Track your Calories, Protein, Carbs, Fats, and Fiber directly on the dashboard. No hidden metrics.
 								</p>
 							</div>
 						</div>
@@ -827,14 +785,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									Interactive Calorie Toggle
+									Consumed vs. Remaining
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									One-tap toggle to switch the dashboard view
-									between remaining calorie allowance and
-									total consumed calories.
+									Tap the calorie ring to switch between remaining allowance and total consumed calories instantly.
 								</p>
 							</div>
 						</div>
@@ -845,14 +801,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									Segmented Date Navigation
+									Frictionless History
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Effortlessly flip back and forth between
-									dates to review past fuel logs and plan your
-									future intake.
+									Swipe or tap to go back in time to review past days or pre-plan tomorrow's meals.
 								</p>
 							</div>
 						</div>
@@ -864,7 +818,7 @@
 					<h3
 						class="text-xs font-black uppercase tracking-wider text-[var(--color-fiber)] pb-3 border-b border-[var(--border)]"
 					>
-						03. Control & Sync
+						03. Zero Lock-in
 					</h3>
 					<div class="flex flex-col gap-6">
 						<div class="flex items-start gap-3">
@@ -874,14 +828,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									Custom Caloric & Macro Targets
+									Custom Targets
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Set your unique daily nutritional targets to
-									match your exact cutting, bulking, or
-									body-recomposition phases.
+									Set exact targets for calories, protein, carbs, fats, and fiber to match your bulking or cutting targets.
 								</p>
 							</div>
 						</div>
@@ -892,14 +844,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									Secure Cloud Sync & Isolation
+									PocketBase Cloud Sync
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Robust PocketBase infrastructure that
-									ensures your data is private, secured, and
-									accessible on any device.
+									Your private database stays isolated, locked, and completely secure. Syncs across all of your devices instantly.
 								</p>
 							</div>
 						</div>
@@ -910,14 +860,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									Automatic Dual-Theme Styling
+									Perfect Dark Mode
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Premium responsive CSS variables with
-									support for beautiful light and dark modes
-									tailored for dawn cardio or midnight feeds.
+									High-contrast light and dark mode styles tailored for early morning lifting or late night recovery meals.
 								</p>
 							</div>
 						</div>
@@ -1032,7 +980,7 @@
 				<div
 					class="text-[var(--color-fiber)] font-black text-xs uppercase tracking-widest select-none"
 				>
-					Clear Answers
+					No Secrets
 				</div>
 				<h2
 					class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1]"
@@ -1042,8 +990,7 @@
 				<p
 					class="text-sm text-muted font-semibold leading-relaxed max-w-[30ch] mt-2"
 				>
-					Have questions? I've got quick, honest answers about the
-					performance, security, and utility of Fuel.
+					Got questions? Here are honest, direct answers about how Fuel works, pricing, and your data.
 				</p>
 			</div>
 
@@ -1111,21 +1058,19 @@
 				<div
 					class="text-[var(--color-calories)] font-black text-xs uppercase tracking-widest select-none"
 				>
-					Instant Activation
+					Stop wasting time.
 				</div>
 				<h2
 					class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05] text-balance max-w-2xl"
 				>
-					Ready to Track at the Speed of Light?
+					Start hitting your numbers today.
 				</h2>
 			</div>
 
 			<p
 				class="text-lg text-muted max-w-[50ch] font-medium leading-relaxed z-10"
 			>
-				Stop wasting time on ads, menus, and feeds. Sign up in seconds,
-				set your personal targets, and begin logging your daily macros
-				instantly.
+				No paywalls. No sponsored feeds. No ads. Just a pure macro calculator built for high performance. Start logging now.
 			</p>
 
 			<div class="w-full sm:w-auto z-10">
@@ -1134,7 +1079,7 @@
 					href={ctaPath}
 					class="inline-flex items-center justify-center w-full sm:w-auto px-10 py-5 rounded-2xl bg-(--fg) text-(--bg) font-black text-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-black/10 hover:shadow-black/25 group"
 				>
-					<span>Start Logging Your Fuel Now</span>
+					<span>Start Logging (It's Free)</span>
 					<span
 						class="material-symbols-outlined ml-2.5 transition-transform group-hover:translate-x-1 select-none text-[22px] leading-none"
 						>bolt</span
