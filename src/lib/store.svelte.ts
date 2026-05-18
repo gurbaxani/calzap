@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { dbManager } from './db';
 
 export interface Food {
 	id: string;
@@ -53,6 +54,7 @@ class Store {
 
 	constructor() {
 		if (browser) {
+			// Instant load from localStorage (fast cache / revalidation source)
 			const storedFoods = localStorage.getItem('foods');
 			if (storedFoods) this.foods = JSON.parse(storedFoods);
 
@@ -61,14 +63,54 @@ class Store {
 
 			const storedStats = localStorage.getItem('userStats');
 			if (storedStats) this.userStats = JSON.parse(storedStats);
+
+			// Async load fully complete database from IndexedDB to ensure consistency & durability
+			this.loadIndexedDB();
+		}
+	}
+
+	async loadIndexedDB() {
+		if (!dbManager) return;
+		try {
+			const idbFoods = await dbManager.getFoods();
+			if (idbFoods && idbFoods.length > 0) {
+				this.foods = idbFoods;
+			} else if (this.foods.length > 0) {
+				// If IndexedDB is empty but localStorage has data, sync it over to IndexedDB
+				await dbManager.saveFoods(this.foods);
+			}
+
+			const idbLogs = await dbManager.getFoodLogs();
+			if (idbLogs && idbLogs.length > 0) {
+				this.foodLogs = idbLogs;
+			} else if (this.foodLogs.length > 0) {
+				await dbManager.saveFoodLogs(this.foodLogs);
+			}
+
+			const idbStats = await dbManager.getUserStats();
+			if (idbStats) {
+				this.userStats = idbStats;
+			} else {
+				await dbManager.saveUserStats(this.userStats);
+			}
+		} catch (err) {
+			console.error("Failed to load/sync from IndexedDB:", err);
 		}
 	}
 
 	save() {
 		if (browser) {
+			// Write to fast cache (localStorage)
 			localStorage.setItem('foods', JSON.stringify(this.foods));
 			localStorage.setItem('foodLogs', JSON.stringify(this.foodLogs));
 			localStorage.setItem('userStats', JSON.stringify(this.userStats));
+
+			// Write to IndexedDB
+			if (dbManager) {
+				dbManager.saveFoods(this.foods).catch(console.error);
+				dbManager.saveFoodLogs(this.foodLogs).catch(console.error);
+				dbManager.saveUserStats(this.userStats).catch(console.error);
+			}
 		}
 	}
 
@@ -128,6 +170,51 @@ class Store {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+	}
+
+	exportBackup() {
+		if (!browser) return;
+		const backupData = {
+			version: 1,
+			foods: this.foods,
+			foodLogs: this.foodLogs,
+			userStats: this.userStats,
+			exportedAt: new Date().toISOString()
+		};
+
+		const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = `calzap_backup_${new Date().toISOString().split('T')[0]}.json`;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+	}
+
+	async importBackup(jsonData: string): Promise<boolean> {
+		try {
+			const parsed = JSON.parse(jsonData);
+			if (!parsed || typeof parsed !== 'object') return false;
+
+			// Simple validation
+			if (parsed.foods && Array.isArray(parsed.foods)) {
+				this.foods = parsed.foods;
+			}
+			if (parsed.foodLogs && Array.isArray(parsed.foodLogs)) {
+				this.foodLogs = parsed.foodLogs;
+			}
+			if (parsed.userStats && typeof parsed.userStats === 'object') {
+				this.userStats = { ...this.userStats, ...parsed.userStats };
+			}
+
+			this.save();
+			return true;
+		} catch (err) {
+			console.error("Failed to import backup:", err);
+			return false;
+		}
 	}
 }
 

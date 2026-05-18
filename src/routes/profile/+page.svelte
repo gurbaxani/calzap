@@ -109,6 +109,38 @@
 		}, 3000);
 	}
 
+	let importSuccess = $state(false);
+	let importError = $state('');
+
+	function handleImportBackup(e: Event) {
+		const target = e.target as HTMLInputElement;
+		const file = target.files?.[0];
+		if (!file) {
+			return;
+		}
+
+		const reader = new FileReader();
+		reader.onload = async (event) => {
+			const text = event.target?.result as string;
+			const success = await store.importBackup(text);
+			if (success) {
+				importSuccess = true;
+				importError = '';
+				fetchGoals();
+				setTimeout(() => {
+					importSuccess = false;
+				}, 3000);
+			} else {
+				importError = 'Invalid backup file format';
+				importSuccess = false;
+				setTimeout(() => {
+					importError = '';
+				}, 4000);
+			}
+		};
+		reader.readAsText(file);
+	}
+
 	onMount(() => {
 		fetchGoals();
 		
@@ -159,7 +191,7 @@
 						</div>
 					</div>
 
-					<div class="pt-5 border-t border-[var(--border)]">
+					<div class="pt-5 border-t border-[var(--border)] flex flex-col gap-3">
 						<button 
 							type="button"
 							onclick={() => store.exportCSV()}
@@ -168,6 +200,42 @@
 							<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
 							Export Monthly CSV
 						</button>
+
+						<button 
+							type="button"
+							onclick={() => store.exportBackup()}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 font-bold transition-all text-sm active:scale-[0.98]"
+						>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">backup</span>
+							Export JSON Backup
+						</button>
+
+						<input 
+							type="file" 
+							id="backup-file-input" 
+							accept=".json" 
+							onchange={handleImportBackup} 
+							class="hidden" 
+						/>
+
+						<button 
+							type="button"
+							onclick={() => {
+								const input = document.getElementById('backup-file-input');
+								if (input) input.click();
+							}}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-zinc-500/20 text-zinc-500 hover:bg-zinc-500/5 transition-all text-sm active:scale-[0.98]"
+						>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">upload</span>
+							Import JSON Backup
+						</button>
+
+						{#if importSuccess}
+							<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">Backup imported successfully!</p>
+						{/if}
+						{#if importError}
+							<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">{importError}</p>
+						{/if}
 					</div>
 				</div>
 
