@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { store } from '$lib/store.svelte';
 	import { onMount } from 'svelte';
+	import GoalSlider from '$lib/components/GoalSlider.svelte';
 
 	let calories = $state(2000);
-	let proteins = $state(150);
-	let carbs = $state(200);
-	let fats = $state(70);
-	let fiber = $state(30);
 	let weight = $state(70);
 	let currentWeight = $state(70);
 
+	let dietStyle = $state<'balanced' | 'high_protein' | 'low_carb' | 'custom'>('balanced');
+	let showAdvanced = $state(false);
+
+	let customProteins = $state(150);
+	let customCarbs = $state(200);
+	let customFats = $state(70);
+	let customFiber = $state(30);
+
 	let isLoading = $state(false);
-	let isSaving = $state(false);
-	let saveSuccess = $state(false);
 
 	// AI API Key states (Google AI Studio)
 	let apiKey = $state('');
@@ -28,69 +31,84 @@
 		return 'password';
 	});
 
-	let keyButtonClasses = $derived.by(() => {
-		if (keySaveSuccess) {
-			return 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/10';
-		}
-		return 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/10 dark:bg-purple-700 dark:hover:bg-purple-600';
+	// Automatic derived macros based on diet focus & calories
+	let computedProteins = $derived.by(() => {
+		if (dietStyle === 'custom') return customProteins;
+		if (dietStyle === 'high_protein') return Math.round((calories * 0.40) / 4);
+		if (dietStyle === 'low_carb') return Math.round((calories * 0.35) / 4);
+		return Math.round((calories * 0.30) / 4); // balanced
 	});
 
-	// High-Utility Derived Macro & Weight Metrics (Zero Side-Effects)
-	let macroCalories = $derived(proteins * 4 + carbs * 4 + fats * 9);
-	let calorieDifference = $derived(calories - macroCalories);
+	let computedCarbs = $derived.by(() => {
+		if (dietStyle === 'custom') return customCarbs;
+		if (dietStyle === 'high_protein') return Math.round((calories * 0.35) / 4);
+		if (dietStyle === 'low_carb') return Math.round((calories * 0.15) / 4);
+		return Math.round((calories * 0.40) / 4); // balanced
+	});
+
+	let computedFats = $derived.by(() => {
+		if (dietStyle === 'custom') return customFats;
+		if (dietStyle === 'high_protein') return Math.round((calories * 0.25) / 9);
+		if (dietStyle === 'low_carb') return Math.round((calories * 0.50) / 9);
+		return Math.round((calories * 0.30) / 9); // balanced
+	});
+
+	let computedFiber = $derived.by(() => {
+		if (dietStyle === 'custom') return customFiber;
+		return Math.round((calories / 1000) * 14);
+	});
+
 	let weightDifference = $derived(Number((currentWeight - weight).toFixed(1)));
 
-	// Dynamic Button State Styles (Ternary-Free, Zero-Side-Effect Rune)
-	let buttonClasses = $derived.by(() => {
-		if (saveSuccess) {
-			return 'bg-emerald-600 hover:bg-emerald-500 text-white focus:ring-emerald-600/20';
-		}
-		return 'bg-zinc-900 hover:bg-zinc-800 text-white focus:ring-zinc-900/20 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-50/20';
-	});
-
-	function fetchGoals() {
-		calories = store.userStats.target_calories;
-		proteins = store.userStats.target_proteins;
-		carbs = store.userStats.target_carbs;
-		fats = store.userStats.target_fats;
-		fiber = store.userStats.target_fiber;
-		weight = store.userStats.target_weight;
-		currentWeight = store.userStats.current_weight;
+	function determineDietStyle(p: number, c: number, f: number) {
+		const total = (p * 4) + (c * 4) + (f * 9);
+		if (total <= 0) return 'balanced';
+		const proteinRatio = (p * 4) / total;
+		const carbsRatio = (c * 4) / total;
+		if (carbsRatio <= 0.22) return 'low_carb';
+		if (proteinRatio >= 0.35) return 'high_protein';
+		return 'balanced';
 	}
 
-	function handleSaveGoals(e: Event) {
-		e.preventDefault();
+	function fetchGoals() {
+		calories = store.userStats.target_calories || 2000;
+		const p = store.userStats.target_proteins || 150;
+		const c = store.userStats.target_carbs || 200;
+		const f = store.userStats.target_fats || 70;
+		const fib = store.userStats.target_fiber || 30;
 
-		isSaving = true;
-		saveSuccess = false;
+		customProteins = p;
+		customCarbs = c;
+		customFats = f;
+		customFiber = fib;
 
+		weight = store.userStats.target_weight || 70;
+		currentWeight = store.userStats.current_weight || 70;
+
+		dietStyle = determineDietStyle(p, c, f);
+		if (dietStyle === 'custom') {
+			showAdvanced = true;
+		}
+	}
+
+	// Seamless autosaving for numerical goals & weight parameters
+	function autosaveGoals() {
 		store.updateUserStats({
 			target_calories: Number(calories),
-			target_proteins: Number(proteins),
-			target_carbs: Number(carbs),
-			target_fats: Number(fats),
-			target_fiber: Number(fiber),
+			target_proteins: Number(computedProteins),
+			target_carbs: Number(computedCarbs),
+			target_fats: Number(computedFats),
+			target_fiber: Number(computedFiber),
 			target_weight: Number(weight),
 			current_weight: Number(currentWeight)
 		});
-
-		isSaving = false;
-		saveSuccess = true;
-		setTimeout(() => {
-			saveSuccess = false;
-		}, 3000);
 	}
 
-	function handleSaveKey(e: Event) {
-		e.preventDefault();
-		if (!apiKey.trim()) {
-			store.updateUserStats({ google_ai_studio_api_key: '' });
-			isKeySaved = false;
-			keySaveSuccess = false;
-			return;
-		}
-		store.updateUserStats({ google_ai_studio_api_key: apiKey.trim() });
-		isKeySaved = true;
+	// Autosaving the API Key when user blurs focus or hits Enter
+	function autosaveKey() {
+		const cleanKey = apiKey.trim();
+		store.updateUserStats({ google_ai_studio_api_key: cleanKey });
+		isKeySaved = cleanKey !== '';
 		keySaveSuccess = true;
 		keyDeleteSuccess = false;
 		setTimeout(() => {
@@ -158,522 +176,542 @@
 
 <main class="max-w-6xl mx-auto px-6 py-12">
 	<!-- Header -->
-	<header class="mb-12">
-		<h1 class="text-4xl md:text-5xl font-black tracking-tighter mb-2">Your Profile</h1>
-		<p class="text-muted font-medium text-lg">Manage your account, macros, and fitness targets</p>
+	<header class="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 reveal-card" style="--delay: 0;">
+		<div>
+			<h1 class="text-4xl md:text-5xl font-black tracking-tighter mb-2">Your Profile</h1>
+			<p class="text-muted font-medium text-lg">Manage your account, macros, and fitness targets</p>
+		</div>
+		<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20 self-start sm:self-center select-none shadow-[0_0_8px_rgba(16,185,129,0.05)]">
+			<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+			Autosaved to Browser Storage
+		</div>
 	</header>
 
 	<!-- Asymmetric Grid Layout -->
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-			
-			<!-- Left Column: Personal details & account status -->
-			<div class="lg:col-span-1 grid gap-6">
-				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group">
-					<!-- Top decorative pulse circle -->
-					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-calories/5 group-hover:scale-110 transition-transform duration-500"></div>
+	<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+		
+		<!-- Left Column: Goals Form divided into Sequential Cards (Delightful Navigation) -->
+		<div class="lg:col-span-2 flex flex-col gap-6">
+			{#if isLoading}
+				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm flex flex-col items-center justify-center py-20 gap-4 reveal-card" style="--delay: 1;">
+					<span class="material-symbols-outlined animate-spin text-[40px] leading-none select-none text-zinc-500">sync</span>
+					<p class="text-sm font-bold text-muted">Retrieving nutritional profile...</p>
+				</div>
+			{:else}
+				<div class="flex flex-col gap-6">
 					
-					<div class="relative">
-						<div class="flex items-center gap-3 mb-4">
-							<div class="w-10 h-10 rounded-xl bg-calories/10 text-calories flex items-center justify-center font-black">
-								<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold">database</span>
+					<!-- Section 1: Calorie Target -->
+					<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm space-y-6 reveal-card" style="--delay: 1;">
+						<div class="flex items-start gap-4">
+							<div class="w-10 h-10 rounded-2xl bg-calories/10 text-calories flex items-center justify-center font-black select-none shrink-0">
+								1
 							</div>
 							<div>
-								<h2 class="text-xl font-bold tracking-tight">Data Management</h2>
-								<p class="text-xs text-muted font-semibold">Import, export, and backup logs</p>
+								<h2 class="text-2xl font-bold tracking-tight mb-1">Calorie Budget</h2>
+								<p class="text-muted font-medium text-sm">Define your daily baseline energy target</p>
 							</div>
 						</div>
 
-						<p class="text-xs text-muted mb-5 leading-relaxed">
-							All your nutritional records are stored offline directly in your browser's local database. Use the options below to backup or export your stats.
-						</p>
-
-						<div class="pt-5 border-t border-(--border) flex flex-col gap-3">
-							<button 
-								type="button"
-								onclick={() => store.exportCSV()}
-								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/5 transition-all text-sm active:scale-[0.98]"
-							>
-								<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
-								Export Monthly CSV
-							</button>
-
-							<button 
-								type="button"
-								onclick={() => store.exportBackup()}
-								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 font-bold transition-all text-sm active:scale-[0.98]"
-							>
-								<span class="material-symbols-outlined text-[16px] select-none leading-none">backup</span>
-								Export JSON Backup
-							</button>
-
-							<input 
-								type="file" 
-								id="backup-file-input" 
-								accept=".json" 
-								onchange={handleImportBackup} 
-								class="hidden" 
+						<div class="pt-4 border-t border-(--border)/40">
+							<GoalSlider
+								id="target_calories"
+								label="Daily Calorie Budget"
+								bind:value={calories}
+								min={1000}
+								max={5000}
+								step={50}
+								unit="kcal"
+								colorClass="calories"
+								description="Your daily energy limit"
+								onchange={autosaveGoals}
 							/>
-
-							<button 
-								type="button"
-								onclick={() => {
-									const input = document.getElementById('backup-file-input');
-									if (input) input.click();
-								}}
-								class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-zinc-500/20 text-zinc-500 hover:bg-zinc-500/5 transition-all text-sm active:scale-[0.98]"
-							>
-								<span class="material-symbols-outlined text-[16px] select-none leading-none">upload</span>
-								Import JSON Backup
-							</button>
-
-							{#if importSuccess}
-								<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">Backup imported successfully!</p>
-							{/if}
-							{#if importError}
-								<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">{importError}</p>
-							{/if}
 						</div>
 					</div>
-				</div>
 
-				<!-- AI Settings Card -->
-				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group">
-					<!-- Decorative purple circle (AI color themed) -->
-					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-fiber/5 group-hover:scale-110 transition-transform duration-500"></div>
-					
-					<div class="relative">
-						<div class="flex items-center gap-3 mb-4">
-							<div class="w-10 h-10 rounded-xl bg-fiber/10 text-fiber flex items-center justify-center font-black">
-								<span class="material-symbols-outlined text-[20px] select-none leading-none">auto_awesome</span>
+					<!-- Section 2: Nutrition Focus & Automated Balance -->
+					<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm space-y-6 reveal-card" style="--delay: 1.5;">
+						<div class="flex items-start gap-4">
+							<div class="w-10 h-10 rounded-2xl bg-protein/10 text-protein flex items-center justify-center font-black select-none shrink-0">
+								2
 							</div>
 							<div>
-								<h2 class="text-xl font-bold tracking-tight">AI Settings</h2>
-								<p class="text-xs text-muted font-semibold">Google AI Studio Configuration</p>
+								<h2 class="text-2xl font-bold tracking-tight mb-1">Nutrition Focus</h2>
+								<p class="text-muted font-medium text-sm">Choose an approach to automatically balance your macronutrients</p>
 							</div>
 						</div>
 
-						<p class="text-xs text-muted mb-5 leading-relaxed">
-							Configure your Google AI Studio API key to enable intelligent meal estimation and personalized nutrition advice. Your key is stored strictly on your local browser.
-						</p>
-
-						<form onsubmit={handleSaveKey} class="space-y-4">
-							<div class="space-y-2">
-								<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-fiber block">
-									AI Studio API Key
-								</label>
-								<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-fiber transition-all">
-									<input
-										id="ai_api_key"
-										type={inputType}
-										bind:value={apiKey}
-										placeholder="AIzaSy..."
-										class="w-full bg-transparent px-4 py-3 text-sm font-medium focus:outline-none pr-12 text-zinc-900 dark:text-zinc-50"
-									/>
-									<button
-										type="button"
-										onclick={() => showKey = !showKey}
-										class="absolute right-3 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1"
-										aria-label="Toggle password visibility"
-									>
-										{#if showKey}
-											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility_off</span>
-										{:else}
-											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility</span>
-										{/if}
-									</button>
-								</div>
-							</div>
-
-							<div class="flex flex-col gap-2">
+						<div class="pt-6 border-t border-(--border)/40 space-y-6">
+							<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+								<!-- Balanced Focus -->
 								<button
-									type="submit"
-									class="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all text-sm active:scale-[0.98] {keyButtonClasses}"
+									type="button"
+									onclick={() => {
+										dietStyle = 'balanced';
+										showAdvanced = false;
+										customProteins = Math.round((calories * 0.30) / 4);
+										customCarbs = Math.round((calories * 0.40) / 4);
+										customFats = Math.round((calories * 0.30) / 9);
+										customFiber = Math.round((calories / 1000) * 14);
+										autosaveGoals();
+									}}
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-calories) {dietStyle === 'balanced' ? 'border-calories bg-calories/5 shadow-[0_0_12px_var(--color-calories)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
 								>
-									{#if keySaveSuccess}
-										<span class="material-symbols-outlined text-[16px] select-none leading-none font-bold animate-bounce text-white">check</span>
-										<span>Key Saved!</span>
-									{:else}
-										{#if isKeySaved}
-											<span>Update API Key</span>
-										{:else}
-											<span>Save API Key</span>
+									<div>
+										<span class="material-symbols-outlined text-[24px] mb-2 block text-calories" style="font-variation-settings: 'FILL' 1;">scale</span>
+										<h4 class="font-bold text-sm text-zinc-900 dark:text-zinc-50">Balanced</h4>
+										<p class="text-[11px] text-muted mt-1 leading-normal">Standard balance of lean proteins, complex carbs, and healthy fats.</p>
+									</div>
+									<div class="mt-4 flex items-center justify-between text-[10px] font-black text-calories uppercase tracking-wider">
+										<span>30% P / 40% C / 30% F</span>
+										{#if dietStyle === 'balanced'}
+											<span class="material-symbols-outlined text-[16px] leading-none">check_circle</span>
 										{/if}
-									{/if}
+									</div>
 								</button>
 
-								{#if isKeySaved}
-									<button
-										type="button"
-										onclick={handleDeleteKey}
-										class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-rose-500/20 text-rose-500 font-bold hover:bg-rose-500/5 transition-all text-sm active:scale-[0.98]"
-									>
-										<span class="material-symbols-outlined text-[14px] select-none leading-none">delete</span>
-										<span>Delete Saved Key</span>
-									</button>
-								{/if}
-							</div>
-
-							{#if keyDeleteSuccess}
-								<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">API Key deleted from local storage</p>
-							{/if}
-
-							<div class="pt-3 border-t border-(--border) text-center">
-								<a
-									href="https://aistudio.google.com/"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="inline-flex items-center gap-1 text-[11px] font-bold text-fiber hover:underline"
+								<!-- High Protein Focus -->
+								<button
+									type="button"
+									onclick={() => {
+										dietStyle = 'high_protein';
+										showAdvanced = false;
+										customProteins = Math.round((calories * 0.40) / 4);
+										customCarbs = Math.round((calories * 0.35) / 4);
+										customFats = Math.round((calories * 0.25) / 9);
+										customFiber = Math.round((calories / 1000) * 14);
+										autosaveGoals();
+									}}
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-protein) {dietStyle === 'high_protein' ? 'border-protein bg-protein/5 shadow-[0_0_12px_var(--color-protein)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
 								>
-									Get a free API Key from Google AI Studio
-									<span class="material-symbols-outlined text-[10px] select-none leading-none font-bold">open_in_new</span>
-								</a>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-
-			<!-- Right Column: Goals Form & Dynamic Calculators -->
-			<div class="lg:col-span-2 grid gap-6">
-				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm">
-					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-						<div>
-							<h2 class="text-2xl font-bold tracking-tight mb-1">Nutritional Goals</h2>
-							<p class="text-muted font-medium text-sm">Fine-tune your daily calorie and macronutrient budgets</p>
-						</div>
-						
-						<!-- Live Alignment Meter -->
-						<div class="flex items-center gap-2 bg-zinc-100/80 dark:bg-zinc-800/80 p-2 rounded-2xl border border-(--border) text-xs font-bold">
-							<span class="text-muted">Balance Meter:</span>
-							{#if calorieDifference === 0}
-								<span class="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">Aligned</span>
-							{:else}
-								{#if calorieDifference > 0}
-									<span class="text-amber-500 bg-amber-500/10 px-2 py-1 rounded-lg">-{Math.abs(calorieDifference)} kcal deficit</span>
-								{:else}
-									<span class="text-rose-500 bg-rose-500/10 px-2 py-1 rounded-lg">+{Math.abs(calorieDifference)} kcal surplus</span>
-								{/if}
-							{/if}
-						</div>
-					</div>
-
-					{#if isLoading}
-						<div class="flex flex-col items-center justify-center py-20 gap-4">
-							<span class="material-symbols-outlined animate-spin text-[40px] leading-none select-none text-zinc-500">sync</span>
-							<p class="text-sm font-bold text-muted">Retrieving nutritional profile...</p>
-						</div>
-					{:else}
-
-
-						<form onsubmit={handleSaveGoals} class="flex flex-col gap-6">
-							
-							<!-- Main Targets Grid -->
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-								
-								<!-- Daily Calories Target Card -->
-								<div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-zinc-100/50 p-6 border border-(--border) dark:bg-zinc-800/20 focus-within:ring-2 focus-within:ring-calories transition-all">
 									<div>
-										<label for="target_calories" class="text-xs font-black uppercase tracking-widest text-calories block mb-1">Daily Calories</label>
-										<span class="text-xs text-muted font-medium">Standard baseline target calculation</span>
+										<span class="material-symbols-outlined text-[24px] mb-2 block text-protein" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+										<h4 class="font-bold text-sm text-zinc-900 dark:text-zinc-50">High Protein</h4>
+										<p class="text-[11px] text-muted mt-1 leading-normal">Higher protein ratio to support active recovery, muscle tone, and fullness.</p>
 									</div>
-									<div class="flex items-center gap-3">
-										<button 
-											type="button" 
-											onclick={() => calories = Math.max(0, calories - 100)}
-											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-100
-										</button>
-										<div class="flex items-baseline bg-white dark:bg-zinc-900 px-4 py-2 rounded-xl border border-(--border)">
-											<input
-												type="number"
-												id="target_calories"
-												bind:value={calories}
-												min="0"
-												step="10"
-												required
-												class="w-20 text-right bg-transparent text-2xl font-black tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
-											/>
-											<span class="text-xs font-bold text-zinc-400 dark:text-zinc-500 ml-1">kcal</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => calories = calories + 100}
-											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+100
-										</button>
-									</div>
-								</div>
-
-								<!-- Protein Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-protein/5 p-5 border border-protein/15 dark:border-protein/25 focus-within:ring-2 focus-within:ring-protein transition-all">
-									<div class="flex justify-between items-center">
-										<label for="target_proteins" class="text-xs font-black uppercase tracking-widest text-protein">Protein</label>
-										<span class="text-[10px] font-bold text-protein bg-protein/10 px-1.5 py-0.5 rounded">{proteins * 4} kcal</span>
-									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => proteins = Math.max(0, proteins - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="target_proteins"
-												bind:value={proteins}
-												min="0"
-												step="1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-protein focus:outline-none"
-											/>
-											<span class="text-[10px] font-bold text-protein/75 ml-0.5">g</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => proteins = proteins + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+5
-										</button>
-									</div>
-								</div>
-
-								<!-- Carbs Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-carbs/5 p-5 border border-carbs/15 dark:border-carbs/25 focus-within:ring-2 focus-within:ring-carbs transition-all">
-									<div class="flex justify-between items-center">
-										<label for="target_carbs" class="text-xs font-black uppercase tracking-widest text-carbs">Carbohydrates</label>
-										<span class="text-[10px] font-bold text-carbs bg-carbs/10 px-1.5 py-0.5 rounded">{carbs * 4} kcal</span>
-									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => carbs = Math.max(0, carbs - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="target_carbs"
-												bind:value={carbs}
-												min="0"
-												step="1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-carbs focus:outline-none"
-											/>
-											<span class="text-[10px] font-bold text-carbs/75 ml-0.5">g</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => carbs = carbs + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+5
-										</button>
-									</div>
-								</div>
-
-								<!-- Fats Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-fats/5 p-5 border border-fats/15 dark:border-fats/25 focus-within:ring-2 focus-within:ring-fats transition-all">
-									<div class="flex justify-between items-center">
-										<label for="target_fats" class="text-xs font-black uppercase tracking-widest text-fats">Fats</label>
-										<span class="text-[10px] font-bold text-fats bg-fats/10 px-1.5 py-0.5 rounded">{fats * 9} kcal</span>
-									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => fats = Math.max(0, fats - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="target_fats"
-												bind:value={fats}
-												min="0"
-												step="1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-fats focus:outline-none"
-											/>
-											<span class="text-[10px] font-bold text-fats/75 ml-0.5">g</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => fats = fats + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+5
-										</button>
-									</div>
-								</div>
-
-								<!-- Fiber Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-fiber/5 p-5 border border-fiber/15 dark:border-fiber/25 focus-within:ring-2 focus-within:ring-fiber transition-all">
-									<div class="flex justify-between items-center">
-										<label for="target_fiber" class="text-xs font-black uppercase tracking-widest text-fiber">Dietary Fiber</label>
-										<span class="text-[10px] font-bold text-fiber bg-fiber/10 px-1.5 py-0.5 rounded">Essential digestion</span>
-									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => fiber = Math.max(0, fiber - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="target_fiber"
-												bind:value={fiber}
-												min="0"
-												step="1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-fiber focus:outline-none"
-											/>
-											<span class="text-[10px] font-bold text-fiber/75 ml-0.5">g</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => fiber = fiber + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+5
-										</button>
-									</div>
-								</div>
-
-								<!-- Weight Target Section Header / Visual Balance Meter -->
-								<div class="md:col-span-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-4 border-t border-(--border) mt-2">
-									<div>
-										<h3 class="text-sm font-bold tracking-tight">Weight Profile</h3>
-										<p class="text-xs text-muted">Track body composition targets and updates</p>
-									</div>
-									
-									<!-- Weight Progress Badge -->
-									<div class="flex items-center gap-1.5 self-start text-[10px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-(--border)">
-										<span class="text-muted">Target status:</span>
-										{#if weightDifference === 0}
-											<span class="text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">Goal Reached</span>
-										{:else}
-											{#if weightDifference > 0}
-												<span class="text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded">To Lose: {weightDifference} kg</span>
-											{:else}
-												<span class="text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">To Gain: {Math.abs(weightDifference)} kg</span>
-											{/if}
+									<div class="mt-4 flex items-center justify-between text-[10px] font-black text-protein uppercase tracking-wider">
+										<span>40% P / 35% C / 25% F</span>
+										{#if dietStyle === 'high_protein'}
+											<span class="material-symbols-outlined text-[16px] leading-none">check_circle</span>
 										{/if}
 									</div>
-								</div>
+								</button>
 
-								<!-- Current Weight Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-(--border) dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
-									<div class="flex justify-between items-center">
-										<label for="current_weight" class="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Current Weight</label>
-										<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">Live entry</span>
+								<!-- Low Carb Focus -->
+								<button
+									type="button"
+									onclick={() => {
+										dietStyle = 'low_carb';
+										showAdvanced = false;
+										customProteins = Math.round((calories * 0.35) / 4);
+										customCarbs = Math.round((calories * 0.15) / 4);
+										customFats = Math.round((calories * 0.50) / 9);
+										customFiber = Math.round((calories / 1000) * 14);
+										autosaveGoals();
+									}}
+									class="p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-carbs) {dietStyle === 'low_carb' ? 'border-carbs bg-carbs/5 shadow-[0_0_12px_var(--color-carbs)/10]' : 'border-(--border) bg-zinc-50/20 dark:bg-zinc-800/5 hover:border-zinc-350'}"
+								>
+									<div>
+										<span class="material-symbols-outlined text-[24px] mb-2 block text-carbs" style="font-variation-settings: 'FILL' 1;">grass</span>
+										<h4 class="font-bold text-sm text-zinc-900 dark:text-zinc-50">Carb Conscious</h4>
+										<p class="text-[11px] text-muted mt-1 leading-normal">Low carb focus. Ideal for energy stability and carbohydrate awareness.</p>
 									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => currentWeight = Math.max(0, Number((currentWeight - 0.5).toFixed(1)))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-0.5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="current_weight"
-												bind:value={currentWeight}
-												min="0"
-												step="0.1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
-											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">kg</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => currentWeight = Number((currentWeight + 0.5).toFixed(1))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+0.5
-										</button>
+									<div class="mt-4 flex items-center justify-between text-[10px] font-black text-carbs uppercase tracking-wider">
+										<span>35% P / 15% C / 50% F</span>
+										{#if dietStyle === 'low_carb'}
+											<span class="material-symbols-outlined text-[16px] leading-none">check_circle</span>
+										{/if}
 									</div>
-								</div>
-
-								<!-- Target Weight (Goal Weight) Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-(--border) dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
-									<div class="flex justify-between items-center">
-										<label for="target_weight" class="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Goal Weight</label>
-										<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">Target goal</span>
-									</div>
-									<div class="flex items-center justify-between gap-2 mt-1">
-										<button 
-											type="button" 
-											onclick={() => weight = Math.max(0, Number((weight - 0.5).toFixed(1)))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											-0.5
-										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
-											<input
-												type="number"
-												id="target_weight"
-												bind:value={weight}
-												min="0"
-												step="0.1"
-												required
-												class="w-12 text-center bg-transparent text-xl font-extrabold tracking-tight text-zinc-900 focus:outline-none dark:text-zinc-50"
-											/>
-											<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 ml-0.5">kg</span>
-										</div>
-										<button 
-											type="button" 
-											onclick={() => weight = Number((weight + 0.5).toFixed(1))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
-										>
-											+0.5
-										</button>
-									</div>
-								</div>
-
+								</button>
 							</div>
 
-							<!-- Save Controls -->
-							<button
-								type="submit"
-								disabled={isSaving}
-								class="group relative flex w-full items-center justify-center gap-2 rounded-xl px-6 py-4 text-lg font-bold transition-all focus:outline-none focus:ring-4 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 {buttonClasses}"
-							>
-								{#if isSaving}
-									<span class="material-symbols-outlined animate-spin text-[20px] leading-none select-none">sync</span>
-									<span>Saving changes...</span>
+							<!-- Derived Macro Summary Card -->
+							<div class="bg-zinc-50/50 dark:bg-zinc-800/10 p-5 rounded-2xl border border-(--border) space-y-4">
+								<div class="flex justify-between items-center text-xs font-bold text-muted">
+									<span class="flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-[16px] text-calories" style="font-variation-settings: 'FILL' 1;">analytics</span>
+										Your Derived Daily Targets
+									</span>
+									<span class="font-black tabular-nums">{calories} kcal</span>
+								</div>
+
+								<div class="grid grid-cols-3 gap-4 border-t border-(--border)/40 pt-4">
+									<!-- Protein target -->
+									<div class="text-center space-y-1">
+										<span class="text-[10px] font-black uppercase tracking-wider text-muted block">Protein</span>
+										<span class="text-xl font-extrabold text-protein tabular-nums">{computedProteins}<span class="text-xs font-bold text-muted ml-0.5">g</span></span>
+										<span class="text-[9px] font-bold text-muted block">({computedProteins * 4} kcal)</span>
+									</div>
+
+									<!-- Carbs target -->
+									<div class="text-center space-y-1">
+										<span class="text-[10px] font-black uppercase tracking-wider text-muted block">Carbohydrates</span>
+										<span class="text-xl font-extrabold text-carbs tabular-nums">{computedCarbs}<span class="text-xs font-bold text-muted ml-0.5">g</span></span>
+										<span class="text-[9px] font-bold text-muted block">({computedCarbs * 4} kcal)</span>
+									</div>
+
+									<!-- Fats target -->
+									<div class="text-center space-y-1">
+										<span class="text-[10px] font-black uppercase tracking-wider text-muted block">Fats</span>
+										<span class="text-xl font-extrabold text-fats tabular-nums">{computedFats}<span class="text-xs font-bold text-muted ml-0.5">g</span></span>
+										<span class="text-[9px] font-bold text-muted block">({computedFats * 9} kcal)</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Progressive Disclosure Custom Macro Toggle -->
+							<div class="flex justify-start">
+								<button
+									type="button"
+									onclick={() => {
+										showAdvanced = !showAdvanced;
+										if (showAdvanced) {
+											dietStyle = 'custom';
+										} else {
+											dietStyle = 'balanced';
+											customProteins = Math.round((calories * 0.30) / 4);
+											customCarbs = Math.round((calories * 0.40) / 4);
+											customFats = Math.round((calories * 0.30) / 9);
+											customFiber = Math.round((calories / 1000) * 14);
+										}
+										autosaveGoals();
+									}}
+									class="text-xs font-bold flex items-center gap-1.5 transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 focus:outline-none"
+								>
+									<span class="material-symbols-outlined text-[16px]">
+										{showAdvanced ? 'tune' : 'settings'}
+									</span>
+									{showAdvanced ? 'Use presets instead' : 'Custom Nutrition Targets (Advanced)'}
+								</button>
+							</div>
+
+							<!-- Collapsible Advanced Sliders -->
+							{#if showAdvanced}
+								<div class="pt-6 border-t border-(--border)/40 space-y-6">
+									<div>
+										<h3 class="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Custom targets</h3>
+										<p class="text-xs text-muted">Manually adjust specific macronutrient limits</p>
+									</div>
+
+									<GoalSlider
+										id="target_proteins"
+										label="Protein"
+										bind:value={customProteins}
+										min={0}
+										max={300}
+										step={1}
+										unit="g"
+										colorClass="protein"
+										kcalFactor={4}
+										onchange={autosaveGoals}
+									/>
+
+									<GoalSlider
+										id="target_carbs"
+										label="Carbohydrates"
+										bind:value={customCarbs}
+										min={0}
+										max={500}
+										step={1}
+										unit="g"
+										colorClass="carbs"
+										kcalFactor={4}
+										onchange={autosaveGoals}
+									/>
+
+									<GoalSlider
+										id="target_fats"
+										label="Fats"
+										bind:value={customFats}
+										min={0}
+										max={200}
+										step={1}
+										unit="g"
+										colorClass="fats"
+										kcalFactor={9}
+										onchange={autosaveGoals}
+									/>
+
+									<GoalSlider
+										id="target_fiber"
+										label="Dietary Fiber"
+										bind:value={customFiber}
+										min={0}
+										max={100}
+										step={1}
+										unit="g"
+										colorClass="fiber"
+										onchange={autosaveGoals}
+									/>
+								</div>
+							{/if}
+						</div>
+					</div>
+
+					<!-- Section 3: Weight Profile Tracker -->
+					<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm space-y-6 reveal-card" style="--delay: 2;">
+						<div class="flex items-start gap-4">
+							<div class="w-10 h-10 rounded-2xl bg-fats/10 text-fats flex items-center justify-center font-black select-none shrink-0">
+								3
+							</div>
+							<div>
+								<h2 class="text-2xl font-bold tracking-tight mb-1">Weight Profile</h2>
+								<p class="text-muted font-medium text-sm">Update your starting weight and goal targets</p>
+							</div>
+						</div>
+
+						<div class="pt-6 border-t border-(--border)/40 space-y-6">
+							<div class="grid grid-cols-2 gap-4">
+								<!-- Current Weight Card -->
+								<div class="bg-zinc-50/50 dark:bg-zinc-800/10 p-4 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-zinc-400 dark:focus-within:ring-zinc-600 transition-all duration-200 space-y-1">
+									<label for="current_weight" class="text-[10px] font-black uppercase tracking-wider text-muted block">Current Weight</label>
+									<div class="flex items-baseline gap-1">
+										<input 
+											type="number" 
+											id="current_weight"
+											bind:value={currentWeight} 
+											step="0.1" 
+											min="0"
+											required
+											oninput={autosaveGoals}
+											class="w-full bg-transparent text-xl font-bold focus:outline-none text-zinc-900 dark:text-zinc-100" 
+										/>
+										<span class="text-xs font-bold text-muted">kg</span>
+									</div>
+								</div>
+
+								<!-- Goal Weight Card -->
+								<div class="bg-zinc-50/50 dark:bg-zinc-800/10 p-4 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-zinc-400 dark:focus-within:ring-zinc-600 transition-all duration-200 space-y-1">
+									<label for="target_weight" class="text-[10px] font-black uppercase tracking-wider text-muted block">Goal Weight</label>
+									<div class="flex items-baseline gap-1">
+										<input 
+											type="number" 
+											id="target_weight"
+											bind:value={weight} 
+											step="0.1" 
+											min="0"
+											required
+											oninput={autosaveGoals}
+											class="w-full bg-transparent text-xl font-bold focus:outline-none text-zinc-900 dark:text-zinc-100" 
+										/>
+										<span class="text-xs font-bold text-muted">kg</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Encased Friendly Summary Progress sentence -->
+							<div class="text-xs font-semibold text-center text-muted py-2.5 px-3 bg-zinc-50/50 dark:bg-zinc-800/10 rounded-xl flex items-center justify-center gap-1.5">
+								{#if weightDifference === 0}
+									<span>🎉 Congratulations! You have reached your weight goal!</span>
 								{:else}
-									{#if saveSuccess}
-										<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold animate-bounce text-white">check</span>
-										<span>Saved Successfully!</span>
+									{#if weightDifference > 0}
+										<span>Target status: Lose <strong class="text-zinc-950 dark:text-zinc-50">{weightDifference} kg</strong> to hit your goal. You can do this!</span>
 									{:else}
-										<span>Save Nutritional Budget</span>
+										<span>Target status: Gain <strong class="text-zinc-950 dark:text-zinc-50">{Math.abs(weightDifference)} kg</strong> to hit your goal. You can do this!</span>
 									{/if}
 								{/if}
-							</button>
-						</form>
-					{/if}
+							</div>
+						</div>
+					</div>
+
+				</div>
+			{/if}
+		</div>
+
+		<!-- Right Column: Personal details, backup, and AI settings (Secondary Focus) -->
+		<div class="lg:col-span-1 grid gap-6">
+			<!-- Data Management Card -->
+			<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group reveal-card" style="--delay: 2.3;">
+				<!-- Top decorative pulse circle -->
+				<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-calories/5 group-hover:scale-110 transition-transform duration-500"></div>
+				
+				<div class="relative">
+					<div class="flex items-center gap-3 mb-4">
+						<div class="w-10 h-10 rounded-xl bg-calories/10 text-calories flex items-center justify-center font-black">
+							<span class="material-symbols-outlined text-[20px] select-none leading-none font-bold">database</span>
+						</div>
+						<div>
+							<h2 class="text-xl font-bold tracking-tight">Data Management</h2>
+							<p class="text-xs text-muted font-semibold">Import, export, and backup logs</p>
+						</div>
+					</div>
+
+					<p class="text-xs text-muted mb-5 leading-relaxed">
+						All your nutritional records are stored offline directly in your browser's local database. Use the options below to backup or export your stats.
+					</p>
+
+					<div class="pt-5 border-t border-(--border) flex flex-col gap-3">
+						<button 
+							type="button"
+							onclick={() => store.exportCSV()}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/5 transition-all text-sm active:scale-[0.98]"
+						>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">download</span>
+							Export Monthly CSV
+						</button>
+
+						<button 
+							type="button"
+							onclick={() => store.exportBackup()}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 font-bold transition-all text-sm active:scale-[0.98]"
+						>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">backup</span>
+							Export JSON Backup
+						</button>
+
+						<input 
+							type="file" 
+							id="backup-file-input" 
+							accept=".json" 
+							onchange={handleImportBackup} 
+							class="hidden" 
+						/>
+
+						<button 
+							type="button"
+							onclick={() => {
+								const input = document.getElementById('backup-file-input');
+								if (input) input.click();
+							}}
+							class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-zinc-500/20 text-zinc-500 hover:bg-zinc-500/5 transition-all text-sm active:scale-[0.98]"
+						>
+							<span class="material-symbols-outlined text-[16px] select-none leading-none">upload</span>
+							Import JSON Backup
+						</button>
+
+						{#if importSuccess}
+							<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">Backup imported successfully!</p>
+						{/if}
+						{#if importError}
+							<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">{importError}</p>
+						{/if}
+					</div>
 				</div>
 			</div>
 
+			<!-- AI Settings Card -->
+			<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group reveal-card" style="--delay: 2.6;">
+				<!-- Decorative purple circle (AI color themed) -->
+				<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-fiber/5 group-hover:scale-110 transition-transform duration-500"></div>
+				
+				<div class="relative">
+					<div class="flex items-center gap-3 mb-4">
+						<div class="w-10 h-10 rounded-xl bg-fiber/10 text-fiber flex items-center justify-center font-black">
+							<span class="material-symbols-outlined text-[20px] select-none leading-none">auto_awesome</span>
+						</div>
+						<div>
+							<h2 class="text-xl font-bold tracking-tight">AI Settings</h2>
+							<p class="text-xs text-muted font-semibold">Google AI Studio Configuration</p>
+						</div>
+					</div>
+
+					<p class="text-xs text-muted mb-5 leading-relaxed">
+						Configure your Google AI Studio API key to enable intelligent meal estimation and personalized nutrition advice. Your key is stored strictly on your local browser.
+					</p>
+
+					<div class="space-y-4">
+						<div class="space-y-2">
+							<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-fiber block">
+								AI Studio API Key
+							</label>
+							<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-fiber/50 dark:focus-within:ring-fiber/40 transition-all duration-200">
+								<input
+									id="ai_api_key"
+									type={inputType}
+									bind:value={apiKey}
+									onchange={autosaveKey}
+									placeholder="AIzaSy..."
+									class="w-full bg-transparent px-4 py-3 text-sm font-medium focus:outline-none pr-12 text-zinc-900 dark:text-zinc-50"
+								/>
+								<button
+									type="button"
+									onclick={() => showKey = !showKey}
+									class="absolute right-3 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1"
+									aria-label="Toggle password visibility"
+								>
+									{#if showKey}
+										<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility_off</span>
+									{:else}
+										<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility</span>
+									{/if}
+								</button>
+							</div>
+						</div>
+
+						<div class="flex flex-col gap-2">
+							{#if isKeySaved}
+								<button
+									type="button"
+									onclick={handleDeleteKey}
+									class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-rose-500/20 text-rose-500 font-bold hover:bg-rose-500/5 transition-all text-sm active:scale-[0.98]"
+								>
+									<span class="material-symbols-outlined text-[14px] select-none leading-none">delete</span>
+									<span>Delete Saved Key</span>
+								</button>
+							{/if}
+						</div>
+
+						{#if keySaveSuccess}
+							<p class="text-center text-xs font-bold text-emerald-500 animate-pulse mt-1">✓ Saved instantly!</p>
+						{/if}
+
+						{#if keyDeleteSuccess}
+							<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">API Key deleted from local storage</p>
+						{/if}
+
+						<div class="pt-3 border-t border-(--border) text-center">
+							<a
+								href="https://aistudio.google.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="inline-flex items-center gap-1 text-[11px] font-bold text-fiber hover:underline"
+							>
+								Get a free API Key from Google AI Studio
+								<span class="material-symbols-outlined text-[10px] select-none leading-none font-bold">open_in_new</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+
+	</div>
 </main>
 
 <style>
 	.text-muted {
 		color: var(--color-text-muted);
+	}
+
+	@keyframes revealUp {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.reveal-card {
+		opacity: 0;
+		animation: revealUp 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		animation-delay: calc(var(--delay, 0) * 80ms);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.reveal-card {
+			opacity: 0;
+			animation: fadeIn 300ms ease-out forwards;
+			animation-delay: 0ms !important;
+		}
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}
 	}
 </style>

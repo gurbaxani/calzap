@@ -52,7 +52,7 @@ class IndexedDBManager {
 				}
 				let completed = 0;
 				for (const item of items) {
-					const putReq = store.put($state.snapshot(item));
+					const putReq = store.put(JSON.parse(JSON.stringify(item)));
 					putReq.onsuccess = () => {
 						completed++;
 						if (completed === items.length) resolve();
@@ -88,7 +88,7 @@ class IndexedDBManager {
 				}
 				let completed = 0;
 				for (const item of items) {
-					const putReq = store.put($state.snapshot(item));
+					const putReq = store.put(JSON.parse(JSON.stringify(item)));
 					putReq.onsuccess = () => {
 						completed++;
 						if (completed === items.length) resolve();
@@ -116,7 +116,7 @@ class IndexedDBManager {
 		return new Promise((resolve, reject) => {
 			const transaction = database.transaction('userStats', 'readwrite');
 			const store = transaction.objectStore('userStats');
-			const request = store.put($state.snapshot(stats), 'current');
+			const request = store.put(JSON.parse(JSON.stringify(stats)), 'current');
 			request.onsuccess = () => resolve();
 			request.onerror = () => reject(request.error);
 		});
