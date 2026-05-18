@@ -148,7 +148,7 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 				type="button"
 				onclick={estimateMacros}
 				disabled={estimating || loading}
-				class="group flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-fiber)]/10 px-4 py-4 text-sm font-bold text-[var(--color-fiber)] transition-all hover:bg-[var(--color-fiber)]/20 focus:outline-none focus:ring-4 focus:ring-[var(--color-fiber)]/20 active:scale-[0.98] border border-[var(--color-fiber)]/20 disabled:cursor-not-allowed disabled:opacity-50"
+				class="group flex w-full items-center justify-center gap-2 rounded-xl bg-fiber/10 px-4 py-4 text-sm font-bold text-fiber transition-all hover:bg-fiber/20 focus:outline-none focus:ring-4 focus:ring-fiber/20 active:scale-[0.98] border border-fiber/20 disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				{#if estimating}
 					<span class="material-symbols-outlined animate-spin text-[20px] leading-none select-none">sync</span>

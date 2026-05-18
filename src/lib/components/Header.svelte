@@ -17,12 +17,12 @@
 {/if}
 
 {#if currentPath === '/'}
-	<header class="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-(--bg)/80 backdrop-blur-md transition-all duration-300">
+	<header class="sticky top-0 z-40 w-full border-b border-(--border) bg-(--bg)/80 backdrop-blur-md transition-all duration-300">
 		<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 			<!-- Left: Stunning Logo -->
 			<a href="/" class="flex items-center gap-2.5 group focus:outline-hidden">
 				<div
-					class="w-9 h-9 rounded-xl bg-[var(--color-calories)] flex items-center justify-center text-white shadow-lg shadow-[var(--color-calories)]/20 group-hover:scale-105 group-hover:rotate-6 transition-all duration-350"
+					class="w-9 h-9 rounded-xl bg-calories flex items-center justify-center text-white shadow-lg shadow-(--color-calories)/20 group-hover:scale-105 group-hover:rotate-6 transition-all duration-350"
 				>
 					<span class="material-symbols-outlined text-[20px] select-none">bolt</span>
 				</div>
@@ -33,17 +33,17 @@
 			<nav class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-wider text-muted">
 				<a
 					href="/#problem-solution-section"
-					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-[var(--color-calories)] after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
+					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
 					>Why Calzap</a
 				>
 				<a
 					href="/#faq-section"
-					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-[var(--color-calories)] after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
+					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
 					>FAQs</a
 				>
 				<a
 					href="/#pricing-section"
-					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-[var(--color-calories)] after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
+					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-calories after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
 					>Pricing</a
 				>
 			</nav>

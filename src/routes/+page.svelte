@@ -133,15 +133,15 @@
 >
 	<!-- Ambient Background Glows -->
 	<div
-		class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[oklch(from_var(--color-calories)_l_c_h_/_0.03)] blur-[120px] pointer-events-none"
+		class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.03)] blur-[120px] pointer-events-none"
 	></div>
 	<div
-		class="absolute bottom-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[oklch(from_var(--color-protein)_l_c_h_/_0.02)] blur-[160px] pointer-events-none"
+		class="absolute bottom-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[oklch(from_var(--color-protein)_l_c_h/0.02)] blur-[160px] pointer-events-none"
 	></div>
 
 	<!-- Main Container -->
 	<main
-		class="flex-grow w-full max-w-7xl mx-auto px-6 py-12 md:py-20 flex flex-col gap-24 md:gap-32"
+		class="grow w-full max-w-7xl mx-auto px-6 py-12 md:py-20 flex flex-col gap-24 md:gap-32"
 	>
 		<!-- ================= SECTION 1: HERO & HOOK ================= -->
 		<section
@@ -153,14 +153,14 @@
 				class="lg:col-span-7 flex flex-col items-start text-left gap-6 md:gap-8"
 			>
 				<div
-					class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h_/_0.08)] text-[var(--color-calories)] text-[11px] font-extrabold uppercase tracking-widest border border-[oklch(from_var(--color-calories)_l_c_h_/_0.15)] select-none"
+					class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] text-calories text-[11px] font-extrabold uppercase tracking-widest border border-[oklch(from_var(--color-calories)_l_c_h/0.15)] select-none"
 				>
 					<span class="relative flex h-2 w-2">
 						<span
-							class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-calories)] opacity-75"
+							class="animate-ping absolute inline-flex h-full w-full rounded-full bg-calories opacity-75"
 						></span>
 						<span
-							class="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-calories)]"
+							class="relative inline-flex rounded-full h-2 w-2 bg-calories"
 						></span>
 					</span>
 					Zero Bloat. Pure Math.
@@ -170,7 +170,7 @@
 					class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] max-w-2xl text-balance"
 				>
 					Log your macros in <span
-						class="text-[var(--color-calories)]"
+						class="text-calories"
 						>10 raw seconds</span
 					>. Stop wasting time.
 				</h1>
@@ -197,11 +197,11 @@
 
 				<!-- Hero Results Bullet Points -->
 				<div
-					class="grid sm:grid-cols-3 gap-6 pt-6 border-t border-[var(--border)] w-full mt-2"
+					class="grid sm:grid-cols-3 gap-6 pt-6 border-t border-(--border) w-full mt-2"
 				>
 					<div class="flex flex-col gap-1.5">
 						<div
-							class="text-[var(--color-protein)] font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
+							class="text-protein font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
 						>
 							<span
 								class="material-symbols-outlined text-[18px] leading-none"
@@ -217,7 +217,7 @@
 					</div>
 					<div class="flex flex-col gap-1.5">
 						<div
-							class="text-[var(--color-carbs)] font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
+							class="text-carbs font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
 						>
 							<span
 								class="material-symbols-outlined text-[18px] leading-none"
@@ -233,7 +233,7 @@
 					</div>
 					<div class="flex flex-col gap-1.5">
 						<div
-							class="text-[var(--color-fats)] font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
+							class="text-fats font-black text-sm uppercase tracking-wider flex items-center gap-1.5"
 						>
 							<span
 								class="material-symbols-outlined text-[18px] leading-none"
@@ -256,11 +256,11 @@
 				id="hero-widget-container"
 			>
 				<div
-					class="w-full max-w-[380px] bg-(--surface) border border-[var(--border)] rounded-[2.5rem] p-6.5 shadow-2xl relative overflow-hidden transition-all hover:border-zinc-300 dark:hover:border-zinc-700"
+					class="w-full max-w-[380px] bg-(--surface) border border-(--border) rounded-[2.5rem] p-6.5 shadow-2xl relative overflow-hidden transition-all hover:border-zinc-300 dark:hover:border-zinc-700"
 				>
 					<!-- Interactive Demo Header -->
 					<div
-						class="flex items-center justify-between mb-6 pb-4 border-b border-[var(--border)]"
+						class="flex items-center justify-between mb-6 pb-4 border-b border-(--border)"
 					>
 						<span
 							class="text-[10px] font-black tracking-widest text-muted uppercase"
@@ -282,7 +282,7 @@
 					>
 						<div class="flex items-baseline justify-center gap-2">
 							<span
-								class="text-5xl font-black tracking-tighter tabular-nums transition-all text-[var(--color-calories)]"
+								class="text-5xl font-black tracking-tighter tabular-nums transition-all text-calories"
 							>
 								{demoRemaining}
 							</span>
@@ -302,11 +302,11 @@
 					<div class="grid grid-cols-2 gap-3.5 mb-7">
 						<!-- Protein Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h_/_0.03)] border border-[oklch(from_var(--color-protein)_l_c_h_/_0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h/0.03)] border border-[oklch(from_var(--color-protein)_l_c_h/0.08)] flex flex-col gap-1.5"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
-									class="text-xs font-black uppercase text-[var(--color-protein)]"
+									class="text-xs font-black uppercase text-protein"
 									>Protein</span
 								>
 								<span
@@ -315,10 +315,10 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-protein)_l_c_h_/_0.08)] overflow-hidden"
+								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-protein)_l_c_h/0.08)] overflow-hidden"
 							>
 								<div
-									class="h-full bg-[var(--color-protein)] rounded-full transition-all duration-500 ease-out-quart"
+									class="h-full bg-protein rounded-full transition-all duration-500 ease-out-quart"
 									style="width: {Math.min(
 										100,
 										(demoTotals.protein / 180) * 100,
@@ -329,11 +329,11 @@
 
 						<!-- Carbs Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-carbs)_l_c_h_/_0.03)] border border-[oklch(from_var(--color-carbs)_l_c_h_/_0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl bg-[oklch(from_var(--color-carbs)_l_c_h/0.03)] border border-[oklch(from_var(--color-carbs)_l_c_h/0.08)] flex flex-col gap-1.5"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
-									class="text-xs font-black uppercase text-[var(--color-carbs)]"
+									class="text-xs font-black uppercase text-carbs"
 									>Carbs</span
 								>
 								<span
@@ -342,10 +342,10 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-carbs)_l_c_h_/_0.08)] overflow-hidden"
+								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-carbs)_l_c_h/0.08)] overflow-hidden"
 							>
 								<div
-									class="h-full bg-[var(--color-carbs)] rounded-full transition-all duration-500 ease-out-quart"
+									class="h-full bg-carbs rounded-full transition-all duration-500 ease-out-quart"
 									style="width: {Math.min(
 										100,
 										(demoTotals.carbs / 250) * 100,
@@ -356,11 +356,11 @@
 
 						<!-- Fats Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fats)_l_c_h_/_0.03)] border border-[oklch(from_var(--color-fats)_l_c_h_/_0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fats)_l_c_h/0.03)] border border-[oklch(from_var(--color-fats)_l_c_h/0.08)] flex flex-col gap-1.5"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
-									class="text-xs font-black uppercase text-[var(--color-fats)]"
+									class="text-xs font-black uppercase text-fats"
 									>Fats</span
 								>
 								<span
@@ -369,10 +369,10 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fats)_l_c_h_/_0.08)] overflow-hidden"
+								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fats)_l_c_h/0.08)] overflow-hidden"
 							>
 								<div
-									class="h-full bg-[var(--color-fats)] rounded-full transition-all duration-500 ease-out-quart"
+									class="h-full bg-fats rounded-full transition-all duration-500 ease-out-quart"
 									style="width: {Math.min(
 										100,
 										(demoTotals.fats / 70) * 100,
@@ -383,11 +383,11 @@
 
 						<!-- Fiber Card -->
 						<div
-							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h_/_0.03)] border border-[oklch(from_var(--color-fiber)_l_c_h_/_0.08)] flex flex-col gap-1.5"
+							class="p-3 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h/0.03)] border border-[oklch(from_var(--color-fiber)_l_c_h/0.08)] flex flex-col gap-1.5"
 						>
 							<div class="flex justify-between items-baseline">
 								<span
-									class="text-xs font-black uppercase text-[var(--color-fiber)]"
+									class="text-xs font-black uppercase text-fiber"
 									>Fiber</span
 								>
 								<span
@@ -396,10 +396,10 @@
 								>
 							</div>
 							<div
-								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fiber)_l_c_h_/_0.08)] overflow-hidden"
+								class="h-2 w-full rounded-full bg-[oklch(from_var(--color-fiber)_l_c_h/0.08)] overflow-hidden"
 							>
 								<div
-									class="h-full bg-[var(--color-fiber)] rounded-full transition-all duration-500 ease-out-quart"
+									class="h-full bg-fiber rounded-full transition-all duration-500 ease-out-quart"
 									style="width: {Math.min(
 										100,
 										(demoTotals.fiber / 35) * 100,
@@ -421,7 +421,7 @@
 								type="button"
 								id="demo-add-whey"
 								onclick={() => addDemoFood(presetWhey)}
-								class="w-full text-left p-3 rounded-xl border border-[var(--border)] hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h_/_0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
@@ -432,7 +432,7 @@
 									>
 								</div>
 								<span
-									class="material-symbols-outlined text-[16px] text-[var(--color-calories)] group-hover:translate-x-0.5 transition-transform select-none"
+									class="material-symbols-outlined text-[16px] text-calories group-hover:translate-x-0.5 transition-transform select-none"
 									>add</span
 								>
 							</button>
@@ -441,7 +441,7 @@
 								type="button"
 								id="demo-add-oats"
 								onclick={() => addDemoFood(presetOats)}
-								class="w-full text-left p-3 rounded-xl border border-[var(--border)] hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h_/_0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
@@ -453,7 +453,7 @@
 									>
 								</div>
 								<span
-									class="material-symbols-outlined text-[16px] text-[var(--color-calories)] group-hover:translate-x-0.5 transition-transform select-none"
+									class="material-symbols-outlined text-[16px] text-calories group-hover:translate-x-0.5 transition-transform select-none"
 									>add</span
 								>
 							</button>
@@ -462,7 +462,7 @@
 								type="button"
 								id="demo-add-almonds"
 								onclick={() => addDemoFood(presetAlmonds)}
-								class="w-full text-left p-3 rounded-xl border border-[var(--border)] hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h_/_0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
+								class="w-full text-left p-3 rounded-xl border border-(--border) hover:border-zinc-300 dark:hover:border-zinc-700 bg-[oklch(from_var(--border)_l_c_h/0.15)] flex justify-between items-center transition-all active:scale-[0.98] group"
 							>
 								<div class="flex flex-col">
 									<span class="font-bold text-xs"
@@ -473,7 +473,7 @@
 									>
 								</div>
 								<span
-									class="material-symbols-outlined text-[16px] text-[var(--color-calories)] group-hover:translate-x-0.5 transition-transform select-none"
+									class="material-symbols-outlined text-[16px] text-calories group-hover:translate-x-0.5 transition-transform select-none"
 									>add</span
 								>
 							</button>
@@ -483,7 +483,7 @@
 					<!-- Visual Confirmation Logged List inside Mockup -->
 					{#if demoLogs.length > 0}
 						<div
-							class="flex flex-col gap-2 mt-4 pt-4 border-t border-[var(--border)] max-h-[140px] overflow-y-auto"
+							class="flex flex-col gap-2 mt-4 pt-4 border-t border-(--border) max-h-[140px] overflow-y-auto"
 						>
 							<h5
 								class="text-[9px] font-black uppercase tracking-wider text-muted"
@@ -514,7 +514,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 01 / 06</span
@@ -529,7 +529,7 @@
 			<!-- Left: Big Typography Section Header -->
 			<div class="lg:col-span-5 flex flex-col items-start gap-4">
 				<div
-					class="text-[var(--color-protein)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-protein font-black text-xs uppercase tracking-widest select-none"
 				>
 					The Friction Bloat
 				</div>
@@ -560,7 +560,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 02 / 06</span
@@ -572,7 +572,7 @@
 			<!-- Header -->
 			<div class="flex flex-col items-start gap-4">
 				<div
-					class="text-[var(--color-carbs)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-carbs font-black text-xs uppercase tracking-widest select-none"
 				>
 					No Bullshit Features
 				</div>
@@ -587,10 +587,10 @@
 			<div class="grid md:grid-cols-3 gap-8 md:gap-10">
 				<!-- Benefit 1 -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-[var(--border)] bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
 				>
 					<div
-						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h_/_0.08)] flex items-center justify-center text-[var(--color-protein)]"
+						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-protein)_l_c_h/0.08)] flex items-center justify-center text-protein"
 					>
 						<span
 							class="material-symbols-outlined text-[24px] select-none"
@@ -611,10 +611,10 @@
 
 				<!-- Benefit 2 -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-[var(--border)] bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
 				>
 					<div
-						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-calories)_l_c_h_/_0.08)] flex items-center justify-center text-[var(--color-calories)]"
+						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] flex items-center justify-center text-calories"
 					>
 						<span
 							class="material-symbols-outlined text-[24px] select-none"
@@ -635,10 +635,10 @@
 
 				<!-- Benefit 3 -->
 				<div
-					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-[var(--border)] bg-(--surface)/40 hover:bg-(--surface) transition-colors"
+					class="flex flex-col items-start gap-5 p-6.5 rounded-3xl border border-(--border) bg-(--surface)/40 hover:bg-(--surface) transition-colors"
 				>
 					<div
-						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h_/_0.08)] flex items-center justify-center text-[var(--color-fiber)]"
+						class="w-12 h-12 rounded-2xl bg-[oklch(from_var(--color-fiber)_l_c_h/0.08)] flex items-center justify-center text-fiber"
 					>
 						<span
 							class="material-symbols-outlined text-[24px] select-none"
@@ -663,7 +663,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 03 / 06</span
@@ -675,7 +675,7 @@
 			<!-- Header -->
 			<div class="flex flex-col items-start gap-4">
 				<div
-					class="text-[var(--color-fats)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-fats font-black text-xs uppercase tracking-widest select-none"
 				>
 					Zero Fat. All Muscle.
 				</div>
@@ -691,7 +691,7 @@
 				<!-- Column 1: Logging Speed -->
 				<div class="flex flex-col gap-6 md:gap-8">
 					<h3
-						class="text-xs font-black uppercase tracking-wider text-[var(--color-calories)] pb-3 border-b border-[var(--border)]"
+						class="text-xs font-black uppercase tracking-wider text-calories pb-3 border-b border-(--border)"
 					>
 						01. Lightning Logging
 					</h3>
@@ -750,7 +750,7 @@
 				<!-- Column 2: Dashboard Visualization -->
 				<div class="flex flex-col gap-6 md:gap-8">
 					<h3
-						class="text-xs font-black uppercase tracking-wider text-[var(--color-protein)] pb-3 border-b border-[var(--border)]"
+						class="text-xs font-black uppercase tracking-wider text-protein pb-3 border-b border-(--border)"
 					>
 						02. Visual Math
 					</h3>
@@ -809,7 +809,7 @@
 				<!-- Column 3: Customization & Security -->
 				<div class="flex flex-col gap-6 md:gap-8">
 					<h3
-						class="text-xs font-black uppercase tracking-wider text-[var(--color-fiber)] pb-3 border-b border-[var(--border)]"
+						class="text-xs font-black uppercase tracking-wider text-fiber pb-3 border-b border-(--border)"
 					>
 						03. Zero Lock-in
 					</h3>
@@ -871,7 +871,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 04 / 06</span
@@ -886,7 +886,7 @@
 			<!-- Left Column: Simple typography declaration -->
 			<div class="lg:col-span-5 flex flex-col items-start gap-4">
 				<div
-					class="text-[var(--color-calories)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-calories font-black text-xs uppercase tracking-widest select-none"
 				>
 					Absolute Freedom
 				</div>
@@ -906,15 +906,15 @@
 
 			<!-- Right Column: Asymmetric, premium focus presentation (No duplicate card grid) -->
 			<div
-				class="lg:col-span-7 p-8 md:p-10 rounded-[2.5rem] border border-[var(--border)] bg-[oklch(from_var(--color-calories)_l_c_h_/_0.015)] relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 group"
+				class="lg:col-span-7 p-8 md:p-10 rounded-[2.5rem] border border-(--border) bg-[oklch(from_var(--color-calories)_l_c_h/0.015)] relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 group"
 			>
 				<div
-					class="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h_/_0.025)] blur-2xl group-hover:scale-110 transition-transform duration-500 pointer-events-none"
+					class="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-[oklch(from_var(--color-calories)_l_c_h/0.025)] blur-2xl group-hover:scale-110 transition-transform duration-500 pointer-events-none"
 				></div>
 
 				<div class="flex flex-col gap-4 max-w-[40ch]">
 					<div
-						class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[oklch(from_var(--color-calories)_l_c_h_/_0.08)] text-[var(--color-calories)] text-[10px] font-black uppercase tracking-wider border border-[oklch(from_var(--color-calories)_l_c_h_/_0.15)] select-none self-start"
+						class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[oklch(from_var(--color-calories)_l_c_h/0.08)] text-calories text-[10px] font-black uppercase tracking-wider border border-[oklch(from_var(--color-calories)_l_c_h/0.15)] select-none self-start"
 					>
 						100% Free Forever
 					</div>
@@ -931,7 +931,7 @@
 				</div>
 
 				<div
-					class="flex flex-col items-start gap-1 p-5 rounded-2xl border border-[var(--border)] bg-(--surface) shadow-lg shadow-black/5 min-w-[160px] self-stretch justify-center text-center sm:text-left"
+					class="flex flex-col items-start gap-1 p-5 rounded-2xl border border-(--border) bg-(--surface) shadow-lg shadow-black/5 min-w-[160px] self-stretch justify-center text-center sm:text-left"
 				>
 					<div
 						class="text-[9px] font-black uppercase tracking-wider text-muted mb-1 w-full text-center sm:text-left"
@@ -939,7 +939,7 @@
 						Monthly Cost
 					</div>
 					<div
-						class="text-4xl font-black tracking-tighter text-[var(--color-calories)] w-full text-center sm:text-left tabular-nums"
+						class="text-4xl font-black tracking-tighter text-calories w-full text-center sm:text-left tabular-nums"
 					>
 						$0.00
 					</div>
@@ -956,7 +956,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 05 / 06</span
@@ -971,7 +971,7 @@
 			<!-- FAQ Left Info -->
 			<div class="lg:col-span-4 flex flex-col items-start gap-4">
 				<div
-					class="text-[var(--color-fiber)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-fiber font-black text-xs uppercase tracking-widest select-none"
 				>
 					No Secrets
 				</div>
@@ -989,21 +989,21 @@
 
 			<!-- FAQ Right Accordions -->
 			<div
-				class="lg:col-span-8 flex flex-col border-t border-[var(--border)]"
+				class="lg:col-span-8 flex flex-col border-t border-(--border)"
 			>
 				{#each faqs as faq, index (faq.question)}
 					<div
-						class="border-b border-[var(--border)] py-4 sm:py-5 flex flex-col"
+						class="border-b border-(--border) py-4 sm:py-5 flex flex-col"
 					>
 						<button
 							type="button"
 							id="faq-button-{index}"
 							onclick={() => toggleFaq(index)}
-							class="flex justify-between items-center w-full text-left font-bold text-base sm:text-lg hover:text-[var(--color-calories)] transition-colors focus:outline-hidden group py-1"
+							class="flex justify-between items-center w-full text-left font-bold text-base sm:text-lg hover:text-calories transition-colors focus:outline-hidden group py-1"
 						>
 							<span class="pr-6">{faq.question}</span>
 							<span
-								class="material-symbols-outlined text-muted group-hover:text-[var(--color-calories)] transition-all select-none text-[20px] leading-none"
+								class="material-symbols-outlined text-muted group-hover:text-calories transition-all select-none text-[20px] leading-none"
 								class:rotate-180={activeFaqIndex === index}
 							>
 								expand_more
@@ -1030,7 +1030,7 @@
 		<div
 			class="w-full flex items-center justify-center pointer-events-none select-none"
 		>
-			<hr class="w-full border-[var(--border)]" />
+			<hr class="w-full border-(--border)" />
 			<span
 				class="absolute px-4 bg-(--bg) text-muted font-extrabold text-[10px] tracking-widest uppercase"
 				>SECTION 06 / 06</span
@@ -1044,12 +1044,12 @@
 		>
 			<!-- Background Glow overlay -->
 			<div
-				class="absolute inset-0 bg-radial from-[oklch(from_var(--color-calories)_l_c_h_/_0.04)] to-transparent rounded-[3rem] blur-xl pointer-events-none"
+				class="absolute inset-0 bg-radial from-[oklch(from_var(--color-calories)_l_c_h/0.04)] to-transparent rounded-[3rem] blur-xl pointer-events-none"
 			></div>
 
 			<div class="flex flex-col items-center gap-4 z-10">
 				<div
-					class="text-[var(--color-calories)] font-black text-xs uppercase tracking-widest select-none"
+					class="text-calories font-black text-xs uppercase tracking-widest select-none"
 				>
 					Stop wasting time.
 				</div>
@@ -1084,7 +1084,7 @@
 
 	<!-- Footer -->
 	<footer
-		class="py-12 border-t border-[var(--border)] text-center bg-(--surface)/20 relative z-10"
+		class="py-12 border-t border-(--border) text-center bg-(--surface)/20 relative z-10"
 	>
 		<div
 			class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm font-bold text-muted"

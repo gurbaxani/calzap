@@ -103,7 +103,7 @@
 			<button
 				type="button"
 				onclick={() => changeDate(-1)}
-				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors cursor-pointer"
 				aria-label="Previous day"
 			>
 				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_left</span>
@@ -118,7 +118,7 @@
 			<button
 				type="button"
 				onclick={() => changeDate(1)}
-				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h_/_0.3)] transition-colors cursor-pointer"
+				class="h-10 w-10 flex items-center justify-center rounded-xl hover:bg-[oklch(from_var(--border)_l_c_h/0.3)] transition-colors cursor-pointer"
 				aria-label="Next day"
 			>
 				<span class="material-symbols-outlined text-[20px] select-none leading-none">chevron_right</span>

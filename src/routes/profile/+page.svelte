@@ -168,12 +168,12 @@
 			
 			<!-- Left Column: Personal details & account status -->
 			<div class="lg:col-span-1 grid gap-6">
-				<div class="p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-sm relative overflow-hidden group">
+				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group">
 					<!-- Top decorative pulse circle -->
-					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-[var(--color-calories)]/5 group-hover:scale-110 transition-transform duration-500"></div>
+					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-calories/5 group-hover:scale-110 transition-transform duration-500"></div>
 					
 					<div class="flex flex-col items-center text-center gap-4 mb-6 relative">
-						<div class="w-24 h-24 rounded-2xl bg-[var(--color-calories)] flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-blue-500/10">
+						<div class="w-24 h-24 rounded-2xl bg-calories flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-blue-500/10">
 							L
 						</div>
 						<div>
@@ -184,14 +184,14 @@
 						</div>
 					</div>
 
-					<div class="grid gap-3 py-5 border-t border-[var(--border)]">
+					<div class="grid gap-3 py-5 border-t border-(--border)">
 						<div class="flex justify-between items-center text-sm">
 							<span class="text-muted font-medium">Data Storage</span>
 							<span class="font-mono text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Browser</span>
 						</div>
 					</div>
 
-					<div class="pt-5 border-t border-[var(--border)] flex flex-col gap-3">
+					<div class="pt-5 border-t border-(--border) flex flex-col gap-3">
 						<button 
 							type="button"
 							onclick={() => store.exportCSV()}
@@ -240,13 +240,13 @@
 				</div>
 
 				<!-- AI Settings Card -->
-				<div class="p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-sm relative overflow-hidden group">
+				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group">
 					<!-- Decorative purple circle (AI color themed) -->
-					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-[var(--color-fiber)]/5 group-hover:scale-110 transition-transform duration-500"></div>
+					<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-fiber/5 group-hover:scale-110 transition-transform duration-500"></div>
 					
 					<div class="relative">
 						<div class="flex items-center gap-3 mb-4">
-							<div class="w-10 h-10 rounded-xl bg-[var(--color-fiber)]/10 text-[var(--color-fiber)] flex items-center justify-center font-black">
+							<div class="w-10 h-10 rounded-xl bg-fiber/10 text-fiber flex items-center justify-center font-black">
 								<span class="material-symbols-outlined text-[20px] select-none leading-none">auto_awesome</span>
 							</div>
 							<div>
@@ -261,10 +261,10 @@
 
 						<form onsubmit={handleSaveKey} class="space-y-4">
 							<div class="space-y-2">
-								<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-[var(--color-fiber)] block">
+								<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-fiber block">
 									AI Studio API Key
 								</label>
-								<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-[var(--border)] focus-within:ring-2 focus-within:ring-[var(--color-fiber)] transition-all">
+								<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-fiber transition-all">
 									<input
 										id="ai_api_key"
 										type={inputType}
@@ -320,12 +320,12 @@
 								<p class="text-center text-xs font-bold text-rose-500 animate-pulse mt-1">API Key deleted from local storage</p>
 							{/if}
 
-							<div class="pt-3 border-t border-[var(--border)] text-center">
+							<div class="pt-3 border-t border-(--border) text-center">
 								<a
 									href="https://aistudio.google.com/"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-fiber)] hover:underline"
+									class="inline-flex items-center gap-1 text-[11px] font-bold text-fiber hover:underline"
 								>
 									Get a free API Key from Google AI Studio
 									<span class="material-symbols-outlined text-[10px] select-none leading-none font-bold">open_in_new</span>
@@ -338,7 +338,7 @@
 
 			<!-- Right Column: Goals Form & Dynamic Calculators -->
 			<div class="lg:col-span-2 grid gap-6">
-				<div class="p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-sm">
+				<div class="p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm">
 					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 						<div>
 							<h2 class="text-2xl font-bold tracking-tight mb-1">Nutritional Goals</h2>
@@ -346,7 +346,7 @@
 						</div>
 						
 						<!-- Live Alignment Meter -->
-						<div class="flex items-center gap-2 bg-zinc-100/80 dark:bg-zinc-800/80 p-2 rounded-2xl border border-[var(--border)] text-xs font-bold">
+						<div class="flex items-center gap-2 bg-zinc-100/80 dark:bg-zinc-800/80 p-2 rounded-2xl border border-(--border) text-xs font-bold">
 							<span class="text-muted">Balance Meter:</span>
 							{#if calorieDifference === 0}
 								<span class="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">Aligned</span>
@@ -374,20 +374,20 @@
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 								
 								<!-- Daily Calories Target Card -->
-								<div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-zinc-100/50 p-6 border border-[var(--border)] dark:bg-zinc-800/20 focus-within:ring-2 focus-within:ring-[var(--color-calories)] transition-all">
+								<div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-zinc-100/50 p-6 border border-(--border) dark:bg-zinc-800/20 focus-within:ring-2 focus-within:ring-calories transition-all">
 									<div>
-										<label for="target_calories" class="text-xs font-black uppercase tracking-widest text-[var(--color-calories)] block mb-1">Daily Calories</label>
+										<label for="target_calories" class="text-xs font-black uppercase tracking-widest text-calories block mb-1">Daily Calories</label>
 										<span class="text-xs text-muted font-medium">Standard baseline target calculation</span>
 									</div>
 									<div class="flex items-center gap-3">
 										<button 
 											type="button" 
 											onclick={() => calories = Math.max(0, calories - 100)}
-											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-100
 										</button>
-										<div class="flex items-baseline bg-white dark:bg-zinc-900 px-4 py-2 rounded-xl border border-[var(--border)]">
+										<div class="flex items-baseline bg-white dark:bg-zinc-900 px-4 py-2 rounded-xl border border-(--border)">
 											<input
 												type="number"
 												id="target_calories"
@@ -402,7 +402,7 @@
 										<button 
 											type="button" 
 											onclick={() => calories = calories + 100}
-											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+100
 										</button>
@@ -410,20 +410,20 @@
 								</div>
 
 								<!-- Protein Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-rose-50/20 p-5 border border-rose-100/60 dark:bg-rose-950/5 dark:border-rose-900/10 focus-within:ring-2 focus-within:ring-[var(--color-protein)] transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-rose-50/20 p-5 border border-rose-100/60 dark:bg-rose-950/5 dark:border-rose-900/10 focus-within:ring-2 focus-within:ring-protein transition-all">
 									<div class="flex justify-between items-center">
-										<label for="target_proteins" class="text-xs font-black uppercase tracking-widest text-[var(--color-protein)]">Protein</label>
+										<label for="target_proteins" class="text-xs font-black uppercase tracking-widest text-protein">Protein</label>
 										<span class="text-[10px] font-bold text-rose-500/70 bg-rose-500/5 px-1.5 py-0.5 rounded">{proteins * 4} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
 											type="button" 
 											onclick={() => proteins = Math.max(0, proteins - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="target_proteins"
@@ -438,7 +438,7 @@
 										<button 
 											type="button" 
 											onclick={() => proteins = proteins + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+5
 										</button>
@@ -446,20 +446,20 @@
 								</div>
 
 								<!-- Carbs Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-amber-50/20 p-5 border border-amber-100/60 dark:bg-amber-950/5 dark:border-amber-900/10 focus-within:ring-2 focus-within:ring-[var(--color-carbs)] transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-amber-50/20 p-5 border border-amber-100/60 dark:bg-amber-950/5 dark:border-amber-900/10 focus-within:ring-2 focus-within:ring-carbs transition-all">
 									<div class="flex justify-between items-center">
-										<label for="target_carbs" class="text-xs font-black uppercase tracking-widest text-[var(--color-carbs)]">Carbohydrates</label>
+										<label for="target_carbs" class="text-xs font-black uppercase tracking-widest text-carbs">Carbohydrates</label>
 										<span class="text-[10px] font-bold text-amber-600/70 bg-amber-600/5 px-1.5 py-0.5 rounded">{carbs * 4} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
 											type="button" 
 											onclick={() => carbs = Math.max(0, carbs - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="target_carbs"
@@ -474,7 +474,7 @@
 										<button 
 											type="button" 
 											onclick={() => carbs = carbs + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+5
 										</button>
@@ -482,20 +482,20 @@
 								</div>
 
 								<!-- Fats Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-emerald-50/20 p-5 border border-emerald-100/60 dark:bg-emerald-950/5 dark:border-emerald-900/10 focus-within:ring-2 focus-within:ring-[var(--color-fats)] transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-emerald-50/20 p-5 border border-emerald-100/60 dark:bg-emerald-950/5 dark:border-emerald-900/10 focus-within:ring-2 focus-within:ring-fats transition-all">
 									<div class="flex justify-between items-center">
-										<label for="target_fats" class="text-xs font-black uppercase tracking-widest text-[var(--color-fats)]">Fats</label>
+										<label for="target_fats" class="text-xs font-black uppercase tracking-widest text-fats">Fats</label>
 										<span class="text-[10px] font-bold text-emerald-600/70 bg-emerald-600/5 px-1.5 py-0.5 rounded">{fats * 9} kcal</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
 											type="button" 
 											onclick={() => fats = Math.max(0, fats - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="target_fats"
@@ -510,7 +510,7 @@
 										<button 
 											type="button" 
 											onclick={() => fats = fats + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+5
 										</button>
@@ -518,20 +518,20 @@
 								</div>
 
 								<!-- Fiber Target Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-purple-50/20 p-5 border border-purple-100/60 dark:bg-purple-950/5 dark:border-purple-900/10 focus-within:ring-2 focus-within:ring-[var(--color-fiber)] transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-purple-50/20 p-5 border border-purple-100/60 dark:bg-purple-950/5 dark:border-purple-900/10 focus-within:ring-2 focus-within:ring-fiber transition-all">
 									<div class="flex justify-between items-center">
-										<label for="target_fiber" class="text-xs font-black uppercase tracking-widest text-[var(--color-fiber)]">Dietary Fiber</label>
+										<label for="target_fiber" class="text-xs font-black uppercase tracking-widest text-fiber">Dietary Fiber</label>
 										<span class="text-[10px] font-bold text-purple-600/70 bg-purple-600/5 px-1.5 py-0.5 rounded">Essential digestion</span>
 									</div>
 									<div class="flex items-center justify-between gap-2 mt-1">
 										<button 
 											type="button" 
 											onclick={() => fiber = Math.max(0, fiber - 5)}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="target_fiber"
@@ -546,7 +546,7 @@
 										<button 
 											type="button" 
 											onclick={() => fiber = fiber + 5}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+5
 										</button>
@@ -554,14 +554,14 @@
 								</div>
 
 								<!-- Weight Target Section Header / Visual Balance Meter -->
-								<div class="md:col-span-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-4 border-t border-[var(--border)] mt-2">
+								<div class="md:col-span-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-4 border-t border-(--border) mt-2">
 									<div>
 										<h3 class="text-sm font-bold tracking-tight">Weight Profile</h3>
 										<p class="text-xs text-muted">Track body composition targets and updates</p>
 									</div>
 									
 									<!-- Weight Progress Badge -->
-									<div class="flex items-center gap-1.5 self-start text-[10px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-[var(--border)]">
+									<div class="flex items-center gap-1.5 self-start text-[10px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-(--border)">
 										<span class="text-muted">Target status:</span>
 										{#if weightDifference === 0}
 											<span class="text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">Goal Reached</span>
@@ -576,7 +576,7 @@
 								</div>
 
 								<!-- Current Weight Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-[var(--border)] dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-(--border) dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
 									<div class="flex justify-between items-center">
 										<label for="current_weight" class="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Current Weight</label>
 										<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">Live entry</span>
@@ -585,11 +585,11 @@
 										<button 
 											type="button" 
 											onclick={() => currentWeight = Math.max(0, Number((currentWeight - 0.5).toFixed(1)))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-0.5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="current_weight"
@@ -604,7 +604,7 @@
 										<button 
 											type="button" 
 											onclick={() => currentWeight = Number((currentWeight + 0.5).toFixed(1))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+0.5
 										</button>
@@ -612,7 +612,7 @@
 								</div>
 
 								<!-- Target Weight (Goal Weight) Card -->
-								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-[var(--border)] dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
+								<div class="flex flex-col gap-3 rounded-2xl bg-zinc-100/30 p-5 border border-(--border) dark:bg-zinc-800/10 focus-within:ring-2 focus-within:ring-zinc-500 transition-all">
 									<div class="flex justify-between items-center">
 										<label for="target_weight" class="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Goal Weight</label>
 										<span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">Target goal</span>
@@ -621,11 +621,11 @@
 										<button 
 											type="button" 
 											onclick={() => weight = Math.max(0, Number((weight - 0.5).toFixed(1)))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											-0.5
 										</button>
-										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-[var(--border)] max-w-[120px]">
+										<div class="flex items-baseline flex-1 justify-center bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-(--border) max-w-[120px]">
 											<input
 												type="number"
 												id="target_weight"
@@ -640,7 +640,7 @@
 										<button 
 											type="button" 
 											onclick={() => weight = Number((weight + 0.5).toFixed(1))}
-											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-[var(--border)] flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
+											class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-(--border) flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-700 active:scale-90 transition-all"
 										>
 											+0.5
 										</button>
