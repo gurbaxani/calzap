@@ -401,7 +401,7 @@
 </script>
 
 <svelte:head>
-	<title>Log Meal | Food Factor</title>
+	<title>Log Meal | Fuel</title>
 	<meta name="description" content="Log your meals quickly by choosing from your catalog or keying in custom macronutrients." />
 </svelte:head>
 

@@ -205,7 +205,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile | Food Factor</title>
+	<title>Profile | Fuel</title>
 </svelte:head>
 
 <main class="max-w-6xl mx-auto px-6 py-12">

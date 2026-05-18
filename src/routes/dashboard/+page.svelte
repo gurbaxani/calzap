@@ -300,7 +300,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard | Food Factor</title>
+	<title>Dashboard | Fuel</title>
 </svelte:head>
 
 <main
