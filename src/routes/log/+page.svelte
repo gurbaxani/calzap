@@ -401,7 +401,7 @@
 </script>
 
 <svelte:head>
-	<title>Log Meal | Fuel</title>
+	<title>Log Meal | Calzap</title>
 	<meta name="description" content="Log your meals quickly by choosing from your catalog or keying in custom macronutrients." />
 </svelte:head>
 
@@ -419,7 +419,7 @@
 				<span class="material-symbols-outlined text-[20px] select-none leading-none">arrow_back</span>
 			</button>
 			<div>
-				<h1 class="text-2xl font-black tracking-tight">Log Fuel</h1>
+				<h1 class="text-2xl font-black tracking-tight">Log Macros</h1>
 				<p class="text-xs text-zinc-500 dark:text-zinc-400">Track macro intake in seconds</p>
 			</div>
 		</div>
@@ -724,7 +724,7 @@
 	<!-- Today's Totals Summary Widget -->
 	<section class="rounded-3xl bg-(--surface) border border-(--border) p-6 shadow-xl shadow-black/5 flex flex-col gap-5">
 		<div>
-			<h3 class="text-[9px] font-black uppercase tracking-widest text-zinc-400">Total Fuel Logged Today</h3>
+			<h3 class="text-[9px] font-black uppercase tracking-widest text-zinc-400">Total Macros Logged Today</h3>
 			<div class="flex items-baseline gap-1.5 mt-1">
 				<span class="text-4xl font-black tracking-tight tabular-nums style-color-calories">
 					{todayTotals.calories}

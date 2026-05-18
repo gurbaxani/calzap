@@ -300,7 +300,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard | Fuel</title>
+	<title>Dashboard | Calzap</title>
 </svelte:head>
 
 <main

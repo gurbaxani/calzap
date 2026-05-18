@@ -205,7 +205,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile | Fuel</title>
+	<title>Profile | Calzap</title>
 </svelte:head>
 
 <main class="max-w-6xl mx-auto px-6 py-12">

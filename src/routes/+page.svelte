@@ -97,7 +97,7 @@
 		},
 		{
 			question: "How is this faster than other calorie trackers?",
-			answer: "By cutting out the junk. When you open Fuel, there is no home feed to load or pop-up warning to dismiss. You search, you select, and you log. Your most frequent foods sit right on your dashboard for a 1-tap quick clone. No spinners, no delays, no nonsense.",
+			answer: "By cutting out the junk. When you open Calzap, there is no home feed to load or pop-up warning to dismiss. You search, you select, and you log. Your most frequent foods sit right on your dashboard for a 1-tap quick clone. No spinners, no delays, no nonsense.",
 		},
 		{
 			question: "Can I customize my daily macro targets?",
@@ -109,11 +109,11 @@
 		},
 		{
 			question: "Does it work on terrible gym Wi-Fi?",
-			answer: "Yes. Fuel uses hyper-lightweight code and instant Svelte reactive states. Your inputs register immediately, and the UI doesn't freeze or wait for slow networks to respond. It's built to be fast even in deep basement weight rooms.",
+			answer: "Yes. Calzap uses hyper-lightweight code and instant Svelte reactive states. Your inputs register immediately, and the UI doesn't freeze or wait for slow networks to respond. It's built to be fast even in deep basement weight rooms.",
 		},
 		{
 			question: "How does the calorie tracker work?",
-			answer: "It's straightforward subtraction. Fuel takes your target and subtracts your logs. Tap the main calorie ring to toggle between 'Remaining' and 'Consumed' calories in a single tap.",
+			answer: "It's straightforward subtraction. Calzap takes your target and subtracts your logs. Tap the main calorie ring to toggle between 'Remaining' and 'Consumed' calories in a single tap.",
 		},
 	];
 
@@ -128,10 +128,10 @@
 </script>
 
 <svelte:head>
-	<title>Fuel | Reach Your Peak Physical Potential</title>
+	<title>Calzap | Log macros in 10 seconds. No bloat.</title>
 	<meta
 		name="description"
-		content="Fuel is the zero-bloat, distraction-free macro tracker that cuts through the noise so you can log your fuel, hit your targets, and get back to your workout."
+		content="Calzap is a lightning-fast, zero-bloat macro tracker built for lifters. Log your macros in 10 seconds, hit your targets, and get back to the gym."
 	/>
 </svelte:head>
 
@@ -185,7 +185,7 @@
 				<p
 					class="text-lg sm:text-xl text-muted max-w-[62ch] font-medium leading-relaxed"
 				>
-					No feeds, no premium upsells, no ads. Fuel is a lightning-fast macro tracker designed to keep your diet mathematically perfect so you can get back to the gym.
+					No feeds, no premium upsells, no ads. Calzap is a lightning-fast macro tracker designed to keep your diet mathematically perfect so you can get back to the gym.
 				</p>
 
 				<div class="w-full sm:w-auto">
@@ -558,7 +558,7 @@
 					Picture standing in the kitchen after a heavy training session, tired and hungry. You spend five minutes fighting a laggy interface just to log a single scoop of whey. Or worse, you get hit with a $12/month paywall just to input a custom meal or see your fiber intake. This annoyance builds up until you eventually quit tracking altogether and lose your gains.
 				</p>
 				<p class="text-(--fg) font-bold">
-					I built Fuel to fix this. It is a completely free, lightning-fast tracker designed for lifters who value their time. No social junk, zero ads, no paywalls. You can search, log, and monitor your five core metrics (Calories, Protein, Carbs, Fats, and Fiber) in under 10 seconds. It's just pure, fast utility to help you hit your numbers.
+					I built Calzap to fix this. It is a completely free, lightning-fast tracker designed for lifters who value their time. No social junk, zero ads, no paywalls. You can search, log, and monitor your five core metrics (Calories, Protein, Carbs, Fats, and Fiber) in under 10 seconds. It's just pure, fast utility to help you hit your numbers.
 				</p>
 			</div>
 		</section>
@@ -931,7 +931,7 @@
 					<p class="text-sm text-muted leading-relaxed font-semibold">
 						There are no hidden in-app purchases, no premium
 						features locked behind paywalls, and no tracking scripts.
-						Fuel is completely open-source under the AGPL-3.0 license—I
+						Calzap is completely open-source under the AGPL-3.0 license—I
 						built it strictly to help lifters and health-conscious
 						individuals track their nutrition at maximum velocity.
 					</p>
@@ -990,7 +990,7 @@
 				<p
 					class="text-sm text-muted font-semibold leading-relaxed max-w-[30ch] mt-2"
 				>
-					Got questions? Here are honest, direct answers about how Fuel works, pricing, and your data.
+					Got questions? Here are honest, direct answers about how Calzap works, pricing, and your data.
 				</p>
 			</div>
 
@@ -1097,7 +1097,7 @@
 			class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm font-bold text-muted"
 		>
 			<div class="flex flex-col sm:items-start gap-1">
-				<p>© {new Date().getFullYear()} Fuel by KH Systems Pvt Ltd.</p>
+				<p>© {new Date().getFullYear()} Calzap by KH Systems Pvt Ltd.</p>
 				<p class="text-[11px] text-muted/70 font-semibold">Licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer" class="underline hover:text-(--fg) transition-colors">GNU AGPL v3.0</a>.</p>
 			</div>
 			<div class="flex items-center gap-6">

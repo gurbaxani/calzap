@@ -26,7 +26,7 @@
 				>
 					<span class="material-symbols-outlined text-[20px] select-none">bolt</span>
 				</div>
-				<span class="font-black text-xl tracking-tight select-none">Fuel</span>
+				<span class="font-black text-xl tracking-tight select-none">Calzap</span>
 			</a>
 
 			<!-- Center: Scroll Anchors for desktop -->
@@ -34,7 +34,7 @@
 				<a
 					href="/#problem-solution-section"
 					class="hover:text-(--fg) relative py-2 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-[var(--color-calories)] after:opacity-0 hover:after:opacity-100 after:transition-opacity duration-200"
-					>Why Fuel</a
+					>Why Calzap</a
 				>
 				<a
 					href="/#faq-section"
@@ -77,7 +77,7 @@
 			class:active={isActive('/dashboard')}
 		>
 			<span class="material-symbols-outlined text-[20px] leading-none">home</span>
-			<span class="text-[9px] font-black uppercase tracking-wider">Fuel</span>
+			<span class="text-[9px] font-black uppercase tracking-wider">Calzap</span>
 		</a>
 
 		<!-- Add Food Tab -->
@@ -101,7 +101,7 @@
 		</a>
 	</nav>
 
-	<!-- Floating Action Button (FAB) for Log Fuel -->
+	<!-- Floating Action Button (FAB) for Log Macros -->
 	{#if isActive('/log')}
 		<a
 			href="/dashboard"
@@ -115,8 +115,8 @@
 		<a
 			href="/log"
 			class="fab-btn"
-			title="Log Fuel"
-			aria-label="Log Fuel"
+			title="Log Macros"
+			aria-label="Log Macros"
 		>
 			<span class="material-symbols-outlined text-[24px] leading-none">add</span>
 		</a>
