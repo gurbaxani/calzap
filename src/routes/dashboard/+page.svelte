@@ -1,8 +1,17 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
 	import MacroBar from "$lib/components/MacroBar.svelte";
 	import { store } from "$lib/store.svelte";
 	import { slide } from "svelte/transition";
 	import ConfirmModal from "$lib/components/ConfirmModal.svelte";
+
+	onMount(async () => {
+		await store.loadIndexedDB();
+		if (!store.userStats.onboarded) {
+			goto("/hello");
+		}
+	});
 
 	let selectedDate = $state(new Date());
 	let isDeleteModalOpen = $state(false);

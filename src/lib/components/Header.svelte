@@ -6,6 +6,7 @@
 		currentPath === path || currentPath.startsWith(path + "/");
 	const isPublicRoute = $derived(
 		currentPath === "/" ||
+		currentPath.replace(/\/$/, "") === "/hello" ||
 		currentPath.replace(/\/$/, "") === "/terms" ||
 		currentPath.replace(/\/$/, "") === "/privacy" ||
 		currentPath.replace(/\/$/, "") === "/cookies"

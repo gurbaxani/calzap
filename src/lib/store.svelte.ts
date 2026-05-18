@@ -35,6 +35,8 @@ export interface UserStats {
 	target_weight: number;
 	current_weight: number;
 	google_ai_studio_api_key?: string;
+	onboarded?: boolean;
+	pwa_prompt_choice?: 'yes' | 'no' | 'later';
 }
 
 function generateId() {
@@ -53,6 +55,7 @@ class Store {
 		target_weight: 70,
 		current_weight: 70,
 		google_ai_studio_api_key: '',
+		onboarded: false,
 	});
 
 	constructor() {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Footer from "$lib/components/Footer.svelte";
+	import { store } from "$lib/store.svelte";
 
 
 	// Interactive widget type definitions and reactive state
@@ -118,7 +119,7 @@
 		},
 	];
 
-	const ctaPath = "/dashboard";
+	const ctaPath = $derived(store.userStats.onboarded ? "/dashboard" : "/hello");
 </script>
 
 <svelte:head>
