@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Footer from "$lib/components/Footer.svelte";
 
 
 	// Interactive widget type definitions and reactive state
@@ -93,27 +94,27 @@
 	const faqs = [
 		{
 			question: "Is this actually free, or is there a catch?",
-			answer: "It's 100% free. No ads, no popups, no premium upsells. I built this for myself because I was sick of sluggish fitness trackers trying to sell me premium subscriptions just to add a custom food. I'm keeping it free and fast for everyone, no strings attached.",
-		},
-		{
-			question: "How is this faster than other calorie trackers?",
-			answer: "By cutting out the junk. When you open Calzap, there is no home feed to load or pop-up warning to dismiss. You search, you select, and you log. Your most frequent foods sit right on your dashboard for a 1-tap quick clone. No spinners, no delays, no nonsense.",
-		},
-		{
-			question: "Can I customize my daily macro targets?",
-			answer: "Yes. You can edit your targets for Calories, Protein, Carbs, Fats, and Fiber inside your profile at any time. Whether you're bulking, cutting, or just trying to hit a specific fiber goal, you have full control.",
+			answer: "It's 100% free. No ads, no popups, and no premium upsells. I built Calzap for myself because I was tired of calorie trackers that make you watch video ads just to log a banana. It's free and fast for everyone, no strings attached.",
 		},
 		{
 			question: "Is my data private?",
-			answer: "Yes. I don't track your location, harvest your search history, or sell your food habits to advertising networks. Your logs are completely isolated to your authenticated account on a secure cloud database.",
+			answer: "Completely. Everything you track is stored directly on your own device—inside your web browser. There are no servers, no databases in the sky, and no tracking scripts. Your logs never leave your device, giving you absolute privacy.",
 		},
 		{
-			question: "Does it work on terrible gym Wi-Fi?",
-			answer: "Yes. Calzap uses hyper-lightweight code and instant Svelte reactive states. Your inputs register immediately, and the UI doesn't freeze or wait for slow networks to respond. It's built to be fast even in deep basement weight rooms.",
+			question: "Does it work offline or in basement gyms?",
+			answer: "Yes! Since the app lives entirely in your browser and saves data on your device, it doesn't need an internet connection to work. You can log your meals in a deep basement weight room, on a flight, or off the grid without any lag or loading screens.",
 		},
 		{
-			question: "How does the calorie tracker work?",
-			answer: "It's straightforward subtraction. Calzap takes your target and subtracts your logs. Tap the main calorie ring to toggle between 'Remaining' and 'Consumed' calories in a single tap.",
+			question: "Can I back up or transfer my data?",
+			answer: "Yes, easily. You can download a backup file of all your foods and logs at any time from your profile, or export them to a spreadsheet. If you change phones or clear your browser, just import your backup file and pick up right where you left off.",
+		},
+		{
+			question: "How is this faster than other calorie trackers?",
+			answer: "By removing all the clutter. When you open Calzap, there are no loading screens, no social feeds, and no popup notifications. You search, tap to log, and get on with your day. Your favorite foods sit right on your dashboard for instant logging.",
+		},
+		{
+			question: "Can I customize my daily targets?",
+			answer: "Yes. You have total control over your calorie, protein, carb, fat, and fiber targets. You can tweak them in your profile whenever your goals change, whether you are building muscle, cutting down, or just focusing on eating well.",
 		},
 	];
 
@@ -163,7 +164,7 @@
 							class="relative inline-flex rounded-full h-2 w-2 bg-calories"
 						></span>
 					</span>
-					Zero Bloat. Pure Math.
+					Zero Accounts. 100% Private.
 				</div>
 
 				<h1
@@ -178,7 +179,7 @@
 				<p
 					class="text-lg sm:text-xl text-muted max-w-[62ch] font-medium leading-relaxed"
 				>
-					No feeds, no premium upsells, no ads. Calzap is a lightning-fast macro tracker designed to keep your diet mathematically perfect so you can get back to the gym.
+					No sign-ups, no ads, and no cloud databases. Calzap is a lightning-fast macro tracker that lives entirely on your device. Keep your diet on track with absolute privacy.
 				</p>
 
 				<div class="w-full sm:w-auto">
@@ -238,14 +239,14 @@
 						>
 							<span
 								class="material-symbols-outlined text-[18px] leading-none"
-								>do_not_disturb_on</span
+								>lock</span
 							>
-							No Social Junk
+							100% Private
 						</div>
 						<p
 							class="text-xs text-muted leading-relaxed font-semibold"
 						>
-							No social feeds, no influence pushers, and no popups. Just pure utility that respects your time.
+							No cloud servers, no tracking, and no accounts. Everything you eat is saved privately on your device and nowhere else.
 						</p>
 					</div>
 				</div>
@@ -856,12 +857,12 @@
 							>
 							<div class="flex flex-col gap-1">
 								<h4 class="font-bold text-base">
-									PocketBase Cloud Sync
+									100% Local Storage
 								</h4>
 								<p
 									class="text-xs text-muted leading-relaxed font-semibold"
 								>
-									Your private database stays isolated, locked, and completely secure. Syncs across all of your devices instantly.
+									No servers, no accounts, and no databases in the sky. Your logs stay right on your device, completely private to you.
 								</p>
 							</div>
 						</div>
@@ -941,11 +942,8 @@
 						Just for the Good of People
 					</h3>
 					<p class="text-sm text-muted leading-relaxed font-semibold">
-						There are no hidden in-app purchases, no premium
-						features locked behind paywalls, and no tracking scripts.
-						Calzap is completely open-source under the AGPL-3.0 license—I
-						built it strictly to help lifters and health-conscious
-						individuals track their nutrition at maximum velocity.
+						There are no hidden fees, no paywalls, and no corporate tracking scripts. 
+						Calzap runs completely on your own device, meaning there are no expensive server bills to pay—so we never have a reason to charge you a single penny. It is built purely to help you hit your goals.
 					</p>
 				</div>
 
@@ -1083,7 +1081,7 @@
 			<p
 				class="text-lg text-muted max-w-[50ch] font-medium leading-relaxed z-10"
 			>
-				No paywalls. No sponsored feeds. No ads. Just a pure macro calculator built for high performance. Start logging now.
+				No paywalls, no ads, and no sign-ups. Just a private, lightning-fast tracker stored directly on your own device. Start logging now.
 			</p>
 
 			<div class="w-full sm:w-auto z-10">
@@ -1104,29 +1102,7 @@
 	</main>
 
 	<!-- Footer -->
-	<footer
-		class="py-12 border-t border-(--border) text-center bg-(--surface)/20 relative z-10"
-	>
-		<div
-			class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm font-bold text-muted"
-		>
-			<div class="flex flex-col sm:items-start gap-1">
-				<p>© {new Date().getFullYear()} Calzap by KH Systems Pvt Ltd.</p>
-				<p class="text-[11px] text-muted/70 font-semibold">Licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer" class="underline hover:text-(--fg) transition-colors">GNU AGPL v3.0</a>.</p>
-			</div>
-			<div class="flex items-center gap-6">
-				<a href="/dashboard" class="hover:text-(--fg) transition-colors"
-					>Dashboard</a
-				>
-				<a href="/foods" class="hover:text-(--fg) transition-colors"
-					>Foods</a
-				>
-				<a href="/profile" class="hover:text-(--fg) transition-colors"
-					>Profile</a
-				>
-			</div>
-		</div>
-	</footer>
+	<Footer />
 </div>
 
 <style>

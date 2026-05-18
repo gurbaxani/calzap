@@ -4,10 +4,16 @@
 	const currentPath = $derived(page.url.pathname);
 	const isActive = (path: string) =>
 		currentPath === path || currentPath.startsWith(path + "/");
+	const isPublicRoute = $derived(
+		currentPath === "/" ||
+		currentPath.replace(/\/$/, "") === "/terms" ||
+		currentPath.replace(/\/$/, "") === "/privacy" ||
+		currentPath.replace(/\/$/, "") === "/cookies"
+	);
 </script>
 
 <!-- Add body padding to ensure content scrolling past fixed bottom dock -->
-{#if currentPath !== "/"}
+{#if !isPublicRoute}
 	<style>
 		body {
 			padding-bottom: 7rem !important;
@@ -113,7 +119,7 @@
 {/if}
 
 <!-- Floating Mobile Dock Nav Bar -->
-{#if currentPath !== "/"}
+{#if !isPublicRoute}
 	<nav
 		class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-[360px] z-50 bg-(--surface)/90 backdrop-blur-md border border-(--border) rounded-3xl p-2 shadow-2xl flex items-center justify-between dock-nav"
 	>
