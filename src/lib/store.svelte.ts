@@ -58,10 +58,12 @@ class Store {
 		onboarded: false,
 	});
 
+	initialized: Promise<void> | null = null;
+
 	constructor() {
 		if (browser) {
 			// Async load fully complete database from IndexedDB to ensure consistency & durability
-			this.loadIndexedDB();
+			this.initialized = this.loadIndexedDB();
 		}
 	}
 
