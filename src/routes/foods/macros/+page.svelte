@@ -8,6 +8,26 @@
 	let error = $state('');
 	let success = $state(false);
 
+	function getCatalogReferences(foodName: string): string {
+		const query = foodName.toLowerCase().trim();
+		if (!query) return '';
+
+		const stopWords = new Set(['and', 'the', 'with', 'for', 'a', 'an', 'in', 'of', 'on', 'at', 'to']);
+		const words = query.split(/\s+/).filter(w => w.length > 2 && !stopWords.has(w));
+		if (words.length === 0) return '';
+
+		const matches = store.foods.filter(food => {
+			const nameLower = food.name.toLowerCase();
+			return words.some(word => nameLower.includes(word));
+		}).slice(0, 3);
+
+		if (matches.length === 0) return '';
+
+		return `\nHere are some relevant reference food items from the user's existing catalog:\n` +
+			matches.map(f => `- ${f.name} (${f.quantity} ${f.units}): ${f.calories} kcal, ${f.proteins}g protein, ${f.carbs}g carbs, ${f.fats}g fats, ${f.fiber}g fiber`).join('\n') +
+			`\nUse these existing custom entries as reference points to calibrate your calculations and maintain user data consistency.`;
+	}
+
 	async function estimateMacros() {
 		const apiKey = store.userStats.google_ai_studio_api_key;
 		if (!apiKey) {
@@ -18,13 +38,28 @@
 		estimating = true;
 		error = '';
 
-		const prompt = `Estimate the macronutrients for the following food item. Respond with a JSON object exactly like this: {"calories": 100, "proteins": 10, "carbs": 20, "fats": 5, "fiber": 2}. Use numbers. Return ONLY valid JSON without Markdown blocks.
-Food Name: ${foodDraft.name}
-Quantity: ${foodDraft.quantity} ${foodDraft.units}
-Special ingredients/notes: ${foodDraft.notes || 'None'}`;
+		const referenceText = getCatalogReferences(foodDraft.name);
+		const prompt = `You are a professional nutrition science calculator. Estimate the macronutrients for the following food item with high scientific accuracy.
+
+Required Constraints:
+1. Calories MUST mathematically align with the macronutrients: Calories = (Proteins * 4) + (Carbs * 4) + (Fats * 9) + (Fiber * 2). Ensure this formula balances.
+2. If reference size is in grams or milliliters: the total weight of macronutrients (Proteins + Carbs + Fats + Fiber) CANNOT exceed the reference portion size (e.g. 100g of food cannot have more than 100g of macros).
+3. Base your estimate on validated food database averages (e.g. USDA FoodData Central).
+4. If it's a composite dish/recipe, estimate the average macros of the individual typical ingredients and sum them up.
+${referenceText}
+
+Food Item to Estimate:
+- Food Name: ${foodDraft.name}
+- Reference Portion Size: ${foodDraft.quantity} ${foodDraft.units}
+- Special details/ingredients/notes: ${foodDraft.notes || 'None'}
+
+Respond ONLY with a valid JSON object matching this schema, without any Markdown formatting or extra text:
+{"calories": number, "proteins": number, "carbs": number, "fats": number, "fiber": number}
+All values must be numbers.`;
 
 		try {
-			const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-4-31b-it:generateContent?key=${apiKey}`, {
+			// Try gemini-2.5-pro first for highest accuracy
+			let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -41,8 +76,28 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 			});
 
 			if (!response.ok) {
-				const errData = await response.json();
-				throw new Error(errData.error?.message || 'Failed to fetch estimation from Gemini');
+				// Fallback to gemini-2.5-flash if pro failed (e.g. rate limit, not enabled, quota)
+				const fallbackResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						contents: [{
+							parts: [{ text: prompt }]
+						}],
+						generationConfig: {
+							temperature: 0.1,
+							responseMimeType: "application/json"
+						}
+					})
+				});
+
+				if (!fallbackResponse.ok) {
+					const errData = await fallbackResponse.json();
+					throw new Error(errData.error?.message || 'Failed to fetch estimation from Gemini');
+				}
+				response = fallbackResponse;
 			}
 
 			const data = await response.json();
@@ -51,15 +106,19 @@ Special ingredients/notes: ${foodDraft.notes || 'None'}`;
 				throw new Error('Invalid response from Gemini');
 			}
 
-			const result = JSON.parse(textResponse);
+			const result = JSON.parse(textResponse.trim());
 
 			if (result.calories !== undefined) foodDraft.calories = Number(result.calories);
 			if (result.proteins !== undefined) foodDraft.proteins = Number(result.proteins);
 			if (result.carbs !== undefined) foodDraft.carbs = Number(result.carbs);
 			if (result.fats !== undefined) foodDraft.fats = Number(result.fats);
 			if (result.fiber !== undefined) foodDraft.fiber = Number(result.fiber);
-		} catch (err: any) {
-			error = 'Estimation failed: ' + err.message;
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				error = 'Estimation failed: ' + err.message;
+			} else {
+				error = 'Estimation failed';
+			}
 		} finally {
 			estimating = false;
 		}
