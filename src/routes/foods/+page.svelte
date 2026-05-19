@@ -27,6 +27,22 @@
 	let fiber = $state<number>(0);
 	let notes = $state('');
 
+	function handleCaloriesChange() {
+		calories = Math.floor(calories || 0);
+	}
+	function handleProteinsChange() {
+		proteins = Math.floor(proteins || 0);
+	}
+	function handleCarbsChange() {
+		carbs = Math.floor(carbs || 0);
+	}
+	function handleFatsChange() {
+		fats = Math.floor(fats || 0);
+	}
+	function handleFiberChange() {
+		fiber = Math.floor(fiber || 0);
+	}
+
 	// AI Estimation States
 	let estimating = $state(false);
 	let aiError = $state('');
@@ -204,11 +220,11 @@ All values must be numbers.`;
 
 			const result = JSON.parse(textResponse.trim());
 
-			if (result.calories !== undefined) calories = Number(result.calories);
-			if (result.proteins !== undefined) proteins = Number(result.proteins);
-			if (result.carbs !== undefined) carbs = Number(result.carbs);
-			if (result.fats !== undefined) fats = Number(result.fats);
-			if (result.fiber !== undefined) fiber = Number(result.fiber);
+			if (result.calories !== undefined) calories = Math.floor(Number(result.calories));
+			if (result.proteins !== undefined) proteins = Math.floor(Number(result.proteins));
+			if (result.carbs !== undefined) carbs = Math.floor(Number(result.carbs));
+			if (result.fats !== undefined) fats = Math.floor(Number(result.fats));
+			if (result.fiber !== undefined) fiber = Math.floor(Number(result.fiber));
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				aiError = 'Estimation failed: ' + err.message;
@@ -516,6 +532,7 @@ All values must be numbers.`;
 								type="number"
 								id="food-form-calories"
 								bind:value={calories}
+								onchange={handleCaloriesChange}
 								min="0"
 								step="1"
 								required
@@ -530,8 +547,9 @@ All values must be numbers.`;
 								type="number"
 								id="food-form-proteins"
 								bind:value={proteins}
+								onchange={handleProteinsChange}
 								min="0"
-								step="0.1"
+								step="1"
 								required
 								class="w-full bg-transparent text-2xl font-extrabold tracking-tighter text-protein focus:outline-none tabular-nums"
 							/>
@@ -544,8 +562,9 @@ All values must be numbers.`;
 								type="number"
 								id="food-form-carbs"
 								bind:value={carbs}
+								onchange={handleCarbsChange}
 								min="0"
-								step="0.1"
+								step="1"
 								required
 								class="w-full bg-transparent text-2xl font-extrabold tracking-tighter text-carbs focus:outline-none tabular-nums"
 							/>
@@ -558,8 +577,9 @@ All values must be numbers.`;
 								type="number"
 								id="food-form-fats"
 								bind:value={fats}
+								onchange={handleFatsChange}
 								min="0"
-								step="0.1"
+								step="1"
 								required
 								class="w-full bg-transparent text-2xl font-extrabold tracking-tighter text-fats focus:outline-none tabular-nums"
 							/>
@@ -572,8 +592,9 @@ All values must be numbers.`;
 								type="number"
 								id="food-form-fiber"
 								bind:value={fiber}
+								onchange={handleFiberChange}
 								min="0"
-								step="0.1;;"
+								step="1"
 								required
 								class="w-full bg-transparent text-2xl font-extrabold tracking-tighter text-fiber focus:outline-none tabular-nums"
 							/>

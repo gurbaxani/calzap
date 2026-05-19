@@ -6,8 +6,18 @@
 	import { page } from "$app/state";
 	import { store } from "$lib/store.svelte";
 
+	import { dev } from "$app/environment";
+	import { onMount } from "svelte";
+
 	let { children } = $props();
 	let isInitialized = $state(false);
+
+	onMount(() => {
+		if ("serviceWorker" in navigator && !dev) {
+			navigator.serviceWorker.register("/service-worker.js")
+				.catch((err) => console.error("Service worker registration failed:", err));
+		}
+	});
 
 	afterNavigate(async () => {
 		if (store.initialized) {

@@ -99,7 +99,15 @@ class Store {
 	}
 
 	addFood(food: Omit<Food, "id">) {
-		const newFood = { ...food, id: generateId() };
+		const newFood = {
+			...food,
+			id: generateId(),
+			calories: Math.floor(food.calories),
+			proteins: Math.floor(food.proteins),
+			carbs: Math.floor(food.carbs),
+			fats: Math.floor(food.fats),
+			fiber: Math.floor(food.fiber)
+		};
 		this.foods.push(newFood);
 		this.save();
 	}
@@ -110,7 +118,14 @@ class Store {
 	}
 
 	updateFood(id: string, updatedFields: Partial<Omit<Food, "id">>) {
-		this.foods = this.foods.map(f => f.id === id ? { ...f, ...updatedFields } : f);
+		const roundedFields = { ...updatedFields };
+		if (roundedFields.calories !== undefined) roundedFields.calories = Math.floor(roundedFields.calories);
+		if (roundedFields.proteins !== undefined) roundedFields.proteins = Math.floor(roundedFields.proteins);
+		if (roundedFields.carbs !== undefined) roundedFields.carbs = Math.floor(roundedFields.carbs);
+		if (roundedFields.fats !== undefined) roundedFields.fats = Math.floor(roundedFields.fats);
+		if (roundedFields.fiber !== undefined) roundedFields.fiber = Math.floor(roundedFields.fiber);
+
+		this.foods = this.foods.map(f => f.id === id ? { ...f, ...roundedFields } : f);
 		this.save();
 	}
 

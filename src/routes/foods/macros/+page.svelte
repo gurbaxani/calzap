@@ -108,11 +108,11 @@ All values must be numbers.`;
 
 			const result = JSON.parse(textResponse.trim());
 
-			if (result.calories !== undefined) foodDraft.calories = Number(result.calories);
-			if (result.proteins !== undefined) foodDraft.proteins = Number(result.proteins);
-			if (result.carbs !== undefined) foodDraft.carbs = Number(result.carbs);
-			if (result.fats !== undefined) foodDraft.fats = Number(result.fats);
-			if (result.fiber !== undefined) foodDraft.fiber = Number(result.fiber);
+			if (result.calories !== undefined) foodDraft.calories = Math.floor(Number(result.calories));
+			if (result.proteins !== undefined) foodDraft.proteins = Math.floor(Number(result.proteins));
+			if (result.carbs !== undefined) foodDraft.carbs = Math.floor(Number(result.carbs));
+			if (result.fats !== undefined) foodDraft.fats = Math.floor(Number(result.fats));
+			if (result.fiber !== undefined) foodDraft.fiber = Math.floor(Number(result.fiber));
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				error = 'Estimation failed: ' + err.message;
@@ -122,6 +122,22 @@ All values must be numbers.`;
 		} finally {
 			estimating = false;
 		}
+	}
+
+	function handleCaloriesChange() {
+		if (foodDraft.calories !== undefined) foodDraft.calories = Math.floor(foodDraft.calories);
+	}
+	function handleProteinsChange() {
+		if (foodDraft.proteins !== undefined) foodDraft.proteins = Math.floor(foodDraft.proteins);
+	}
+	function handleCarbsChange() {
+		if (foodDraft.carbs !== undefined) foodDraft.carbs = Math.floor(foodDraft.carbs);
+	}
+	function handleFatsChange() {
+		if (foodDraft.fats !== undefined) foodDraft.fats = Math.floor(foodDraft.fats);
+	}
+	function handleFiberChange() {
+		if (foodDraft.fiber !== undefined) foodDraft.fiber = Math.floor(foodDraft.fiber);
 	}
 
 	async function handleSubmit(e: Event) {
@@ -229,6 +245,7 @@ All values must be numbers.`;
 							type="number"
 							id="calories"
 							bind:value={foodDraft.calories}
+							onchange={handleCaloriesChange}
 							min="0"
 							step="1"
 							placeholder="0"
@@ -243,8 +260,9 @@ All values must be numbers.`;
 							type="number"
 							id="proteins"
 							bind:value={foodDraft.proteins}
+							onchange={handleProteinsChange}
 							min="0"
-							step="0.1"
+							step="1"
 							placeholder="0"
 							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-protein placeholder:text-protein/30 focus:outline-none"
 						/>
@@ -257,8 +275,9 @@ All values must be numbers.`;
 							type="number"
 							id="carbs"
 							bind:value={foodDraft.carbs}
+							onchange={handleCarbsChange}
 							min="0"
-							step="0.1"
+							step="1"
 							placeholder="0"
 							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-carbs placeholder:text-carbs/30 focus:outline-none"
 						/>
@@ -271,8 +290,9 @@ All values must be numbers.`;
 							type="number"
 							id="fats"
 							bind:value={foodDraft.fats}
+							onchange={handleFatsChange}
 							min="0"
-							step="0.1"
+							step="1"
 							placeholder="0"
 							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-fats placeholder:text-fats/30 focus:outline-none"
 						/>
@@ -285,8 +305,9 @@ All values must be numbers.`;
 							type="number"
 							id="fiber"
 							bind:value={foodDraft.fiber}
+							onchange={handleFiberChange}
 							min="0"
-							step="0.1"
+							step="1"
 							placeholder="0"
 							class="w-full bg-transparent text-3xl font-extrabold tracking-tighter text-fiber placeholder:text-fiber/30 focus:outline-none"
 						/>
