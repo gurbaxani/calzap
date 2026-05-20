@@ -679,26 +679,36 @@
 							<label for="ai_api_key" class="text-xs font-black uppercase tracking-widest text-fiber block">
 								AI Studio API Key
 							</label>
-							<div class="relative flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-fiber/50 dark:focus-within:ring-fiber/40 transition-all duration-200">
-								<input
-									id="ai_api_key"
-									type={inputType}
-									bind:value={apiKey}
-									onchange={autosaveKey}
-									placeholder="AIzaSy..."
-									class="w-full bg-transparent px-4 py-3 text-sm font-medium focus:outline-none pr-12 text-zinc-900 dark:text-zinc-50"
-								/>
+							<div class="flex gap-2">
+								<div class="relative flex-1 flex items-center bg-zinc-100/50 dark:bg-zinc-800/20 rounded-xl border border-(--border) focus-within:ring-2 focus-within:ring-fiber/50 dark:focus-within:ring-fiber/40 transition-all duration-200">
+									<input
+										id="ai_api_key"
+										type={inputType}
+										bind:value={apiKey}
+										onchange={autosaveKey}
+										placeholder="AIzaSy..."
+										class="w-full bg-transparent px-4 py-3 text-sm font-medium focus:outline-none pr-12 text-zinc-900 dark:text-zinc-50"
+									/>
+									<button
+										type="button"
+										onclick={() => showKey = !showKey}
+										class="absolute right-3 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1"
+										aria-label="Toggle password visibility"
+									>
+										{#if showKey}
+											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility_off</span>
+										{:else}
+											<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility</span>
+										{/if}
+									</button>
+								</div>
 								<button
 									type="button"
-									onclick={() => showKey = !showKey}
-									class="absolute right-3 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1"
-									aria-label="Toggle password visibility"
+									onclick={autosaveKey}
+									class="px-4 py-3 rounded-xl bg-fiber text-white text-sm font-bold hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm shadow-fiber/25"
 								>
-									{#if showKey}
-										<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility_off</span>
-									{:else}
-										<span class="material-symbols-outlined text-[16px] select-none leading-none">visibility</span>
-									{/if}
+									<span class="material-symbols-outlined text-[16px] select-none leading-none font-bold">save</span>
+									<span>Save</span>
 								</button>
 							</div>
 						</div>
