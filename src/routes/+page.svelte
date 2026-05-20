@@ -206,7 +206,7 @@
 							alt="Calzap - An AI calorie tracking app that wants you to live your life. | Product Hunt"
 							width="250"
 							height="54"
-							src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1150619&amp;theme=neutral&amp;t=1779258293312"
+							src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1150619&amp;theme=light&amp;t=1779258404693"
 							class="w-[250px] h-[54px]"
 						/>
 					</a>
