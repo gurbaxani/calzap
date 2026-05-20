@@ -751,6 +751,38 @@
 		</div>
 
 	</div>
+
+	<!-- GitHub Promo Section -->
+	<section class="mt-12 p-8 rounded-3xl bg-(--surface) border border-(--border) shadow-sm relative overflow-hidden group reveal-card" style="--delay: 2.8;">
+		<!-- Subtle decorative pulse circle -->
+		<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-zinc-500/5 group-hover:scale-110 transition-transform duration-500"></div>
+
+		<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+			<div class="space-y-2 text-center md:text-left">
+				<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800/60 text-zinc-650 dark:text-zinc-400 text-[10px] font-black uppercase tracking-wider select-none border border-zinc-200/60 dark:border-zinc-700/40">
+					<span class="material-symbols-outlined text-[12px] leading-none">code</span>
+					Open Source Project
+				</div>
+				<h3 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Love using Calzap?</h3>
+				<p class="text-zinc-500 dark:text-zinc-400 max-w-xl text-sm font-medium leading-relaxed">
+					Calzap is 100% free, open-source, and offline-first. Star our repository on GitHub to show your support, track updates, or contribute.
+				</p>
+			</div>
+			
+			<a 
+				href="https://github.com/gurbaxani/calzap" 
+				target="_blank" 
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 font-bold transition-all text-sm active:scale-[0.98] select-none border border-zinc-200/55 dark:border-zinc-700/50 cursor-pointer shadow-sm hover:shadow-md shrink-0"
+			>
+				<svg class="w-4 h-4 fill-current text-zinc-700 dark:text-zinc-300" viewBox="0 0 24 24" aria-hidden="true">
+					<path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+				</svg>
+				<span>Star on GitHub</span>
+				<span class="material-symbols-outlined text-[15px] select-none leading-none">open_in_new</span>
+			</a>
+		</div>
+	</section>
 </main>
 
 <style>
