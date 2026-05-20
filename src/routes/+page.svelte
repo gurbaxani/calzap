@@ -183,17 +183,32 @@
 					No sign-ups, no ads, and no cloud databases. Calzap is a lightning-fast macro tracker that lives entirely on your device. Keep your diet on track with absolute privacy.
 				</p>
 
-				<div class="w-full sm:w-auto">
+				<div class="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
 					<a
 						id="hero-cta-button"
 						href={ctaPath}
-						class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4.5 rounded-2xl bg-(--fg) text-(--bg) font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 group"
+						class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4.5 rounded-2xl bg-(--fg) text-(--bg) font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 group shrink-0"
 					>
 						<span>Start Logging (Free)</span>
 						<span
 							class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1 select-none text-[20px] leading-none"
 							>arrow_forward</span
 						>
+					</a>
+
+					<a
+						href="https://www.producthunt.com/products/calzap-ai-calorie-tracking-super-quick?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-calzap"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center justify-center transition-transform hover:scale-[1.02] active:scale-[0.98] shrink-0"
+					>
+						<img
+							alt="Calzap - An AI calorie tracking app that wants you to live your life. | Product Hunt"
+							width="250"
+							height="54"
+							src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1150619&amp;theme=neutral&amp;t=1779258293312"
+							class="w-[250px] h-[54px]"
+						/>
 					</a>
 				</div>
 
