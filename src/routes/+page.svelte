@@ -187,7 +187,7 @@
 					<a
 						id="hero-cta-button"
 						href={ctaPath}
-						class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4.5 rounded-2xl bg-(--fg) text-(--bg) font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 group shrink-0"
+						class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4.5 rounded-2xl bg-calories hover:bg-[oklch(from_var(--color-calories)_calc(l-0.04)_c_h)] text-white font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-(--color-calories)/20 hover:shadow-xl hover:shadow-(--color-calories)/30 group shrink-0"
 					>
 						<span>Start Logging (Free)</span>
 						<span
@@ -1104,7 +1104,7 @@
 				<a
 					id="bottom-cta-button"
 					href={ctaPath}
-					class="inline-flex items-center justify-center w-full sm:w-auto px-10 py-5 rounded-2xl bg-(--fg) text-(--bg) font-black text-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-black/10 hover:shadow-black/25 group"
+					class="inline-flex items-center justify-center w-full sm:w-auto px-10 py-5 rounded-2xl bg-calories hover:bg-[oklch(from_var(--color-calories)_calc(l-0.04)_c_h)] text-white font-black text-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-(--color-calories)/20 hover:shadow-(--color-calories)/35 group"
 				>
 					<span>Start Logging (It's Free)</span>
 					<span
