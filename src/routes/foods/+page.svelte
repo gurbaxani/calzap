@@ -154,10 +154,11 @@
 		const prompt = `You are a professional nutrition science calculator. Estimate the macronutrients for the following food item with high scientific accuracy.
 
 Required Constraints:
-1. Calories MUST mathematically align with the macronutrients: Calories = (Proteins * 4) + (Carbs * 4) + (Fats * 9) + (Fiber * 2). Ensure this formula balances.
-2. If reference size is in grams or milliliters: the total weight of macronutrients (Proteins + Carbs + Fats + Fiber) CANNOT exceed the reference portion size (e.g. 100g of food cannot have more than 100g of macros).
-3. Base your estimate on validated food database averages (e.g. USDA FoodData Central).
-4. If it's a composite dish/recipe, estimate the average macros of the individual typical ingredients and sum them up.
+1. CRITICAL: Your final output MUST represent the nutritional values for EXACTLY the specified Reference Portion Size (\${quantity} \${units}). For example, if the portion is 250g, you must calculate the macros for 250g, NOT 100g.
+2. Calories MUST mathematically align with the macronutrients. Assume Calories = (Proteins * 4) + (Carbs * 4) + (Fats * 9).
+3. If reference size is in grams or milliliters: the total weight of macronutrients (Proteins + Carbs + Fats + Fiber) CANNOT exceed the reference portion size.
+4. Base your estimate on validated food database averages (e.g. USDA FoodData Central).
+5. If it's a composite dish/recipe, estimate the average macros of the individual typical ingredients and sum them up.
 ${referenceText}
 
 Food Item to Estimate:
