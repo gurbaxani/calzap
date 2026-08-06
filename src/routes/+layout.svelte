@@ -44,7 +44,10 @@
 	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+<link rel="icon" href={favicon} />
+<script defer data-domain="calzap.ashwinig.com" src="https://plausible.ashwinig.com/js/script.js"></script>
+</svelte:head>
 
 {#if showContent}
 	<Header />
